@@ -12,27 +12,33 @@ class Config
     protected $password;
     protected $apiVersion;
 
+    const REQUIRED_CONFIGURATION_DATA = ['clientId', 'clientSecret', 'path', 'password', 'apiVersion'];
+
     /**
      * Config constructor.
      *
+     * @param array $config config
+     * [
+     *  'clientId' =>
+     *  'clientSecret' =>
+     *  'path' =>
+     *  'username' =>
+     *  'password' =>
+     *  'apiVersion' =>
+     * ]
      * @throws ConfigException
      */
-    public function __construct()
+    public function __construct(array $config)
     {
-        try {
-            $this->clientId = getenv('Salesforce.clientId');
-            $this->clientSecret = getenv('Salesforce.clientSecret');
-            $this->path = getenv('Salesforce.path');
-            $this->username = getenv('Salesforce.username');
-            $this->password = getenv('Salesforce.password');
-            $this->apiVersion = getenv('Salesforce.apiVersion');
-        } catch (\Exception $exception) {
-            throw new ConfigException(ConfigException::MSG_FAILED_READING_EVN . $exception->getMessage());
+        if (!isset($config['clientId']) || !isset($config['clientSecret']) || !isset($config['path']) || !isset($config['username']) || !isset($config['password']) || !isset($config['apiVersion'])) {
+            throw new ConfigException(ConfigException::MSG_MISSING_SALESFORCE_CONFIG . implode(",", self::REQUIRED_CONFIGURATION_DATA));
         }
-
-        if (!$this->clientId || !$this->clientSecret || !$this->path || !$this->username || !$this->password || !$this->apiVersion) {
-            throw new ConfigException(ConfigException::MSG_MISSING_SALESFORCE_ENV);
-        }
+        $this->clientId = $config['clientId'];
+        $this->clientSecret = $config['clientSecret'];
+        $this->path = $config['path'];
+        $this->username = $config['username'];
+        $this->password = $config['password'];
+        $this->apiVersion = $config['apiVersion'];
     }
 
     /**

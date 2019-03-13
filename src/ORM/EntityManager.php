@@ -2,6 +2,7 @@
 namespace Salesforce\ORM;
 
 use Salesforce\Client\Client;
+use Salesforce\Client\Config;
 use Salesforce\Client\FieldNames;
 use Salesforce\ORM\Exception\EntityException;
 use Salesforce\ORM\Query\Builder;
@@ -23,14 +24,24 @@ class EntityManager
     /**
      * EntityManager constructor.
      *
-     * @param Client|null $salesforceClient client
+     * @param array $config client config, must have the following
+     * [
+     *  'clientId' =>
+     *  'clientSecret' =>
+     *  'path' =>
+     *  'username' =>
+     *  'password' =>
+     *  'apiVersion' =>
+     * ]
      * @param Mapper|null $mapper mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \Exception
+     * @throws \EventFarm\Restforce\RestforceException
+     * @throws \Salesforce\Client\Exception\ConfigException
      */
-    public function __construct(Client $salesforceClient = null, Mapper $mapper = null)
+    public function __construct(array $config, Mapper $mapper = null)
     {
-        $this->salesforceClient = $salesforceClient ?: new Client();
+        $clientConfig = new Config($config);
+        $this->salesforceClient = new Client($clientConfig);
         $this->mapper = $mapper ?: new Mapper();
     }
 
@@ -194,6 +205,19 @@ class EntityManager
         }
 
         return $object;
+    }
+
+    /**
+     * @param $class class
+     * @return Repository
+     * @throws \Exception
+     */
+    public function createRepository($class)
+    {
+        $repository = new Repository($this);
+        $repository->setClass($class);
+
+        return $repository;
     }
 
     /**
