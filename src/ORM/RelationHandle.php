@@ -12,14 +12,14 @@ class RelationHandle
     /**
      * RelationHandle constructor.
      *
-     * @param Repository|null $repository repo
+     * @param EntityManager|null $entityManager entity manager
      * @param Mapper|null $mapper mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \Exception
      */
-    public function __construct(Repository $repository = null, Mapper $mapper = null)
+    public function __construct(EntityManager $entityManager, Mapper $mapper = null)
     {
-        $this->repository = $repository ?: new Repository();
+        $this->repository = new Repository($entityManager);
         $this->mapper = $mapper ?: new Mapper();
     }
 }

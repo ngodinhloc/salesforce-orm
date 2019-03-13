@@ -181,7 +181,7 @@ class EntityManager
             $property = $load['property'];
             $relation = $load['relation'];
             if ($relation instanceof RelationInterface) {
-                $handler = $relation->getHandler();
+                $handler = $relation->getHandler($this);
                 $handler->handle($entity, $property, $relation);
             }
         }

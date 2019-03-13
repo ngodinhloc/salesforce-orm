@@ -2,6 +2,7 @@
 namespace Salesforce\ORM\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
+use Salesforce\ORM\EntityManager;
 use Salesforce\ORM\RelationHandleInterface;
 use Salesforce\ORM\RelationInterface;
 
@@ -16,11 +17,12 @@ class OneToMany extends Annotation implements RelationInterface
     public $lazy = true;
 
     /**
+     * @param EntityManager $entityManager entity manager
      * @return RelationHandleInterface
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    public function getHandler(): RelationHandleInterface
+    public function getHandler(EntityManager $entityManager): RelationHandleInterface
     {
-        return new \Salesforce\ORM\RelationHandles\OneToMany();
+        return new \Salesforce\ORM\RelationHandles\OneToMany($entityManager);
     }
 }
