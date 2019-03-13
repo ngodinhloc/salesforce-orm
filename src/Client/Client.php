@@ -23,12 +23,11 @@ class Client
      * Client constructor.
      *
      * @param Config|null $config config
-     * @throws \Salesforce\Client\Exception\ConfigException
      * @throws \EventFarm\Restforce\RestforceException
      */
-    public function __construct(Config $config = null)
+    public function __construct(Config $config)
     {
-        $this->config = $config ?: new Config();
+        $this->config = $config;
         $this->restforce = new Restforce(
             $this->config->getClientId(),
             $this->config->getClientSecret(),
