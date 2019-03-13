@@ -51,7 +51,7 @@ class OpportunityContactRole extends Entity
      * @param string $contactId contact id
      * @return OpportunityContactRole
      */
-    public function setContactId(string $contactId): OpportunityContactRole
+    public function setContactId($contactId): OpportunityContactRole
     {
         $this->contactId = $contactId;
 
@@ -70,7 +70,7 @@ class OpportunityContactRole extends Entity
      * @param string $opportunityId opportunity id
      * @return OpportunityContactRole
      */
-    public function setOpportunityId(string $opportunityId): OpportunityContactRole
+    public function setOpportunityId($opportunityId): OpportunityContactRole
     {
         $this->opportunityId = $opportunityId;
 
@@ -89,7 +89,7 @@ class OpportunityContactRole extends Entity
      * @param bool $isPrimary primary
      * @return OpportunityContactRole
      */
-    public function setIsPrimary(bool $isPrimary): OpportunityContactRole
+    public function setIsPrimary($isPrimary): OpportunityContactRole
     {
         $this->isPrimary = $isPrimary;
 
@@ -108,7 +108,7 @@ class OpportunityContactRole extends Entity
      * @param string $role role
      * @return OpportunityContactRole
      */
-    public function setRole(string $role): OpportunityContactRole
+    public function setRole($role): OpportunityContactRole
     {
         $this->role = $role;
 

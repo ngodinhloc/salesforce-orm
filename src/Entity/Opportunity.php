@@ -62,10 +62,10 @@ class Opportunity extends Entity
     }
 
     /**
-     * @param string $name
+     * @param string $name name
      * @return Opportunity
      */
-    public function setName(string $name): Opportunity
+    public function setName($name): Opportunity
     {
         $this->name = $name;
 
@@ -81,10 +81,10 @@ class Opportunity extends Entity
     }
 
     /**
-     * @param string $accountId
+     * @param string $accountId account id
      * @return Opportunity
      */
-    public function setAccountId(string $accountId): Opportunity
+    public function setAccountId($accountId): Opportunity
     {
         $this->accountId = $accountId;
 
@@ -100,10 +100,10 @@ class Opportunity extends Entity
     }
 
     /**
-     * @param string $closeDate
+     * @param string $closeDate close date
      * @return Opportunity
      */
-    public function setCloseDate(string $closeDate): Opportunity
+    public function setCloseDate($closeDate): Opportunity
     {
         $this->closeDate = $closeDate;
 
@@ -119,10 +119,10 @@ class Opportunity extends Entity
     }
 
     /**
-     * @param string $recordTypeId
+     * @param string $recordTypeId record type
      * @return Opportunity
      */
-    public function setRecordTypeId(string $recordTypeId): Opportunity
+    public function setRecordTypeId($recordTypeId): Opportunity
     {
         $this->recordTypeId = $recordTypeId;
 
@@ -138,10 +138,10 @@ class Opportunity extends Entity
     }
 
     /**
-     * @param string $stage
+     * @param string $stage stage
      * @return Opportunity
      */
-    public function setStage(string $stage): Opportunity
+    public function setStage($stage): Opportunity
     {
         $this->stage = $stage;
 
@@ -157,10 +157,10 @@ class Opportunity extends Entity
     }
 
     /**
-     * @param string $ownerId
+     * @param string $ownerId owner
      * @return Opportunity
      */
-    public function setOwnerId(string $ownerId): Opportunity
+    public function setOwnerId($ownerId): Opportunity
     {
         $this->ownerId = $ownerId;
 

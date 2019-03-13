@@ -70,10 +70,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $name
+     * @param string $name name
      * @return Account
      */
-    public function setName(string $name): Account
+    public function setName($name): Account
     {
         $this->name = $name;
 
@@ -89,10 +89,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $website
+     * @param string $website website
      * @return Account
      */
-    public function setWebsite(string $website): Account
+    public function setWebsite($website): Account
     {
         $this->website = $website;
 
@@ -108,10 +108,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $billingCity
+     * @param string $billingCity city
      * @return Account
      */
-    public function setBillingCity(string $billingCity): Account
+    public function setBillingCity($billingCity): Account
     {
         $this->billingCity = $billingCity;
 
@@ -127,10 +127,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $billingCountry
+     * @param string $billingCountry country
      * @return Account
      */
-    public function setBillingCountry(string $billingCountry): Account
+    public function setBillingCountry($billingCountry): Account
     {
         $this->billingCountry = $billingCountry;
 
@@ -146,10 +146,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $billingPostcode
+     * @param string $billingPostcode post code
      * @return Account
      */
-    public function setBillingPostcode(string $billingPostcode): Account
+    public function setBillingPostcode($billingPostcode): Account
     {
         $this->billingPostcode = $billingPostcode;
 
@@ -165,10 +165,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $billingState
+     * @param string $billingState state
      * @return Account
      */
-    public function setBillingState(string $billingState): Account
+    public function setBillingState($billingState): Account
     {
         $this->billingState = $billingState;
 
@@ -184,10 +184,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $billingStreet
+     * @param string $billingStreet street
      * @return Account
      */
-    public function setBillingStreet(string $billingStreet): Account
+    public function setBillingStreet($billingStreet): Account
     {
         $this->billingStreet = $billingStreet;
 
@@ -203,10 +203,10 @@ class Account extends Entity
     }
 
     /**
-     * @param string $ownerId
+     * @param string $ownerId owner
      * @return Account
      */
-    public function setOwnerId(string $ownerId): Account
+    public function setOwnerId($ownerId): Account
     {
         $this->ownerId = $ownerId;
 

@@ -19,7 +19,6 @@ class Contact extends Entity
      */
     protected $accountId;
 
-
     /**
      * @var string
      * @SF\Field(name="FirstName")
@@ -84,10 +83,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $accountId
+     * @param string $accountId account id
      * @return Contact
      */
-    public function setAccountId(string $accountId): Contact
+    public function setAccountId($accountId): Contact
     {
         $this->accountId = $accountId;
 
@@ -103,10 +102,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $firstName
+     * @param string $firstName first name
      * @return Contact
      */
-    public function setFirstName(string $firstName): Contact
+    public function setFirstName($firstName): Contact
     {
         $this->firstName = $firstName;
 
@@ -122,10 +121,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $lastName
+     * @param string $lastName last name
      * @return Contact
      */
-    public function setLastName(string $lastName): Contact
+    public function setLastName($lastName): Contact
     {
         $this->lastName = $lastName;
 
@@ -141,10 +140,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $email
+     * @param string $email email
      * @return Contact
      */
-    public function setEmail(string $email): Contact
+    public function setEmail($email): Contact
     {
         $this->email = $email;
 
@@ -160,10 +159,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $phone
+     * @param string $phone phone
      * @return Contact
      */
-    public function setPhone(string $phone): Contact
+    public function setPhone($phone): Contact
     {
         $this->phone = $phone;
 
@@ -179,10 +178,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $mailingCity
+     * @param string $mailingCity city
      * @return Contact
      */
-    public function setMailingCity(string $mailingCity): Contact
+    public function setMailingCity($mailingCity): Contact
     {
         $this->mailingCity = $mailingCity;
 
@@ -198,10 +197,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $mailingCountry
+     * @param string $mailingCountry country
      * @return Contact
      */
-    public function setMailingCountry(string $mailingCountry): Contact
+    public function setMailingCountry($mailingCountry): Contact
     {
         $this->mailingCountry = $mailingCountry;
 
@@ -217,10 +216,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $mailingStreet
+     * @param string $mailingStreet street
      * @return Contact
      */
-    public function setMailingStreet(string $mailingStreet): Contact
+    public function setMailingStreet($mailingStreet): Contact
     {
         $this->mailingStreet = $mailingStreet;
 
@@ -236,10 +235,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $mailingState
+     * @param string $mailingState state
      * @return Contact
      */
-    public function setMailingState(string $mailingState): Contact
+    public function setMailingState($mailingState): Contact
     {
         $this->mailingState = $mailingState;
 
@@ -255,10 +254,10 @@ class Contact extends Entity
     }
 
     /**
-     * @param string $mailingPostcode
+     * @param string $mailingPostcode post code
      * @return Contact
      */
-    public function setMailingPostcode(string $mailingPostcode): Contact
+    public function setMailingPostcode($mailingPostcode): Contact
     {
         $this->mailingPostcode = $mailingPostcode;
 
