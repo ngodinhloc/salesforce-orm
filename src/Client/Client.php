@@ -9,32 +9,37 @@ use Salesforce\Client\Exception\ClientException;
 /**
  * Class Client
  *
- * @package SalesforceORM\Client
+ * @package Salesforce\Client
  */
 class Client
 {
     /** @var Restforce */
     protected $restforce;
 
+    /** @var Config */
     protected $config;
 
     /**
-     * SalesforceClient constructor.
+     * Client constructor.
      *
-     * @param array $config configurations
+     * @param Config|null $config config
+     * @throws \Salesforce\Client\Exception\ConfigException
      * @throws \EventFarm\Restforce\RestforceException
      */
-    public function __construct($config = [])
+    public function __construct(Config $config = null)
     {
+        $this->config = $config ?: new Config();
         $this->restforce = new Restforce(
-            $config['clientId'],
-            $config['clientSecret'],
-            $config['path'],
-            $config['accessToken'],
-            $config['username'],
-            $config['password'],
-            $config['apiVersion']
+            $this->config->getClientId(),
+            $this->config->getClientSecret(),
+            $this->config->getPath(),
+            null,
+            $this->config->getUsername(),
+            $this->config->getPassword(),
+            $this->config->getApiVersion()
         );
+
+
     }
 
     /**
