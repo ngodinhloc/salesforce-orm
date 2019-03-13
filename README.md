@@ -13,6 +13,11 @@ composer.json
         }
     ],
 </pre>
+
+Run 
+<pre>
+composer require brightecapital/salesforce-orm
+</pre>
 ## Sample usage
 <pre>
 $config = [
