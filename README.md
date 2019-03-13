@@ -1,5 +1,18 @@
 # Salesforce ORM
 
+## Configuration
+composer.json
+<pre>
+"require": {
+        "brightecapital/salesforce-orm": "dev-master"
+    },
+    "repositories": [
+        {
+            "url": "https://github.com/brightecapital/salesforce-orm.git",
+            "type": "git"
+        }
+    ],
+</pre>
 ## Sample usage
 <pre>
 $config = [
