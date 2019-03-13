@@ -5,7 +5,7 @@
 $config = [
             'clientId' => 'yourSalesforceClientId'
             'clientSecret' => "yourSalesforceSecret"
-            'path' => 'yourSalesforcePaht'
+            'path' => 'yourSalesforcePath'
             'username' => 'yourSalesforceUsername'
             'password' => 'yourSalesforcePassword'
             'apiVersion' => 'yourSalesforceApiVersion'
