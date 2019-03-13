@@ -2,6 +2,7 @@
 namespace Salesforce\Client;
 
 use EventFarm\Restforce\Restforce;
+use EventFarm\Restforce\RestforceInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Salesforce\Client\Exception\ClientException;
@@ -119,5 +120,15 @@ class Client
     public function getObject($sObject, $sObjectId): array
     {
         return json_decode($this->restforce->find($sObject, $sObjectId)->getBody()->getContents(), true);
+    }
+
+    /**
+     * RestforceInterface getter
+     *
+     * @return RestforceInterface
+     */
+    public function getRestforce(): RestforceInterface
+    {
+        return $this->restforce;
     }
 }
