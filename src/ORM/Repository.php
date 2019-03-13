@@ -19,9 +19,9 @@ class Repository
      * @param EntityManager|null $entityManager entity manager
      * @throws \Exception
      */
-    public function __construct(EntityManager $entityManager = null)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager ?: new EntityManager();
+        $this->entityManager = $entityManager;
     }
 
     /**
