@@ -38,8 +38,6 @@ class Client
             $this->config->getPassword(),
             $this->config->getApiVersion()
         );
-
-
     }
 
     /**
