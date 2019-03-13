@@ -4,7 +4,7 @@
 composer.json
 <pre>
 "require": {
-        "brightecapital/salesforce-orm": "dev-master"
+        "brightecapital/salesforce-orm": "^1.1"
     },
     "repositories": [
         {
