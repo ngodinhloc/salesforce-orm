@@ -3,9 +3,9 @@
 namespace SalesforceTest\ORM;
 
 use PHPUnit\Framework\TestCase;
+use Salesforce\Client\Client;
 use Salesforce\Client\FieldNames;
 use Salesforce\Client\ResponseCodes;
-use Salesforce\Client\Client;
 use Salesforce\Entity\Account;
 use Salesforce\ORM\EntityManager;
 use Salesforce\ORM\Mapper;
@@ -25,16 +25,18 @@ class EntityManagerTest extends TestCase
         parent::setUp();
         $this->sfClient = $this->createMock(Client::class);
         $this->mapper = $this->createMock(Mapper::class);
-        $this->entityManager = new EntityManager($this->sfClient, $this->mapper);
+        $config = ["clientId" => "***", "clientSecret" => "***", "path" => "***", 'username' => '***', "password" => "***", "apiVersion" => "***"];
+        $this->entityManager = new EntityManager($config, $this->mapper);
+        $this->entityManager->setSalesforceClient($this->sfClient);
     }
 
     public function testFind()
     {
         $id = "someId";
         $class = Account::class;
-        $this->sfClient->expects($this->once())->method("getObject");
+        $this->sfClient->expects($this->once())->method("findObject");
         $this->mapper->expects($this->once())->method("getObjectType")->willReturn("Account");
-        $this->mapper->expects($this->once())->method("patch")->willReturn(new Account());
+        $this->mapper->expects($this->exactly(0))->method("patch")->willReturn(false);
         $this->entityManager->find($class, $id);
     }
 
@@ -86,7 +88,7 @@ class EntityManagerTest extends TestCase
         $array = $mapper->toArray($account);
         $builder = new Builder();
         $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->getQuery();
-        $this->sfClient->expects($this->once())->method("__call")->with('query', [$query]);
+        $this->sfClient->expects($this->once())->method("query")->with($query);
         $this->entityManager->query(Account::class, $conditions);
     }
 

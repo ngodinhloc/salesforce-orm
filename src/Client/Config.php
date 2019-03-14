@@ -12,7 +12,7 @@ class Config
     protected $password;
     protected $apiVersion;
 
-    const REQUIRED_CONFIGURATION_DATA = ['clientId', 'clientSecret', 'path', 'password', 'apiVersion'];
+    const REQUIRED_CONFIGURATION_DATA = ['clientId', 'clientSecret', 'path', 'username', 'password', 'apiVersion'];
 
     /**
      * Config constructor.
