@@ -137,13 +137,11 @@ class EntityManager
             };
         }
         // id is not set, then create object
-        if ($data = $this->salesforceClient->createObject($objectType, $data)) {
-            if ($data['success']) {
-                $entity->setId($data['id']);
-                $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, true);
+        if ($id = $this->salesforceClient->createObject($objectType, $data)) {
+            $entity->setId($id);
+            $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, true);
 
-                return true;
-            }
+            return true;
         };
 
         return false;

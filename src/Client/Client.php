@@ -43,7 +43,7 @@ class Client
     /**
      * @param string $sObject object name
      * @param array $data associative array to send to salesforce.
-     * @return mixed
+     * @return string
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
@@ -65,7 +65,7 @@ class Client
      * @param string $sObject object
      * @param string $sObjectId id to update
      * @param array $data data in associate array format
-     * @return mixed
+     * @return bool
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
@@ -90,7 +90,7 @@ class Client
     /**
      * @param string $sObject salesforce object name
      * @param string $sObjectId id
-     * @return mixed
+     * @return array|bool
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
@@ -114,7 +114,7 @@ class Client
 
     /**
      * @param string $query query string
-     * @return mixed
+     * @return array|bool
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
