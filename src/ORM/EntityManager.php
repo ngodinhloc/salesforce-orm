@@ -80,7 +80,7 @@ class EntityManager
      * @return Entity|false patched entity
      * @throws \Salesforce\ORM\EXception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
     public function find($class, $id)
@@ -110,7 +110,7 @@ class EntityManager
      * @return bool
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
     public function save(Entity &$entity)
@@ -155,7 +155,7 @@ class EntityManager
      * @return mixed
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
     public function query($class, $conditions = [])

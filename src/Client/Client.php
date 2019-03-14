@@ -5,7 +5,6 @@ use EventFarm\Restforce\Restforce;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Salesforce\Client\Exception\ClientException;
-use Salesforce\ORM\Query\Result;
 
 /**
  * Class Client
@@ -45,7 +44,7 @@ class Client
      * @param array $data associative array to send to salesforce.
      * @return string
      * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function createObject(string $sObject, array $data)
     {
@@ -67,7 +66,7 @@ class Client
      * @param array $data data in associate array format
      * @return bool
      * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function updateObject(string $sObject, string $sObjectId, array $data)
     {
@@ -92,7 +91,7 @@ class Client
      * @param string $sObjectId id
      * @return array|bool
      * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function findObject($sObject, $sObjectId)
     {
@@ -116,7 +115,7 @@ class Client
      * @param string $query query string
      * @return array|bool
      * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function query($query)
     {

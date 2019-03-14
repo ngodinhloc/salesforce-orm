@@ -1,10 +1,10 @@
 <?php
-namespace SalesforceTest\ORM;
+namespace SalesforceTest\Client;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Salesforce\Client\ResponseCodes;
-use Salesforce\ORM\Query\Result;
+use Salesforce\Client\Result;
 
 class ResultTest extends TestCase
 {

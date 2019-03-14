@@ -1,5 +1,5 @@
 <?php
-namespace Salesforce\ORM\Exception;
+namespace Salesforce\Client\Exception;
 
 class ResultException extends \Exception
 {

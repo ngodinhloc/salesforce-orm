@@ -27,9 +27,11 @@ class Repository
     /**
      * @param string $id id
      * @return Entity
-     * @throws \Salesforce\ORM\Exception\RepositoryException
-     * @throws \Salesforce\ORM\Exception\EntityException
+     * @throws \Salesforce\ORM\EXception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\ORM\Exception\RepositoryException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function find(string $id)
     {
@@ -48,6 +50,7 @@ class Repository
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function save(Entity &$entity)
     {
@@ -72,7 +75,8 @@ class Repository
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function query($conditions = [])
     {

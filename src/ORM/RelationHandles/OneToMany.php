@@ -16,7 +16,7 @@ class OneToMany extends RelationHandle implements RelationHandleInterface
      * @return void
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Exception
      */
     public function handle(Entity &$entity, \ReflectionProperty $property, RelationInterface $relation)

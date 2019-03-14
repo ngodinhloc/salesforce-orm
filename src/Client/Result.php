@@ -1,9 +1,8 @@
 <?php
-namespace Salesforce\ORM\Query;
+namespace Salesforce\Client;
 
 use Psr\Http\Message\ResponseInterface;
-use Salesforce\Client\ResponseCodes;
-use Salesforce\ORM\Exception\ResultException;
+use Salesforce\Client\Exception\ResultException;
 
 class Result
 {
@@ -22,7 +21,7 @@ class Result
 
     /**
      * @return mixed
-     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function get()
     {
