@@ -2,10 +2,10 @@
 namespace Salesforce\Client;
 
 use EventFarm\Restforce\Restforce;
-use EventFarm\Restforce\RestforceInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Salesforce\Client\Exception\ClientException;
+use Salesforce\ORM\Query\Result;
 
 /**
  * Class Client
@@ -41,92 +41,112 @@ class Client
     }
 
     /**
-     * call client
-     *
-     * @param string $method Resforce method name
-     * @param array $arguments passed onto restforce
-     * @return ResponseInterface
-     * @throws \Salesforce\Client\Exception\ClientException
-     */
-    public function __call(string $method, array $arguments): ResponseInterface
-    {
-        if (!method_exists($this->getRestforce(), $method)) {
-            throw new ClientException(ClientException::MSG_METHOD_NOT_EXISTS . $method);
-        }
-        $result = call_user_func_array([$this->getRestforce(), $method], $arguments);
-
-        return $result;
-    }
-
-    /**
      * @param string $sObject object name
      * @param array $data associative array to send to salesforce.
-     * @return array
+     * @return mixed
      * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\ORM\Exception\ResultException
      */
     public function createObject(string $sObject, array $data): array
     {
         try {
-            /** @var ResponseInterface $response */
-            $response = $this->create($sObject, $data);
+            /* @var ResponseInterface $response */
+            $response = $this->restforce->create($sObject, $data);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_CREATE_OBJECT . $e->getMessage());
         }
-        $content = json_decode($response->getBody()->getContents(), true);
 
-        if (empty($content['success'])) {
-            throw new ClientException(ClientException::MSG_FAILED_TO_CREATE_OBJECT . $sObject);
-        }
+        $result = new Result($response);
 
-        return $content;
+        return $result->get();
     }
 
     /**
      * @param string $sObject object
-     * @param string $salesforceId id to update
+     * @param string $objectId id to update
      * @param array $data data in associate array format
-     * @return int
+     * @return mixed
      * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\ORM\Exception\ResultException
      */
-    public function updateObject(string $sObject, string $salesforceId, array $data): int
+    public function updateObject(string $sObject, string $objectId, array $data): int
     {
-        if (empty($salesforceId)) {
-            return ResponseCodes::HTTP_BAD_REQUEST;
+        if (empty($objectId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
         try {
-            /** @var ResponseInterface $response */
-            $response = $this->update($sObject, $salesforceId, $data);
+            /* @var ResponseInterface $response */
+            $response = $this->restforce->update($sObject, $objectId, $data);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_UPDATE_OBJECT . $e->getMessage());
         }
 
-        $statusCode = $response->getStatusCode();
+        $result = new Result($response);
 
-        if ($statusCode !== ResponseCodes::HTTP_NO_CONTENT) {
-            throw new ClientException(ClientException::MSG_FAILED_TO_UPDATE_OBJECT . $sObject);
-        }
-
-        return $statusCode;
+        return $result->get();
     }
 
     /**
      * @param string $sObject salesforce object name
      * @param string $sObjectId id
-     * @return array
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\ORM\Exception\ResultException
      */
-    public function getObject($sObject, $sObjectId): array
+    public function findObject($sObject, $sObjectId): array
     {
-        return json_decode($this->restforce->find($sObject, $sObjectId)->getBody()->getContents(), true);
+        if (empty($objectId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
+        }
+
+        try {
+            /* @var ResponseInterface $response */
+            $response = $this->restforce->find($sObject, $sObjectId);
+        } catch (Exception $e) {
+            throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
+        }
+
+        $result = new Result($response);
+
+        return $result->get();
     }
 
     /**
-     * RestforceInterface getter
-     *
-     * @return RestforceInterface
+     * @return Restforce
      */
-    public function getRestforce(): RestforceInterface
+    public function getRestforce(): Restforce
     {
         return $this->restforce;
+    }
+
+    /**
+     * @param Restforce $restforce
+     * @return Client
+     */
+    public function setRestforce(Restforce $restforce): Client
+    {
+        $this->restforce = $restforce;
+
+        return $this;
+    }
+
+    /**
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param Config $config
+     * @return Client
+     */
+    public function setConfig(Config $config): Client
+    {
+        $this->config = $config;
+
+        return $this;
     }
 }

@@ -78,17 +78,23 @@ class EntityManager
     /**
      * @param string $class class name
      * @param string $id id
-     * @return Entity patched entity
-     * @throws \Salesforce\ORM\Exception\EntityException
+     * @return Entity|false patched entity
+     * @throws \Salesforce\ORM\EXception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function find($class, $id)
     {
         $object = $this->object($class);
         $objectType = $this->mapper->getObjectType($object);
-        $array = $this->salesforceClient->getObject($objectType, $id);
-        $entity = $this->mapper->patch($object, $array);
+        $find = $this->salesforceClient->findObject($objectType, $id);
 
+        if (!$find) {
+            return $find;
+        }
+
+        $entity = $this->mapper->patch($object, $find);
         // No eager loading
         if (empty($entity->getEagerLoad())) {
             return $entity;
@@ -105,6 +111,7 @@ class EntityManager
      * @return bool
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\ORM\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
     public function save(Entity &$entity)
@@ -208,7 +215,7 @@ class EntityManager
     }
 
     /**
-     * @param $class class
+     * @param string $class class
      * @return Repository
      * @throws \Exception
      */

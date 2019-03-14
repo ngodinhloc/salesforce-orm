@@ -21,7 +21,7 @@ class Result
     }
 
     /**
-     * @return bool|array
+     * @return mixed
      * @throws \Salesforce\ORM\Exception\ResultException
      */
     public function get()
@@ -34,12 +34,32 @@ class Result
         switch ($this->response->getStatusCode()) {
             case ResponseCodes::HTTP_OK:
                 if ($content = $this->response->getBody()->getContents()) {
-                    $result = json_decode($content, true)['records'];
+                    $array = json_decode($content, true);
+                    $result = isset($array['records']) ? $array['records'] : $array;
                 }
+                break;
+            case ResponseCodes::HTTP_CREATED:
+                if ($content = $this->response->getBody()->getContents()) {
+                    $array = json_decode($content, true);
+                    if ($array['success'] && isset($array['id'])) {
+                        $result = $array['id'];
+                    }
+                }
+                break;
+            case ResponseCodes::HTTP_NOT_FOUND:
+            case ResponseCodes::HTTP_BAD_REQUEST:
+                if ($content = $this->response->getBody()->getContents()) {
+                    $array = json_decode($content, true);
+                    if (isset($array['message'])) {
+                        throw new ResultException($array['message']);
+                    }
+                }
+                $result = false;
                 break;
             case ResponseCodes::HTTP_NO_CONTENT:
                 $result = true;
                 break;
+
         }
 
         return $result;
