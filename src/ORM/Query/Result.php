@@ -54,7 +54,6 @@ class Result
                         throw new ResultException($array['message']);
                     }
                 }
-                $result = false;
                 break;
             case ResponseCodes::HTTP_NO_CONTENT:
                 $result = true;
