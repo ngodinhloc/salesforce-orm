@@ -63,21 +63,21 @@ class Client
 
     /**
      * @param string $sObject object
-     * @param string $objectId id to update
+     * @param string $sObjectId id to update
      * @param array $data data in associate array format
      * @return mixed
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
-    public function updateObject(string $sObject, string $objectId, array $data): int
+    public function updateObject(string $sObject, string $sObjectId, array $data): int
     {
-        if (empty($objectId)) {
+        if (empty($sObjectId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
         try {
             /* @var ResponseInterface $response */
-            $response = $this->restforce->update($sObject, $objectId, $data);
+            $response = $this->restforce->update($sObject, $sObjectId, $data);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_UPDATE_OBJECT . $e->getMessage());
         }
@@ -96,7 +96,7 @@ class Client
      */
     public function findObject($sObject, $sObjectId): array
     {
-        if (empty($objectId)) {
+        if (empty($sObjectId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
