@@ -16,23 +16,24 @@ class OneToMany extends RelationHandle implements RelationHandleInterface
      * @return void
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Exception
      */
     public function handle(Entity &$entity, \ReflectionProperty $property, RelationInterface $relation)
     {
-        /* @var \App\Domain\Marketing\Salesforce\ORM\Annotation\OneToMany $relation */
-        $collections = $this->repository->setClass($relation->class)->query(["{$relation->field} = {$entity->getId()}"]);
+        /* @var \Salesforce\ORM\Annotation\OneToMany $relation */
+        $mapper = $this->entityManager->getMapper();
+        $collections = $this->entityManager->query($relation->class, ["{$relation->field} = {$entity->getId()}"]);
         $objects = [];
         foreach ($collections as $array) {
-            $object = $this->repository->getEntityManager()->object($relation->class);
-            $relationEntity = $this->mapper->patch($object, $array);
+            $object = $this->entityManager->object($relation->class);
+            $relationEntity = $mapper->patch($object, $array);
             if (empty($relationEntity->getEagerLoad())) {
                 $objects[] = $relationEntity;
             } else {
-                $objects[] = $this->repository->getEntityManager()->eagerLoad($relationEntity);
+                $objects[] = $this->entityManager->eagerLoad($relationEntity);
             }
         }
-        $this->mapper->setPropertyValue($entity, $property, $objects);
+        $mapper->setPropertyValue($entity, $property, $objects);
     }
 }

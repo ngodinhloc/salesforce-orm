@@ -19,7 +19,6 @@ class OneToMany extends Annotation implements RelationInterface
     /**
      * @param EntityManager $entityManager entity manager
      * @return RelationHandleInterface
-     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function getHandler(EntityManager $entityManager): RelationHandleInterface
     {

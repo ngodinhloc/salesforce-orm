@@ -5,13 +5,7 @@ composer.json
 <pre>
 "require": {
         "brightecapital/salesforce-orm": "^1.1"
-    },
-    "repositories": [
-        {
-            "url": "https://github.com/brightecapital/salesforce-orm.git",
-            "type": "git"
-        }
-    ],
+    }
 </pre>
 
 Run 

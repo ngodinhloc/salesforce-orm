@@ -3,23 +3,16 @@ namespace Salesforce\ORM;
 
 class RelationHandle
 {
-    /** @var Repository */
-    protected $repository;
-
-    /** @var Mapper */
-    protected $mapper;
+    /** @var EntityManager */
+    protected $entityManager;
 
     /**
      * RelationHandle constructor.
      *
-     * @param EntityManager|null $entityManager entity manager
-     * @param Mapper|null $mapper mapper
-     * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \Exception
+     * @param EntityManager $entityManager entity manager
      */
-    public function __construct(EntityManager $entityManager, Mapper $mapper = null)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->repository = new Repository($entityManager);
-        $this->mapper = $mapper ?: new Mapper();
+        $this->entityManager = $entityManager;
     }
 }
