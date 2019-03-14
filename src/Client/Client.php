@@ -47,7 +47,7 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
-    public function createObject(string $sObject, array $data): array
+    public function createObject(string $sObject, array $data)
     {
         try {
             /* @var ResponseInterface $response */
@@ -69,7 +69,7 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
-    public function updateObject(string $sObject, string $sObjectId, array $data): int
+    public function updateObject(string $sObject, string $sObjectId, array $data)
     {
         if (empty($sObjectId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
@@ -94,7 +94,7 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\ResultException
      */
-    public function findObject($sObject, $sObjectId): array
+    public function findObject($sObject, $sObjectId)
     {
         if (empty($sObjectId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
@@ -103,6 +103,26 @@ class Client
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->find($sObject, $sObjectId);
+        } catch (Exception $e) {
+            throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
+        }
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string $query query string
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\ORM\Exception\ResultException
+     */
+    public function query($query)
+    {
+        try {
+            /* @var ResponseInterface $response */
+            $response = $this->restforce->query($query);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
         }

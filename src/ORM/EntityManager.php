@@ -6,7 +6,6 @@ use Salesforce\Client\Config;
 use Salesforce\Client\FieldNames;
 use Salesforce\ORM\Exception\EntityException;
 use Salesforce\ORM\Query\Builder;
-use Salesforce\ORM\Query\Result;
 
 /**
  * Class EntityManager
@@ -159,6 +158,7 @@ class EntityManager
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\ORM\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function query($class, $conditions = [])
     {
@@ -167,10 +167,8 @@ class EntityManager
         $array = $this->mapper->toArray($entity);
         $builder = new Builder();
         $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->getQuery();
-        $response = $this->salesforceClient->query($query);
-        $result = new Result($response);
 
-        return $result->get();
+        return $this->salesforceClient->query($query);
     }
 
     /**
