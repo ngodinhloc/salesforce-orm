@@ -31,7 +31,7 @@ class OpportunityContactRole extends Entity
      * @var bool
      * @SF\Field(name="IsPrimary")
      */
-    protected $isPrimary;
+    protected $isPrimary = false;
 
     /**
      * @var string

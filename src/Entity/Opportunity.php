@@ -43,6 +43,7 @@ class Opportunity extends Entity
     /**
      * @var string
      * @SF\Field(name="StageName")
+     * @SF\Required(value=true)
      */
     protected $stage;
 

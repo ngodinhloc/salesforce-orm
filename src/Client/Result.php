@@ -49,8 +49,8 @@ class Result
             case ResponseCodes::HTTP_BAD_REQUEST:
                 if ($content = $this->response->getBody()->getContents()) {
                     $array = json_decode($content, true);
-                    if (isset($array['message'])) {
-                        throw new ResultException($array['message']);
+                    if (isset($array[0]['message'])) {
+                        throw new ResultException($array[0]['message']);
                     }
                 }
                 break;
