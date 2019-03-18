@@ -10,23 +10,22 @@ use Salesforce\ORM\RelationInterface;
 class OneToMany extends RelationHandle implements RelationHandleInterface
 {
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param \ReflectionProperty $property property
-     * @param RelationInterface $relation relation
+     * @param \Salesforce\ORM\RelationInterface $annotation relation
      * @return void
-     * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Exception
      */
-    public function handle(Entity &$entity, \ReflectionProperty $property, RelationInterface $relation)
+    public function handle(Entity &$entity, \ReflectionProperty $property, RelationInterface $annotation)
     {
-        /* @var \Salesforce\ORM\Annotation\OneToMany $relation */
+        /* @var \Salesforce\ORM\Annotation\OneToMany $annotation */
         $mapper = $this->entityManager->getMapper();
-        $collections = $this->entityManager->query($relation->class, ["{$relation->field} = {$entity->getId()}"]);
+        $collections = $this->entityManager->query($annotation->class, ["{$annotation->field} = {$entity->getId()}"]);
         $objects = [];
         foreach ($collections as $array) {
-            $object = $this->entityManager->object($relation->class);
+            $object = $mapper->object($annotation->class);
             $relationEntity = $mapper->patch($object, $array);
             if (empty($relationEntity->getEagerLoad())) {
                 $objects[] = $relationEntity;

@@ -27,7 +27,6 @@ class Repository
     /**
      * @param string $id id
      * @return Entity
-     * @throws \Salesforce\ORM\EXception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\Client\Exception\ClientException
@@ -73,7 +72,6 @@ class Repository
      * @param array $conditions conditions
      * @return mixed
      * @throws \Salesforce\ORM\Exception\RepositoryException
-     * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
@@ -85,37 +83,6 @@ class Repository
         }
 
         return $this->entityManager->query($this->class, $conditions);
-    }
-
-    /**
-     * Create new entity from array data
-     *
-     * @param array $data data
-     * @return Entity
-     * @throws \Salesforce\ORM\Exception\RepositoryException
-     * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\ORM\Exception\MapperException
-     */
-    public function new($data)
-    {
-        if (!$this->class) {
-            throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
-        }
-
-        return $this->entityManager->new($this->class, $data);
-    }
-
-    /**
-     * Patch entity with data array
-     *
-     * @param Entity $entity entity
-     * @param array $array data
-     * @return Entity
-     * @throws \Salesforce\ORM\Exception\MapperException
-     */
-    public function patch(Entity $entity, $array = [])
-    {
-        return $this->entityManager->patch($entity, $array);
     }
 
     /**

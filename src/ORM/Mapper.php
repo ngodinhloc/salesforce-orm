@@ -1,13 +1,13 @@
 <?php
 namespace Salesforce\ORM;
 
-use Salesforce\ORM\Exception\MapperException;
-use Salesforce\ORM\Annotation\Field;
-use Salesforce\ORM\Annotation\Object;
-use Salesforce\ORM\Annotation\Required;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
+use Salesforce\ORM\Annotation\Field;
+use Salesforce\ORM\Annotation\Object;
+use Salesforce\ORM\Annotation\Required;
+use Salesforce\ORM\Exception\MapperException;
 
 class Mapper
 {
@@ -57,6 +57,7 @@ class Mapper
 
         $eagerLoad = [];
         $requiredProperties = [];
+        $requiredValidations = [];
         foreach ($properties as $property) {
             $annotations = $this->reader->getPropertyAnnotations($property);
             foreach ($annotations as $annotation) {
@@ -66,15 +67,21 @@ class Mapper
                     }
                 }
 
-                if ($annotation instanceof RelationInterface) {
-                    if ($annotation->lazy === false) {
-                        $eagerLoad[$property->name] = ['property' => $property, 'relation' => $annotation];
-                    }
-                }
-
                 if ($annotation instanceof Required) {
                     if ($annotation->value === true) {
                         $requiredProperties[$property->name] = $property;
+                    }
+                }
+
+                if ($annotation instanceof RelationInterface) {
+                    if ($annotation->lazy === false) {
+                        $eagerLoad[$property->name] = ['property' => $property, 'annotation' => $annotation];
+                    }
+                }
+
+                if ($annotation instanceof ValidationInterface) {
+                    if ($annotation->value === true) {
+                        $requiredValidations[$property->name] = ['property' => $property, 'annotation' => $annotation];
                     }
                 }
             }
@@ -86,6 +93,10 @@ class Mapper
 
         if (!empty($requiredProperties)) {
             $this->setPropertyValueByName($entity, Entity::PROPERTY_REQUIRED_PROPERTIES, $requiredProperties);
+        }
+
+        if (!empty($requiredValidations)) {
+            $this->setPropertyValueByName($entity, Entity::PROPERTY_REQUIRED_VALIDATIONS, $requiredValidations);
         }
 
         $this->setPropertyValueByName($entity, Entity::PROPERTY_IS_PATCHED, true);
@@ -121,6 +132,42 @@ class Mapper
         }
 
         return $missingFields;
+    }
+
+    /**
+     * @param Entity $entity entity
+     * @return bool|array
+     * @throws \Salesforce\ORM\Exception\MapperException
+     */
+    public function checkRequiredValidations(Entity $entity)
+    {
+        if ($entity->isPatched() !== true) {
+            $entity = $this->patch($entity, []);
+        }
+
+        if (empty($entity->getRequiredValidations())) {
+            return true;
+        }
+
+        $validationRules = [];
+        /* @var \ReflectionProperty $property */
+        foreach ($entity->getRequiredValidations() as $rule) {
+            $property = $rule['property'];
+            $annotation = $rule['annotation'];
+            if ($annotation instanceof ValidationInterface) {
+                $validator = $annotation->getValidator();
+                $check = $validator->validate($entity, $property, $annotation);
+                if (!$check) {
+                    $validationRules[] = $property->name . ": ." . $annotation->name;
+                }
+            }
+        }
+
+        if (empty($validationRules)) {
+            return true;
+        }
+
+        return $validationRules;
     }
 
     /**
@@ -224,6 +271,24 @@ class Mapper
         }
 
         return false;
+    }
+
+    /**
+     * Create Entity object from class name
+     *
+     * @param string $class class name
+     * @return Entity
+     * @throws \Salesforce\ORM\Exception\MapperException
+     */
+    public function object($class)
+    {
+        try {
+            $object = new $class();
+        } catch (\Exception $exception) {
+            throw new MapperException(MapperException::MGS_INVALID_CLASS_NAME . $class);
+        }
+
+        return $object;
     }
 
     /**

@@ -45,47 +45,16 @@ class EntityManager
     }
 
     /**
-     * Create new object from data
-     *
-     * @param string $class class
-     * @param array $data data
-     * @return Entity
-     * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\ORM\Exception\MapperException
-     */
-    public function new($class, $data)
-    {
-        $object = $this->object($class);
-        $entity = $this->mapper->patch($object, $data);
-
-        return $entity;
-    }
-
-    /**
-     * Patch entity with data array
-     *
-     * @param Entity $entity entity
-     * @param array $array array
-     * @return Entity patched entity
-     * @throws \Salesforce\ORM\Exception\MapperException
-     */
-    public function patch(Entity $entity, $array = [])
-    {
-        return $this->mapper->patch($entity, $array);
-    }
-
-    /**
      * @param string $class class name
      * @param string $id id
      * @return Entity|false patched entity
-     * @throws \Salesforce\ORM\EXception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
     public function find($class, $id)
     {
-        $object = $this->object($class);
+        $object = $this->mapper->object($class);
         $objectType = $this->mapper->getObjectType($object);
         $find = $this->salesforceClient->findObject($objectType, $id);
 
@@ -118,6 +87,11 @@ class EntityManager
         $checkRequiredProperties = $this->mapper->checkRequiredProperties($entity);
         if ($checkRequiredProperties !== true) {
             throw new EntityException(EntityException::MGS_REQUIRED_PROPERTIES . implode(", ", $checkRequiredProperties));
+        }
+
+        $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
+        if ($checkRequiredValidations !== true) {
+            throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
         }
 
         $objectType = $this->mapper->getObjectType($entity);
@@ -153,14 +127,13 @@ class EntityManager
      * @param string $class class name
      * @param array $conditions conditions
      * @return mixed
-     * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
     public function query($class, $conditions = [])
     {
-        $entity = $this->object($class);
+        $entity = $this->mapper->object($class);
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
         $builder = new Builder();
@@ -182,10 +155,10 @@ class EntityManager
         }
         foreach ($entity->getEagerLoad() as $load) {
             $property = $load['property'];
-            $relation = $load['relation'];
-            if ($relation instanceof RelationInterface) {
-                $handler = $relation->getHandler($this);
-                $handler->handle($entity, $property, $relation);
+            $annotation = $load['annotation'];
+            if ($annotation instanceof RelationInterface) {
+                $handler = $annotation->getHandler($this);
+                $handler->handle($entity, $property, $annotation);
             }
         }
 
@@ -193,29 +166,11 @@ class EntityManager
     }
 
     /**
-     * Create Entity object from class name
-     *
-     * @param string $class class name
-     * @return Entity
-     * @throws \Salesforce\ORM\Exception\EntityException
-     */
-    public function object($class)
-    {
-        try {
-            $object = new $class();
-        } catch (\Exception $exception) {
-            throw new EntityException(EntityException::MGS_INVALID_CLASS_NAME . $class);
-        }
-
-        return $object;
-    }
-
-    /**
      * @param string $class class
      * @return Repository
      * @throws \Exception
      */
-    public function createRepository($class)
+    public function getRepository($class)
     {
         $repository = new Repository($this);
         $repository->setClass($class);

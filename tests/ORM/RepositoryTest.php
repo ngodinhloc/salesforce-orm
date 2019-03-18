@@ -42,20 +42,4 @@ class RepositoryTest extends TestCase
         $this->entityManager->expects($this->once())->method('query');
         $this->repository->setClass($class)->query($where);
     }
-
-    public function testNew()
-    {
-        $class = "Account";
-        $data = ["Id" => "12345"];
-        $this->entityManager->expects($this->once())->method('new')->with($class, $data)->willReturn(new Account());
-        $this->repository->setClass($class)->new($data);
-    }
-
-    public function testPatch()
-    {
-        $account = new Account();
-        $data = ["Id" => "12345"];
-        $this->entityManager->expects($this->once())->method('patch')->with($account, $data)->willReturn(new Account());
-        $this->repository->setClass(get_class($account))->patch($account, $data);
-    }
 }

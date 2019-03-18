@@ -39,15 +39,7 @@ class EntityManagerTest extends TestCase
         $this->mapper->expects($this->exactly(0))->method("patch")->willReturn(false);
         $this->entityManager->find($class, $id);
     }
-
-    public function testNew()
-    {
-        $class = Account::class;
-        $data = ["Id" => "123456", "Name" => "Ken"];
-        $this->mapper->expects($this->once())->method("patch")->with(new $class(), $data)->willReturn(new Account());
-        $this->entityManager->new($class, $data);
-    }
-
+    
     public function testUpdate()
     {
         $account = new Account();
@@ -90,13 +82,5 @@ class EntityManagerTest extends TestCase
         $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->getQuery();
         $this->sfClient->expects($this->once())->method("query")->with($query);
         $this->entityManager->query(Account::class, $conditions);
-    }
-
-    public function testPatch()
-    {
-        $account = new Account();
-        $data = ["Id" => "12345", "Name" => "Ken"];
-        $this->mapper->expects($this->once())->method("patch")->with($account, $data)->willReturn(new Account());
-        $this->entityManager->patch($account, $data);
     }
 }

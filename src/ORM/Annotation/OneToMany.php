@@ -17,8 +17,8 @@ class OneToMany extends Annotation implements RelationInterface
     public $lazy = true;
 
     /**
-     * @param EntityManager $entityManager entity manager
-     * @return RelationHandleInterface
+     * @param \Salesforce\ORM\EntityManager $entityManager entity manager
+     * @return \Salesforce\ORM\RelationHandleInterface
      */
     public function getHandler(EntityManager $entityManager): RelationHandleInterface
     {
