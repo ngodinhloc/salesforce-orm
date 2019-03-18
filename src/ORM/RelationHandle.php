@@ -9,7 +9,7 @@ class RelationHandle
     /**
      * RelationHandle constructor.
      *
-     * @param EntityManager $entityManager entity manager
+     * @param \Salesforce\ORM\EntityManager $entityManager entity manager
      */
     public function __construct(EntityManager $entityManager)
     {

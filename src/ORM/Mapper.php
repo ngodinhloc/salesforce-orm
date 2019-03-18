@@ -17,7 +17,7 @@ class Mapper
     /**
      * Mapper constructor.
      *
-     * @param AnnotationReader|null $reader reader
+     * @param \Doctrine\Common\Annotations\AnnotationReader|null $reader reader
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function __construct(AnnotationReader $reader = null)
@@ -26,7 +26,7 @@ class Mapper
     }
 
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return string
      * @throws \Salesforce\ORM\Exception\MapperException
      */
@@ -45,9 +45,9 @@ class Mapper
     /**
      * Patch object properties with data array
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param array $array array
-     * @return Entity
+     * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function patch(Entity $entity, $array = [])
@@ -105,7 +105,7 @@ class Mapper
     }
 
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return bool|array
      * @throws \Salesforce\ORM\Exception\MapperException
      */
@@ -135,7 +135,7 @@ class Mapper
     }
 
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return bool|array
      * @throws \Salesforce\ORM\Exception\MapperException
      */
@@ -171,7 +171,7 @@ class Mapper
     }
 
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return array
      * @throws \Salesforce\ORM\Exception\MapperException
      */
@@ -196,7 +196,7 @@ class Mapper
     /**
      * Set property value
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param \ReflectionProperty $property property
      * @param mixed $value value
      * @return void
@@ -210,7 +210,7 @@ class Mapper
     /**
      * Get property value
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param \ReflectionProperty $property property
      * @return mixed
      */
@@ -226,7 +226,7 @@ class Mapper
     /**
      * Set property value by name
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param string $propertyName name
      * @param mixed $value value
      * @return void
@@ -241,7 +241,7 @@ class Mapper
     /**
      * Get property value by name
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param string $propertyName name
      * @return mixed
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -254,7 +254,7 @@ class Mapper
     }
 
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param string $propertyName name
      * @return bool|\ReflectionProperty
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -277,7 +277,7 @@ class Mapper
      * Create Entity object from class name
      *
      * @param string $class class name
-     * @return Entity
+     * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function object($class)
@@ -292,8 +292,8 @@ class Mapper
     }
 
     /**
-     * @param Entity $entity entity
-     * @return ReflectionClass
+     * @param \Salesforce\ORM\Entity $entity entity
+     * @return \ReflectionClass
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     protected function reflect(Entity $entity)

@@ -4,10 +4,10 @@ namespace Salesforce\ORM;
 interface RelationHandleInterface
 {
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param \ReflectionProperty $property property
-     * @param RelationInterface $annotation relation
-     * @return Entity
+     * @param \Salesforce\ORM\RelationInterface $annotation relation
+     * @return \Salesforce\ORM\Entity
      */
     public function handle(Entity &$entity, \ReflectionProperty $property, RelationInterface $annotation);
 }

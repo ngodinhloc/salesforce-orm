@@ -26,7 +26,7 @@ class Config
      *  'password' =>
      *  'apiVersion' =>
      * ]
-     * @throws ConfigException
+     * @throws \Salesforce\Client\Exception\ConfigException
      */
     public function __construct(array $config)
     {
@@ -51,7 +51,7 @@ class Config
 
     /**
      * @param array|false|string $clientId client id
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function setClientId($clientId)
     {
@@ -70,7 +70,7 @@ class Config
 
     /**
      * @param array|false|string $clientSecret secret
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function setClientSecret($clientSecret)
     {
@@ -89,7 +89,7 @@ class Config
 
     /**
      * @param array|false|string $path path
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function setPath($path)
     {
@@ -108,7 +108,7 @@ class Config
 
     /**
      * @param array|false|string $username username
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function setUsername($username)
     {
@@ -127,7 +127,7 @@ class Config
 
     /**
      * @param array|false|string $password password
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function setPassword($password)
     {
@@ -146,7 +146,7 @@ class Config
 
     /**
      * @param array|false|string $apiVersion api version
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function setApiVersion($apiVersion)
     {

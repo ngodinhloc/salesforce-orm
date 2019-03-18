@@ -32,7 +32,7 @@ class EntityManager
      *  'password' =>
      *  'apiVersion' =>
      * ]
-     * @param Mapper|null $mapper mapper
+     * @param \Salesforce\ORM\Mapper|null $mapper mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \EventFarm\Restforce\RestforceException
      * @throws \Salesforce\Client\Exception\ConfigException
@@ -47,7 +47,7 @@ class EntityManager
     /**
      * @param string $class class name
      * @param string $id id
-     * @return Entity|false patched entity
+     * @return \Salesforce\ORM\Entity|false patched entity
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
@@ -75,7 +75,7 @@ class EntityManager
     /**
      * Save entity
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return bool
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -145,8 +145,8 @@ class EntityManager
     /**
      * Load object in relations
      *
-     * @param Entity $entity entity
-     * @return Entity
+     * @param \Salesforce\ORM\Entity $entity entity
+     * @return \Salesforce\ORM\Entity
      */
     public function eagerLoad(Entity $entity)
     {
@@ -167,7 +167,7 @@ class EntityManager
 
     /**
      * @param string $class class
-     * @return Repository
+     * @return \Salesforce\ORM\Repository
      * @throws \Exception
      */
     public function getRepository($class)
@@ -179,7 +179,7 @@ class EntityManager
     }
 
     /**
-     * @return Client
+     * @return \Salesforce\Client\Client
      */
     public function getSalesforceClient()
     {
@@ -187,7 +187,7 @@ class EntityManager
     }
 
     /**
-     * @param Client $salesforceClient client
+     * @param \Salesforce\Client\Client $salesforceClient client
      * @return void
      */
     public function setSalesforceClient(Client $salesforceClient)
@@ -196,7 +196,7 @@ class EntityManager
     }
 
     /**
-     * @return Mapper
+     * @return \Salesforce\ORM\Mapper
      */
     public function getMapper()
     {
@@ -204,7 +204,7 @@ class EntityManager
     }
 
     /**
-     * @param Mapper $mapper mapper
+     * @param \Salesforce\ORM\Mapper $mapper mapper
      * @return void
      */
     public function setMapper(Mapper $mapper)

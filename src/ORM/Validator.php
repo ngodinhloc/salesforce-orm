@@ -9,7 +9,7 @@ class Validator
     /**
      * Validator constructor.
      *
-     * @param Mapper|null $mapper
+     * @param \Salesforce\ORM\Mapper|null $mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function __construct(Mapper $mapper = null)

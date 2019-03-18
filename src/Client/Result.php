@@ -73,7 +73,7 @@ class Result
 
     /**
      * @param ResponseInterface|null $response response
-     * @return Result
+     * @return \Salesforce\Client\Result
      */
     public function setResponse(ResponseInterface $response): Result
     {

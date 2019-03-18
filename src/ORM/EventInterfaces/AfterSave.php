@@ -6,7 +6,7 @@ use Salesforce\ORM\Entity;
 interface AfterSave
 {
     /**
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return mixed
      */
     public function afterSave(Entity &$entity);

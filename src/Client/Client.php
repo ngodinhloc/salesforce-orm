@@ -22,7 +22,7 @@ class Client
     /**
      * Client constructor.
      *
-     * @param Config|null $config config
+     * @param \Salesforce\Client\Config|null $config config
      * @throws \EventFarm\Restforce\RestforceException
      */
     public function __construct(Config $config)
@@ -141,7 +141,7 @@ class Client
 
     /**
      * @param Restforce $restforce
-     * @return Client
+     * @return \Salesforce\Client\Client
      */
     public function setRestforce(Restforce $restforce): Client
     {
@@ -151,7 +151,7 @@ class Client
     }
 
     /**
-     * @return Config
+     * @return \Salesforce\Client\Config
      */
     public function getConfig(): Config
     {
@@ -159,8 +159,8 @@ class Client
     }
 
     /**
-     * @param Config $config
-     * @return Client
+     * @param \Salesforce\Client\Config $config
+     * @return \Salesforce\Client\Client
      */
     public function setConfig(Config $config): Client
     {

@@ -11,7 +11,7 @@ class EntityFactory
     /**
      * EntityFactory constructor.
      *
-     * @param Mapper|null $mapper
+     * @param \Salesforce\ORM\Mapper|null $mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function __construct(Mapper $mapper = null)
@@ -24,7 +24,7 @@ class EntityFactory
      *
      * @param string $class
      * @param array $data data
-     * @return Entity
+     * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function new($class, $data)
@@ -42,9 +42,9 @@ class EntityFactory
     /**
      * Patch entity with data array
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @param array $array data
-     * @return Entity
+     * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function patch(Entity $entity, $array = [])

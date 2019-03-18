@@ -16,7 +16,7 @@ class Repository
     /**
      * Repository constructor.
      *
-     * @param EntityManager|null $entityManager entity manager
+     * @param \Salesforce\ORM\EntityManager|null $entityManager entity manager
      * @throws \Exception
      */
     public function __construct(EntityManager $entityManager)
@@ -26,7 +26,7 @@ class Repository
 
     /**
      * @param string $id id
-     * @return Entity
+     * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\Client\Exception\ClientException
@@ -44,7 +44,7 @@ class Repository
     /**
      * Save entity to Salesforce
      *
-     * @param Entity $entity entity
+     * @param \Salesforce\ORM\Entity $entity entity
      * @return bool
      * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -95,7 +95,7 @@ class Repository
 
     /**
      * @param string $class class name
-     * @return Repository
+     * @return \Salesforce\ORM\Repository
      */
     public function setClass(string $class): Repository
     {
@@ -105,7 +105,7 @@ class Repository
     }
 
     /**
-     * @return EntityManager
+     * @return \Salesforce\ORM\EntityManager
      */
     public function getEntityManager()
     {
@@ -113,8 +113,8 @@ class Repository
     }
 
     /**
-     * @param EntityManager $entityManager entity manager
-     * @return Repository
+     * @param \Salesforce\ORM\EntityManager $entityManager entity manager
+     * @return \Salesforce\ORM\Repository
      */
     public function setEntityManager(EntityManager $entityManager)
     {
