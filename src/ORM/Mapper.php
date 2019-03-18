@@ -155,7 +155,7 @@ class Mapper
             $property = $rule['property'];
             $annotation = $rule['annotation'];
             if ($annotation instanceof ValidationInterface) {
-                $validator = $annotation->getValidator();
+                $validator = $annotation->getValidator($this);
                 $check = $validator->validate($entity, $property, $annotation);
                 if (!$check) {
                     $validationRules[] = $property->name . ": ." . $annotation->name;

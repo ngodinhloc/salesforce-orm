@@ -3,9 +3,10 @@ namespace Salesforce\ORM\Validators;
 
 use Salesforce\ORM\Entity;
 use Salesforce\ORM\ValidationInterface;
+use Salesforce\ORM\Validator;
 use Salesforce\ORM\ValidatorInterface;
 
-class Email implements ValidatorInterface
+class Email extends Validator implements ValidatorInterface
 {
 
     /**
@@ -16,7 +17,7 @@ class Email implements ValidatorInterface
      */
     public function validate(Entity &$entity, \ReflectionProperty $property, ValidationInterface $annotation)
     {
-        $email = $property->getValue($entity);
+        $email = $this->mapper->getPropertyValue($entity, $property);
 
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
