@@ -17,11 +17,11 @@ class Url extends Validator implements ValidatorInterface
      */
     public function validate(Entity &$entity, \ReflectionProperty $property, ValidationInterface $annotation)
     {
-        $email = $this->mapper->getPropertyValue($entity, $property);
-        if ($email === null) {
+        $url = $this->mapper->getPropertyValue($entity, $property);
+        if ($url === null) {
             return true;
         }
 
-        return filter_var($email, FILTER_VALIDATE_URL);
+        return filter_var($url, FILTER_VALIDATE_URL);
     }
 }
