@@ -15,7 +15,7 @@ class EntityManagerTest extends TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $sfClient;
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var Mapper */
     protected $mapper;
     /** @var EntityManager */
     protected $entityManager;
@@ -24,7 +24,7 @@ class EntityManagerTest extends TestCase
     {
         parent::setUp();
         $this->sfClient = $this->createMock(Client::class);
-        $this->mapper = $this->createMock(Mapper::class);
+        $this->mapper = new Mapper();
         $config = ["clientId" => "***", "clientSecret" => "***", "path" => "***", 'username' => '***', "password" => "***", "apiVersion" => "***"];
         $this->entityManager = new EntityManager($config, $this->mapper);
         $this->entityManager->setSalesforceClient($this->sfClient);
@@ -34,12 +34,12 @@ class EntityManagerTest extends TestCase
     {
         $id = "someId";
         $class = Account::class;
-        $this->sfClient->expects($this->once())->method("findObject");
-        $this->mapper->expects($this->once())->method("getObjectType")->willReturn("Account");
-        $this->mapper->expects($this->exactly(0))->method("patch")->willReturn(false);
+        $object = $this->mapper->object($class);
+        $objectType = $this->mapper->getObjectType($object);
+        $this->sfClient->expects($this->once())->method("findObject")->with($objectType, $id)->willReturn(false);
         $this->entityManager->find($class, $id);
     }
-    
+
     public function testUpdate()
     {
         $account = new Account();
@@ -62,10 +62,8 @@ class EntityManagerTest extends TestCase
     {
         $account = new Account();
         $account->setName("Ken");
-        $mapper = new Mapper();
-        $this->entityManager->setMapper($mapper);
-        $objectType = $mapper->getObjectType($account);
-        $data = $mapper->toArray($account);
+        $objectType = $this->mapper->getObjectType($account);
+        $data = $this->mapper->toArray($account);
         $this->sfClient->expects($this->once())->method("createObject")->with($objectType, $data);
         $this->entityManager->save($account);
     }

@@ -24,7 +24,7 @@ class EntityFactoryTest extends TestCase
     {
         $class = "Account";
         $data = ["Id" => "12345"];
-        $this->mapper->expects($this->once())->method('new')->with($class, $data)->willReturn(new Account());
+        $this->mapper->expects($this->once())->method('object')->with($class)->willReturn(new Account());
         $this->entityFactory->new($class, $data);
     }
 

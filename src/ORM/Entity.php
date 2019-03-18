@@ -96,7 +96,7 @@ class Entity
     /**
      * @return array
      */
-    public function getRequiredValidations(): array
+    public function getRequiredValidations()
     {
         return $this->requiredValidations;
     }

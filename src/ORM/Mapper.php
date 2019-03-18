@@ -158,7 +158,7 @@ class Mapper
                 $validator = $annotation->getValidator($this);
                 $check = $validator->validate($entity, $property, $annotation);
                 if (!$check) {
-                    $validationRules[] = $property->name . ": ." . $annotation->name;
+                    $validationRules[] = $property->name . ": " . $annotation->name;
                 }
             }
         }
