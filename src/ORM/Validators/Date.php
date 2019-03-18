@@ -17,8 +17,12 @@ class Date extends Validator implements ValidatorInterface
      */
     public function validate(Entity &$entity, \ReflectionProperty $property, ValidationInterface $annotation)
     {
+        $date = $this->mapper->getPropertyValue($entity, $property);
+        if ($date === null) {
+            return true;
+        }
         /** @var \Salesforce\ORM\Annotation\Date $annotation */
-        $date = date_parse_from_format($annotation->format, $this->mapper->getPropertyValue($entity, $property));
+        $date = date_parse_from_format($annotation->format, $date);
 
         return checkdate($date['month'], $date['day'], $date['year']);
     }

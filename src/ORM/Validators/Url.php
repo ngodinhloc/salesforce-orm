@@ -18,6 +18,9 @@ class Url extends Validator implements ValidatorInterface
     public function validate(Entity &$entity, \ReflectionProperty $property, ValidationInterface $annotation)
     {
         $email = $this->mapper->getPropertyValue($entity, $property);
+        if ($email === null) {
+            return true;
+        }
 
         return filter_var($email, FILTER_VALIDATE_URL);
     }
