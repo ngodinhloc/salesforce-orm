@@ -72,12 +72,12 @@ class Builder
     }
 
     /**
-     * @param  int $limit limit
+     * @param  int|null $limit limit
      * @return $this
      */
-    public function limit(int $limit)
+    public function limit($limit = null)
     {
-        $this->limit = (int)$limit;
+        $this->limit = $limit;
 
         return $this;
     }

@@ -6,5 +6,5 @@ use Salesforce\ORM\Repository;
 
 class OpportunityRepository extends Repository
 {
-    protected $class = Opportunity::class;
+    protected $className = Opportunity::class;
 }

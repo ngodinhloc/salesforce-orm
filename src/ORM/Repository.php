@@ -3,12 +3,13 @@ namespace Salesforce\ORM;
 
 use Salesforce\ORM\EventInterfaces\AfterSave;
 use Salesforce\ORM\EventInterfaces\BeforeSave;
+use Salesforce\ORM\Exception\MapperException;
 use Salesforce\ORM\Exception\RepositoryException;
 
 class Repository
 {
-    /* @var string $class class name */
-    protected $class;
+    /* @var string $className class name */
+    protected $className;
 
     /** @var EntityManager */
     protected $entityManager;
@@ -25,6 +26,8 @@ class Repository
     }
 
     /**
+     * Find object by id
+     *
      * @param string $id id
      * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -34,15 +37,53 @@ class Repository
      */
     public function find(string $id)
     {
-        if (!$this->class) {
+        if (!$this->className) {
             throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->find($this->class, $id);
+        return $this->entityManager->find($this->className, $id);
     }
 
     /**
-     * Save entity to Salesforce
+     * Find objects on by conditions
+     *
+     * @param array $conditions conditions
+     * @param int $limit
+     * @return array|bool
+     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\ORM\Exception\RepositoryException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function findBy($conditions = [], $limit = null)
+    {
+        if (!$this->className) {
+            throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
+        }
+
+        return $this->entityManager->findBy($this->className, $conditions, $limit);
+    }
+
+    /**
+     * Find all object of this class
+     *
+     * @return array|bool
+     * @throws \Salesforce\ORM\Exception\RepositoryException
+     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function findAll()
+    {
+        if (!$this->className) {
+            throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
+        }
+
+        return $this->entityManager->findAll($this->className);
+    }
+
+    /**
+     * Save entity
      *
      * @param \Salesforce\ORM\Entity $entity entity
      * @return bool
@@ -67,39 +108,52 @@ class Repository
     }
 
     /**
-     * Query objects on Salesforce
+     * Create new entity from array data
      *
-     * @param array $conditions conditions
-     * @return mixed
-     * @throws \Salesforce\ORM\Exception\RepositoryException
+     * @param array $data data
+     * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function query($conditions = [])
+    public function new($data)
     {
-        if (!$this->class) {
-            throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
+        if (!$this->className) {
+            throw new MapperException(MapperException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->query($this->class, $conditions);
+        $object = $this->entityManager->getMapper()->object($this->className);
+        $entity = $this->entityManager->getMapper()->patch($object, $data);
+
+        return $entity;
+    }
+
+    /**
+     * Patch entity with data array
+     *
+     * @param \Salesforce\ORM\Entity $entity entity
+     * @param array $array data
+     * @return \Salesforce\ORM\Entity
+     * @throws \Salesforce\ORM\Exception\MapperException
+     */
+    public function patch(Entity $entity, $array = [])
+    {
+        return $this->entityManager->getMapper()->patch($entity, $array);
     }
 
     /**
      * @return string
      */
-    public function getClass(): string
+    public function getClassName()
     {
-        return $this->class;
+        return $this->className;
     }
 
     /**
-     * @param string $class class name
+     * @param string $className class name
      * @return \Salesforce\ORM\Repository
      */
-    public function setClass(string $class): Repository
+    public function setClassName($className)
     {
-        $this->class = $class;
+        $this->className = $className;
 
         return $this;
     }

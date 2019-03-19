@@ -3,6 +3,7 @@
 namespace Salesforce\ORM\RelationHandles;
 
 use Salesforce\ORM\Entity;
+use Salesforce\ORM\Exception\MapperException;
 use Salesforce\ORM\RelationHandle;
 use Salesforce\ORM\RelationHandleInterface;
 use Salesforce\ORM\RelationInterface;
@@ -22,10 +23,11 @@ class OneToMany extends RelationHandle implements RelationHandleInterface
     {
         /* @var \Salesforce\ORM\Annotation\OneToMany $annotation */
         $mapper = $this->entityManager->getMapper();
-        $collections = $this->entityManager->query($annotation->class, ["{$annotation->field} = {$entity->getId()}"]);
+        $value = $mapper->getPropertyValueByFieldName($entity, $annotation->field);
+        $collections = $this->entityManager->findBy($annotation->targetClass, ["{$annotation->targetField} = {$value}"]);
         $objects = [];
         foreach ($collections as $array) {
-            $object = $mapper->object($annotation->class);
+            $object = $mapper->object($annotation->targetClass);
             $relationEntity = $mapper->patch($object, $array);
             if (empty($relationEntity->getEagerLoad())) {
                 $objects[] = $relationEntity;

@@ -12,8 +12,9 @@ use Salesforce\ORM\RelationInterface;
 class OneToMany extends Annotation implements RelationInterface
 {
     public $name;
+    public $targetClass;
     public $field;
-    public $class;
+    public $targetField;
     public $lazy = true;
 
     /**

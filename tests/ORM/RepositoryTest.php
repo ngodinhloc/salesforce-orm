@@ -25,7 +25,7 @@ class RepositoryTest extends TestCase
         $class = "Account";
         $id = "12345";
         $this->entityManager->expects($this->once())->method('find')->with($class, $id);
-        $this->repository->setClass($class)->find($id);
+        $this->repository->setClassName($class)->find($id);
     }
 
     public function testSave()
@@ -40,6 +40,6 @@ class RepositoryTest extends TestCase
         $class = "Account";
         $where = ["Id" => "12345"];
         $this->entityManager->expects($this->once())->method('query');
-        $this->repository->setClass($class)->query($where);
+        $this->repository->setClassName($class)->findBy($where);
     }
 }

@@ -26,6 +26,8 @@ class Mapper
     }
 
     /**
+     * Get object type of entity
+     *
      * @param \Salesforce\ORM\Entity $entity entity
      * @return string
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -36,7 +38,7 @@ class Mapper
         /* @var Object $object */
         $object = $this->reader->getClassAnnotation($reflectionClass, Object::class);
         if (!$object->name) {
-            throw new MapperException(MapperException::OBJECT_TYPE_NOT_FOUND . get_class($entity));
+            throw new MapperException(MapperException::MSG_OBJECT_TYPE_NOT_FOUND . get_class($entity));
         }
 
         return $object->name;
@@ -105,6 +107,8 @@ class Mapper
     }
 
     /**
+     * Check for entity required properties
+     *
      * @param \Salesforce\ORM\Entity $entity entity
      * @return bool|array
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -135,6 +139,8 @@ class Mapper
     }
 
     /**
+     * Check for entity validations
+     *
      * @param \Salesforce\ORM\Entity $entity entity
      * @return bool|array
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -171,6 +177,8 @@ class Mapper
     }
 
     /**
+     * Get array of entity
+     *
      * @param \Salesforce\ORM\Entity $entity entity
      * @return array
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -182,12 +190,9 @@ class Mapper
 
         $array = [];
         foreach ($properties as $property) {
-            $annotations = $this->reader->getPropertyAnnotations($property);
-            foreach ($annotations as $annotation) {
-                if ($annotation instanceof Field) {
-                    $array[$annotation->name] = $this->getPropertyValue($entity, $property);
-                }
-            }
+            /* @var Field $annotation */
+            $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
+            $array[$annotation->name] = $this->getPropertyValue($entity, $property);
         }
 
         return $array;
@@ -254,6 +259,32 @@ class Mapper
     }
 
     /**
+     * Get value of a property by field name
+     *
+     * @param \Salesforce\ORM\Entity $entity entity
+     * @param string $fieldName field name
+     * @return \ReflectionProperty|null
+     * @throws \Salesforce\ORM\Exception\MapperException
+     */
+    public function getPropertyValueByFieldName(Entity $entity, $fieldName)
+    {
+        $reflectionClass = $this->reflect($entity);
+        $properties = $reflectionClass->getProperties();
+
+        foreach ($properties as $property) {
+            /* @var Field $annotation */
+            $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
+            if ($annotation->name == $fieldName) {
+                return $this->getPropertyValue($entity, $property);
+            }
+        }
+
+        throw new MapperException(MapperException::MSG_NO_FIELD_FOUND . $fieldName);
+    }
+
+    /**
+     * Get enity property by property name
+     *
      * @param \Salesforce\ORM\Entity $entity entity
      * @param string $propertyName name
      * @return bool|\ReflectionProperty
@@ -302,7 +333,7 @@ class Mapper
             $reflectionClass = new ReflectionClass(get_class($entity));
             $this->register();
         } catch (\ReflectionException $exception) {
-            throw new MapperException(MapperException::FAILED_TO_CREATE_REFLECT_CLASS . $exception->getMessage());
+            throw new MapperException(MapperException::MGS_FAILED_TO_CREATE_REFLECT_CLASS . $exception->getMessage());
         }
 
         return $reflectionClass;

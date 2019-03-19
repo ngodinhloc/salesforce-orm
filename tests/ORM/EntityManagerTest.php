@@ -79,6 +79,6 @@ class EntityManagerTest extends TestCase
         $builder = new Builder();
         $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->getQuery();
         $this->sfClient->expects($this->once())->method("query")->with($query);
-        $this->entityManager->query(Account::class, $conditions);
+        $this->entityManager->findBy(Account::class, $conditions);
     }
 }

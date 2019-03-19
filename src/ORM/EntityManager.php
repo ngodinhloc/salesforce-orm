@@ -1,8 +1,7 @@
 <?php
 namespace Salesforce\ORM;
 
-use Salesforce\Client\Client;
-use Salesforce\Client\Config;
+use Salesforce\Client\Connection;
 use Salesforce\Client\FieldNames;
 use Salesforce\ORM\Exception\EntityException;
 use Salesforce\ORM\Query\Builder;
@@ -14,8 +13,8 @@ use Salesforce\ORM\Query\Builder;
  */
 class EntityManager
 {
-    /* @var Client $salesforceClient */
-    protected $salesforceClient;
+    /** @var Connection */
+    protected $connection;
 
     /** @var Mapper */
     protected $mapper;
@@ -23,40 +22,29 @@ class EntityManager
     /**
      * EntityManager constructor.
      *
-     * @param array $config client config, must have the following
-     * [
-     *  'clientId' =>
-     *  'clientSecret' =>
-     *  'path' =>
-     *  'username' =>
-     *  'password' =>
-     *  'apiVersion' =>
-     * ]
+     * @param \Salesforce\Client\Connection|null $conn
      * @param \Salesforce\ORM\Mapper|null $mapper mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
-     * @throws \EventFarm\Restforce\RestforceException
-     * @throws \Salesforce\Client\Exception\ConfigException
      */
-    public function __construct(array $config, Mapper $mapper = null)
+    public function __construct(Connection $conn = null, Mapper $mapper = null)
     {
-        $clientConfig = new Config($config);
-        $this->salesforceClient = new Client($clientConfig);
+        $this->connection = $conn;
         $this->mapper = $mapper ?: new Mapper();
     }
 
     /**
-     * @param string $class class name
+     * @param string $className class name
      * @param string $id id
      * @return \Salesforce\ORM\Entity|false patched entity
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function find($class, $id)
+    public function find($className, $id)
     {
-        $object = $this->mapper->object($class);
+        $object = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($object);
-        $find = $this->salesforceClient->findObject($objectType, $id);
+        $find = $this->connection->getClient()->findObject($objectType, $id);
 
         if (!$find) {
             return $find;
@@ -70,6 +58,48 @@ class EntityManager
 
         // eager loading
         return $this->eagerLoad($entity);
+    }
+
+    /**
+     * Query objects by conditions
+     *
+     * @param string $className class name
+     * @param array $conditions conditions
+     * @param int|null $limit
+     * @return array|bool
+     * @throws Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function findBy($className, $conditions = [], $limit = null)
+    {
+        $entity = $this->mapper->object($className);
+        $objectType = $this->mapper->getObjectType($entity);
+        $array = $this->mapper->toArray($entity);
+        $builder = new Builder();
+        $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->limit($limit)->getQuery();
+
+        return $this->connection->getClient()->query($query);
+    }
+
+    /**
+     * Find all object of a class name
+     *
+     * @param string $className class
+     * @return array|bool
+     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function findAll($className)
+    {
+        $entity = $this->mapper->object($className);
+        $objectType = $this->mapper->getObjectType($entity);
+        $array = $this->mapper->toArray($entity);
+        $builder = new Builder();
+        $query = $builder->from($objectType)->select(array_keys($array))->getQuery();
+
+        return $this->connection->getClient()->query($query);
     }
 
     /**
@@ -104,14 +134,14 @@ class EntityManager
 
         // If id is set, then update object
         if ($entity->getId()) {
-            if ($this->salesforceClient->updateObject($objectType, $entity->getId(), $data)) {
+            if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
                 $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
 
                 return true;
             };
         }
         // id is not set, then create object
-        if ($id = $this->salesforceClient->createObject($objectType, $data)) {
+        if ($id = $this->connection->getClient()->createObject($objectType, $data)) {
             $entity->setId($id);
             $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, true);
 
@@ -119,27 +149,6 @@ class EntityManager
         };
 
         return false;
-    }
-
-    /**
-     * Query Salesforces
-     *
-     * @param string $class class name
-     * @param array $conditions conditions
-     * @return mixed
-     * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\Client\Exception\ClientException
-     */
-    public function query($class, $conditions = [])
-    {
-        $entity = $this->mapper->object($class);
-        $objectType = $this->mapper->getObjectType($entity);
-        $array = $this->mapper->toArray($entity);
-        $builder = new Builder();
-        $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->getQuery();
-
-        return $this->salesforceClient->query($query);
     }
 
     /**
@@ -173,26 +182,28 @@ class EntityManager
     public function getRepository($class)
     {
         $repository = new Repository($this);
-        $repository->setClass($class);
+        $repository->setClassName($class);
 
         return $repository;
     }
 
     /**
-     * @return \Salesforce\Client\Client
+     * @return \Salesforce\Client\Connection
      */
-    public function getSalesforceClient()
+    public function getConnection()
     {
-        return $this->salesforceClient;
+        return $this->connection;
     }
 
     /**
-     * @param \Salesforce\Client\Client $salesforceClient client
-     * @return void
+     * @param \Salesforce\Client\Connection $connection
+     * @return \Salesforce\ORM\EntityManager
      */
-    public function setSalesforceClient(Client $salesforceClient)
+    public function setConnection(Connection $connection)
     {
-        $this->salesforceClient = $salesforceClient;
+        $this->connection = $connection;
+
+        return $this;
     }
 
     /**

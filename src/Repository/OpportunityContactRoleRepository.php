@@ -6,5 +6,5 @@ use Salesforce\ORM\Repository;
 
 class OpportunityContactRoleRepository extends Repository
 {
-    protected $class = OpportunityContactRole::class;
+    protected $className = OpportunityContactRole::class;
 }
