@@ -135,6 +135,15 @@ class Account extends Entity
 + @SF\Url(value=true): indicate that this field is a url. An exception will be thrown if the value of this property is not an url
 
 Available validations: Url, Email, Date
+#### Find and Count
+<pre>
+// Find Account by conditions, by default lazy loading = false (will load relations)
+$accounts = $accountRepo->findBy(['Company_Name__c = Adant Services Group Pty Ltd']);
+// Find all Account, by default lazy loading = true (will not load relations)
+$accounts = $accountRepo->findAll();
+// Find total number of Account
+$count = $accountRepository->count();
+</pre>
 #### BeforeSave, AfterSave
 These events only trigger if the entity is saved by using the its repository. The repository need to implement the interfaces 
 <pre>
