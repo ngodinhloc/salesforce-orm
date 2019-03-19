@@ -190,9 +190,10 @@ class Mapper
 
         $array = [];
         foreach ($properties as $property) {
-            /* @var Field $annotation */
             $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
-            $array[$annotation->name] = $this->getPropertyValue($entity, $property);
+            if ($annotation instanceof Field) {
+                $array[$annotation->name] = $this->getPropertyValue($entity, $property);
+            }
         }
 
         return $array;
@@ -272,9 +273,8 @@ class Mapper
         $properties = $reflectionClass->getProperties();
 
         foreach ($properties as $property) {
-            /* @var Field $annotation */
             $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
-            if ($annotation->name == $fieldName) {
+            if ($annotation instanceof Field && $annotation->name == $fieldName) {
                 return $this->getPropertyValue($entity, $property);
             }
         }
