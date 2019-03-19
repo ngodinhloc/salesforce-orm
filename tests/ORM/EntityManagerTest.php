@@ -4,6 +4,7 @@ namespace SalesforceTest\ORM;
 
 use PHPUnit\Framework\TestCase;
 use Salesforce\Client\Client;
+use Salesforce\Client\Connection;
 use Salesforce\Client\FieldNames;
 use Salesforce\Client\ResponseCodes;
 use Salesforce\Entity\Account;
@@ -15,6 +16,8 @@ class EntityManagerTest extends TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $sfClient;
+    /** @var Connection */
+    protected $connection;
     /** @var Mapper */
     protected $mapper;
     /** @var EntityManager */
@@ -23,11 +26,12 @@ class EntityManagerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->sfClient = $this->createMock(Client::class);
-        $this->mapper = new Mapper();
         $config = ["clientId" => "***", "clientSecret" => "***", "path" => "***", 'username' => '***', "password" => "***", "apiVersion" => "***"];
-        $this->entityManager = new EntityManager($config, $this->mapper);
-        $this->entityManager->setSalesforceClient($this->sfClient);
+        $this->connection = new Connection($config);
+        $this->sfClient = $this->createMock(Client::class);
+        $this->connection->setClient($this->sfClient);
+        $this->mapper = new Mapper();
+        $this->entityManager = new EntityManager($this->connection, $this->mapper);
     }
 
     public function testFind()
@@ -66,19 +70,5 @@ class EntityManagerTest extends TestCase
         $data = $this->mapper->toArray($account);
         $this->sfClient->expects($this->once())->method("createObject")->with($objectType, $data);
         $this->entityManager->save($account);
-    }
-
-    public function testQuery()
-    {
-        $account = new Account();
-        $conditions = ["Id = 12345"];
-        $mapper = new Mapper();
-        $this->entityManager->setMapper($mapper);
-        $objectType = $mapper->getObjectType($account);
-        $array = $mapper->toArray($account);
-        $builder = new Builder();
-        $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->getQuery();
-        $this->sfClient->expects($this->once())->method("query")->with($query);
-        $this->entityManager->findBy(Account::class, $conditions);
     }
 }

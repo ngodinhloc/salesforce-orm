@@ -35,11 +35,11 @@ class RepositoryTest extends TestCase
         $this->repository->save($account);
     }
 
-    public function testQuery()
+    public function testFindBy()
     {
         $class = "Account";
         $where = ["Id" => "12345"];
-        $this->entityManager->expects($this->once())->method('query');
+        $this->entityManager->expects($this->once())->method('findBy');
         $this->repository->setClassName($class)->findBy($where);
     }
 }
