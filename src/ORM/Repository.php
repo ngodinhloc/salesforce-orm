@@ -83,6 +83,15 @@ class Repository
     }
 
     /**
+     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function count(){
+        return $this->entityManager->count($this->className);
+    }
+
+    /**
      * Save entity
      *
      * @param \Salesforce\ORM\Entity $entity entity

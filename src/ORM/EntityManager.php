@@ -66,40 +66,67 @@ class EntityManager
      * @param string $className class name
      * @param array $conditions conditions
      * @param int|null $limit
-     * @return array|bool
-     * @throws Exception\MapperException
+     * @param bool $lazy
+     * @return array collections of objects
+     * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findBy($className, $conditions = [], $limit = null)
+    public function findBy($className, $conditions = [], $limit = null, $lazy = false)
     {
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
         $builder = new Builder();
         $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->limit($limit)->getQuery();
+        $result = $this->connection->getClient()->query($query);
+        $collections = $this->resultToCollection($result, $className, $lazy);
 
-        return $this->connection->getClient()->query($query);
+        return $collections;
     }
 
     /**
      * Find all object of a class name
      *
      * @param string $className class
+     * @param bool $lazy lazy loading
      * @return array|bool
-     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findAll($className)
+    public function findAll($className, $lazy = true)
     {
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
         $builder = new Builder();
         $query = $builder->from($objectType)->select(array_keys($array))->getQuery();
+        $result = $this->connection->getClient()->query($query);
+        $collections = $this->resultToCollection($result, $className, $lazy);
 
-        return $this->connection->getClient()->query($query);
+        return $collections;
+    }
+
+    /**
+     * Count the total number of object
+     * @param $className
+     * @return int|false
+     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function count($className)
+    {
+        $entity = $this->mapper->object($className);
+        $objectType = $this->mapper->getObjectType($entity);
+        $query = "SELECT COUNT(Id) FROM {$objectType}";
+        $result = $this->connection->getClient()->query($query);
+        if ($result) {
+            return $result[0]['expr0'];
+        }
+
+        return false;
     }
 
     /**
@@ -172,6 +199,33 @@ class EntityManager
         }
 
         return $entity;
+    }
+
+    /**
+     * @param array $result
+     * @param string $className
+     * @param bool $lazy
+     * @return array
+     * @throws \Salesforce\ORM\Exception\MapperException
+     */
+    public function resultToCollection($result, $className, $lazy = true)
+    {
+        $collections = [];
+        foreach ($result as $item) {
+            $object = $this->mapper->object($className);
+            $relationEntity = $this->mapper->patch($object, $item);
+            if ($lazy == true) {
+                $collections[] = $relationEntity;
+            } else {
+                if (empty($relationEntity->getEagerLoad())) {
+                    $collections[] = $relationEntity;
+                } else {
+                    $collections[] = $this->eagerLoad($relationEntity);
+                }
+            }
+        }
+
+        return $collections;
     }
 
     /**

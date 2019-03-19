@@ -121,14 +121,71 @@ class Account extends Entity
 
  }
 </pre>
+
 + @SF\OneToMany(name="Contacts", targetClass="App\Domain\Marketing\Salesforce\Entity\Contact", field="Id", targetField="AccountId", lazy=false): indicate that one Account has many Contact
 + targetClass : the implemented class of Contact
 + field: the field/column of Account object
 + targetField: the field/column of the target Contact object
-+ lazy: if lazy = false, the repository will autoload list of Contact of the Account when you do
++ lazy: if lazy = false, the repository will autoload list of Contact of the Account when you do (default = true)
 <pre>
  $account = $accountRepository->find('0010p000002Wam9AAC');
 </pre>
 
 + @SF\Required(value=true): indicate that this field is required. An exception will be thrown if this property is not set when saving the entity
 + @SF\Url(value=true): indicate that this field is a url. An exception will be thrown if the value of this property is not an url
+
+Available validations: Url, Email, Date
+#### BeforeSave, AfterSave
+These events only trigger if the entity is saved by using the its repository. The repository need to implement the interfaces 
+<pre>
+/**
+ * Salesforce Account
+ *
+ * @package Salesforce\Entity
+ * @SF\Object(name="Account")
+ */
+class Account extends Entity implements BeforeSave, AfterSave
+{
+    /**
+     * @var string
+     * @SF\Field(name="Name")
+     * @SF\Required(value=true)
+     */
+    protected $name;
+
+    /**
+     * @var string
+     * @SF\Field(name="Website")
+     * @SF\Url(value=true)
+     */
+    protected $website;
+    
+    /**
+      * @var array
+      * @SF\OneToMany(name="Contacts", targetClass="App\Domain\Marketing\Salesforce\Entity\Contact", field="Id", targetField="AccountId", lazy=false)
+      */
+     protected $contacts;
+     
+    /**
+      * @param \Salesforce\ORM\Entity $entity entity
+      * @return mixed
+      */
+     public function afterSave(Entity &$entity)
+     {
+         // TODO: Implement afterSave() method.
+     }
+ 
+     /**
+      * @param \Salesforce\ORM\Entity $entity entity
+      * @return mixed
+      */
+     public function beforeSave(Entity &$entity)
+     {
+         // TODO: Implement beforeSave() method.
+     }
+ }
+</pre>
+
+<pre>
+$accountRepository->save($account); // this will trigger beforeSave and afterSave of AccountRepository
+</pre>
