@@ -287,4 +287,23 @@ class EntityManager
     {
         $this->mapper = $mapper;
     }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     * @return EntityManager
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): EntityManager
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
 }
