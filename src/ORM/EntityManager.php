@@ -41,12 +41,13 @@ class EntityManager
     /**
      * @param string $className class name
      * @param string $id id
+     * @param bool $lazy
      * @return \Salesforce\ORM\Entity|false patched entity
-     * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function find($className, $id)
+    public function find($className, $id, $lazy = false)
     {
         $object = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($object);
@@ -57,6 +58,10 @@ class EntityManager
         }
 
         $entity = $this->mapper->patch($object, $find);
+
+        if($lazy == true){
+            return $entity;
+        }
         // No eager loading
         if (empty($entity->getEagerLoad())) {
             return $entity;
