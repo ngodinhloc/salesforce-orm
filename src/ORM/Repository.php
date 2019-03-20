@@ -26,19 +26,20 @@ class Repository
      * Find object by id
      *
      * @param string $id id
+     * @param bool $lazy lazy loading relations
      * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function find(string $id)
+    public function find(string $id, $lazy = false)
     {
         if (!$this->className) {
             throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->find($this->className, $id);
+        return $this->entityManager->find($this->className, $id, $lazy);
     }
 
     /**
@@ -46,37 +47,39 @@ class Repository
      *
      * @param array $conditions conditions
      * @param int $limit
+     * @param bool $lazy lazy loading relations
      * @return array|bool
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findBy($conditions = [], $limit = null)
+    public function findBy($conditions = [], $limit = null, $lazy = false)
     {
         if (!$this->className) {
             throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->findBy($this->className, $conditions, $limit);
+        return $this->entityManager->findBy($this->className, $conditions, $limit, $lazy);
     }
 
     /**
      * Find all object of this class
      *
+     * @param bool $lazy lazy loading relations
      * @return array|bool
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findAll()
+    public function findAll($lazy = true)
     {
         if (!$this->className) {
             throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->findAll($this->className);
+        return $this->entityManager->findAll($this->className, $lazy);
     }
 
     /**
