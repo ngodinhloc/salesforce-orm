@@ -59,7 +59,7 @@ class EntityManager
 
         $entity = $this->mapper->patch($object, $find);
 
-        if($lazy == true){
+        if ($lazy == true) {
             return $entity;
         }
         // No eager loading
@@ -190,6 +190,43 @@ class EntityManager
 
             return true;
         };
+
+        return false;
+    }
+
+    /**
+     * Update entity : allow to update entity without find the entity first, and won't check for required properties
+     *
+     * @param \Salesforce\ORM\Entity $entity entity
+     * @return bool
+     * @throws \Salesforce\ORM\Exception\EntityException
+     * @throws \Salesforce\ORM\Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     */
+    public function update(Entity &$entity)
+    {
+        $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
+        if ($checkRequiredValidations !== true) {
+            throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
+        }
+
+        /** If id is set, then update object */
+        if ($entity->getId()) {
+            $objectType = $this->mapper->getObjectType($entity);
+            $data = $this->mapper->toArray($entity);
+
+            /** unset Id before sending to Salesforce */
+            if (isset($data[FieldNames::SF_FIELD_ID])) {
+                unset($data[FieldNames::SF_FIELD_ID]);
+            };
+
+            if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
+                $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
+
+                return true;
+            };
+        }
 
         return false;
     }
