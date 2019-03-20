@@ -3,6 +3,7 @@ namespace Salesforce\ORM;
 
 use Salesforce\Client\Connection;
 use Salesforce\Client\FieldNames;
+use Salesforce\Event\EventDispatcherInterface;
 use Salesforce\ORM\Exception\EntityException;
 use Salesforce\ORM\Query\Builder;
 
@@ -19,17 +20,22 @@ class EntityManager
     /** @var Mapper */
     protected $mapper;
 
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+
     /**
      * EntityManager constructor.
      *
      * @param \Salesforce\Client\Connection|null $conn
      * @param \Salesforce\ORM\Mapper|null $mapper mapper
+     * @param \Salesforce\Event\EventDispatcherInterface|null $eventDispatcher
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    public function __construct(Connection $conn = null, Mapper $mapper = null)
+    public function __construct(Connection $conn = null, Mapper $mapper = null, EventDispatcherInterface $eventDispatcher = null)
     {
         $this->connection = $conn;
         $this->mapper = $mapper ?: new Mapper();
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -110,6 +116,7 @@ class EntityManager
 
     /**
      * Count the total number of object
+     *
      * @param $className
      * @return int|false
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -154,12 +161,12 @@ class EntityManager
         $objectType = $this->mapper->getObjectType($entity);
         $data = $this->mapper->toArray($entity);
 
-        // unset Id before sending to Salesforce
+        /** unset Id before sending to Salesforce */
         if (isset($data[FieldNames::SF_FIELD_ID])) {
             unset($data[FieldNames::SF_FIELD_ID]);
         };
 
-        // If id is set, then update object
+        /** If id is set, then update object */
         if ($entity->getId()) {
             if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
                 $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
@@ -167,10 +174,14 @@ class EntityManager
                 return true;
             };
         }
-        // id is not set, then create object
+        /** id is not set, then create object */
         if ($id = $this->connection->getClient()->createObject($objectType, $data)) {
             $entity->setId($id);
             $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, true);
+            /** dispatch event if EventDispatcher is provided */
+            if ($this->eventDispatcher) {
+                $this->eventDispatcher->dispatchEvent(EventDispatcherInterface::ENTITY_AFTER_SAVE_EVENT, [], $entity);
+            }
 
             return true;
         };
