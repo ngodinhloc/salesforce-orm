@@ -195,38 +195,37 @@ class EntityManager
     }
 
     /**
-     * Update entity : allow to update entity without find the entity first, and won't check for required properties
+     * Update entity : allow to update entity with array of data
      *
      * @param \Salesforce\ORM\Entity $entity entity
+     * @param array $data [fieldName => value]
      * @return bool
-     * @throws \Salesforce\ORM\Exception\EntityException
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function update(Entity &$entity)
+    public function update(Entity &$entity, $data = [])
     {
-        $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
-        if ($checkRequiredValidations !== true) {
-            throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
+        if (!$entity->getId()) {
+            throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
+        }
+        if (empty($data)) {
+            return true;
         }
 
-        /** If id is set, then update object */
-        if ($entity->getId()) {
-            $objectType = $this->mapper->getObjectType($entity);
-            $data = $this->mapper->toArray($entity);
+        $objectType = $this->mapper->getObjectType($entity);
+        /** unset Id before sending to Salesforce */
+        if (isset($data[FieldNames::SF_FIELD_ID])) {
+            unset($data[FieldNames::SF_FIELD_ID]);
+        };
 
-            /** unset Id before sending to Salesforce */
-            if (isset($data[FieldNames::SF_FIELD_ID])) {
-                unset($data[FieldNames::SF_FIELD_ID]);
-            };
+        if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
+            $entity = $this->mapper->patch($entity, $data);
+            $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
 
-            if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
-                $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
-
-                return true;
-            };
-        }
+            return true;
+        };
 
         return false;
     }
