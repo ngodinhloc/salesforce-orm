@@ -214,6 +214,12 @@ class EntityManager
             return true;
         }
 
+        $entity = $this->mapper->patch($entity, $data);
+        $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
+        if ($checkRequiredValidations !== true) {
+            throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
+        }
+
         $objectType = $this->mapper->getObjectType($entity);
         /** unset Id before sending to Salesforce */
         if (isset($data[FieldNames::SF_FIELD_ID])) {
@@ -221,7 +227,6 @@ class EntityManager
         };
 
         if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
-            $entity = $this->mapper->patch($entity, $data);
             $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
 
             return true;
