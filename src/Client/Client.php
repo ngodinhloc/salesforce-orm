@@ -105,6 +105,12 @@ class Client
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
+        if ($this->cache) {
+            $result = $this->cache->getCache($this->cache->createKey($sObject . $sObjectId));
+            if ($result !== null) {
+                return $result;
+            }
+        }
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->find($sObject, $sObjectId);
@@ -113,6 +119,10 @@ class Client
         }
 
         $result = new Result($response);
+
+        if ($this->cache) {
+            $this->cache->writeCache($this->cache->createKey($sObject . $sObjectId), $result->get());
+        }
 
         return $result->get();
     }
