@@ -1,6 +1,8 @@
 <?php
 namespace Salesforce\Client;
 
+use Salesforce\Cache\CacheEngineFactory;
+
 class Connection
 {
     /** @var Config */
@@ -11,7 +13,7 @@ class Connection
     /**
      * Connection constructor.
      *
-     * @param array $configuration
+     * @param array $clientConfig
      * [
      *  'clientId' =>
      *  'clientSecret' =>
@@ -20,13 +22,16 @@ class Connection
      *  'password' =>
      *  'apiVersion' =>
      * ]
+     * @param array $cacheConfig
      * @throws \Salesforce\Client\Exception\ConfigException
      * @throws \EventFarm\Restforce\RestforceException
+     * @throws \Salesforce\Cache\Exception\CacheException
      */
-    public function __construct($configuration = [])
+    public function __construct($clientConfig = [], $cacheConfig = [])
     {
-        $this->config = new Config($configuration);
-        $this->client = new Client($this->config);
+        $cache = empty($cacheConfig) ? null : CacheEngineFactory::createCacheEngine($cacheConfig);
+        $this->config = new Config($clientConfig);
+        $this->client = new Client($this->config, $cache);
     }
 
     /**

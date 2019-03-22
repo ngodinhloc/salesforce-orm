@@ -4,6 +4,7 @@ namespace Salesforce\Client;
 use EventFarm\Restforce\Restforce;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
 
 /**
@@ -19,15 +20,20 @@ class Client
     /** @var Config */
     protected $config;
 
+    /** @var CacheEngineInterface */
+    protected $cache;
+
     /**
      * Client constructor.
      *
      * @param \Salesforce\Client\Config|null $config config
+     * @param \Salesforce\Cache\CacheEngineInterface|null $cache
      * @throws \EventFarm\Restforce\RestforceException
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, CacheEngineInterface $cache = null)
     {
         $this->config = $config;
+        $this->cache = $cache;
         $this->restforce = new Restforce(
             $this->config->getClientId(),
             $this->config->getClientSecret(),
@@ -119,6 +125,13 @@ class Client
      */
     public function query($query)
     {
+        if ($this->cache) {
+            $result = $this->cache->getCache($this->cache->createKey($query));
+            if ($result !== null) {
+                return $result;
+            }
+        }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->query($query);
@@ -127,6 +140,10 @@ class Client
         }
 
         $result = new Result($response);
+
+        if ($this->cache) {
+            $this->cache->writeCache($this->cache->createKey($query), $result->get());
+        }
 
         return $result->get();
     }
@@ -165,6 +182,25 @@ class Client
     public function setConfig(Config $config): Client
     {
         $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * @return CacheEngineInterface
+     */
+    public function getCache(): CacheEngineInterface
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param \Salesforce\Cache\CacheEngineInterface $cache
+     * @return \Salesforce\Client\Client
+     */
+    public function setCache(CacheEngineInterface $cache = null)
+    {
+        $this->cache = $cache;
 
         return $this;
     }
