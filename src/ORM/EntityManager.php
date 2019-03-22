@@ -2,7 +2,6 @@
 namespace Salesforce\ORM;
 
 use Salesforce\Client\Connection;
-use Salesforce\Client\FieldNames;
 use Salesforce\Event\EventDispatcherInterface;
 use Salesforce\ORM\Exception\EntityException;
 use Salesforce\ORM\Query\Builder;

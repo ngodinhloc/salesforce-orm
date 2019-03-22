@@ -1,16 +1,14 @@
 <?php
-
 namespace SalesforceTest\ORM;
 
 use PHPUnit\Framework\TestCase;
 use Salesforce\Client\Client;
 use Salesforce\Client\Connection;
-use Salesforce\Client\FieldNames;
 use Salesforce\Client\ResponseCodes;
 use Salesforce\Entity\Account;
 use Salesforce\ORM\EntityManager;
+use Salesforce\ORM\FieldNames;
 use Salesforce\ORM\Mapper;
-use Salesforce\ORM\Query\Builder;
 
 class EntityManagerTest extends TestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Salesforce\Client;
+namespace Salesforce\ORM;
 
 class FieldNames
 {
