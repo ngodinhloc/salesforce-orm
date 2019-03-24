@@ -1,6 +1,8 @@
 <?php
 namespace Salesforce\Cache;
 
+use Salesforce\Cache\Exception\CacheException;
+
 /**
  * Class CacheEngine
  *
@@ -16,9 +18,13 @@ abstract class CacheEngine
      *
      * @param string|null $cacheDir
      * @param int $cacheTime
+     * @throws \Salesforce\Cache\Exception\CacheException
      */
     public function __construct(string $cacheDir = null, $cacheTime = 36000)
     {
+        if (!is_dir($cacheDir)) {
+            throw new CacheException(CacheException::MSG_INVALID_CACHE_DIR . $cacheDir);
+        }
         $this->cacheDir = $cacheDir;
         $this->cacheTime = $cacheTime;
     }
