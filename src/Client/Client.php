@@ -106,11 +106,12 @@ class Client
         }
 
         if ($this->cache) {
-            $result = $this->cache->getCache($this->cache->createKey($sObject . $sObjectId));
-            if ($result !== null) {
-                return $result;
+            $cache = $this->cache->getCache($this->cache->createKey($sObject . $sObjectId));
+            if ($cache !== null) {
+                return $cache;
             }
         }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->find($sObject, $sObjectId);
@@ -118,13 +119,13 @@ class Client
             throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
         }
 
-        $result = new Result($response);
+        $result = (new Result($response))->get();
 
         if ($this->cache) {
-            $this->cache->writeCache($this->cache->createKey($sObject . $sObjectId), $result->get());
+            $this->cache->writeCache($this->cache->createKey($sObject . $sObjectId), $result);
         }
 
-        return $result->get();
+        return $result;
     }
 
     /**
@@ -136,9 +137,9 @@ class Client
     public function query($query)
     {
         if ($this->cache) {
-            $result = $this->cache->getCache($this->cache->createKey($query));
-            if ($result !== null) {
-                return $result;
+            $cache = $this->cache->getCache($this->cache->createKey($query));
+            if ($cache !== null) {
+                return $cache;
             }
         }
 
@@ -149,13 +150,13 @@ class Client
             throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
         }
 
-        $result = new Result($response);
+        $result = (new Result($response))->get();
 
         if ($this->cache) {
-            $this->cache->writeCache($this->cache->createKey($query), $result->get());
+            $this->cache->writeCache($this->cache->createKey($query), $result);
         }
 
-        return $result->get();
+        return $result;
     }
 
     /**

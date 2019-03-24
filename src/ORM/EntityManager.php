@@ -267,16 +267,18 @@ class EntityManager
     public function resultToCollection($result, $className, $lazy = true)
     {
         $collections = [];
-        foreach ($result as $item) {
-            $object = $this->mapper->object($className);
-            $relationEntity = $this->mapper->patch($object, $item);
-            if ($lazy == true) {
-                $collections[] = $relationEntity;
-            } else {
-                if (empty($relationEntity->getEagerLoad())) {
+        if(!empty($result)) {
+            foreach ($result as $item) {
+                $object = $this->mapper->object($className);
+                $relationEntity = $this->mapper->patch($object, $item);
+                if ($lazy == true) {
                     $collections[] = $relationEntity;
                 } else {
-                    $collections[] = $this->eagerLoad($relationEntity);
+                    if (empty($relationEntity->getEagerLoad())) {
+                        $collections[] = $relationEntity;
+                    } else {
+                        $collections[] = $this->eagerLoad($relationEntity);
+                    }
                 }
             }
         }
