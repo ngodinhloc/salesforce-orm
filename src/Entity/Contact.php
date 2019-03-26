@@ -77,7 +77,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getAccountId(): string
+    public function getAccountId()
     {
         return $this->accountId;
     }
@@ -86,7 +86,7 @@ class Contact extends Entity
      * @param string $accountId account id
      * @return Contact
      */
-    public function setAccountId($accountId): Contact
+    public function setAccountId(string $accountId = null)
     {
         $this->accountId = $accountId;
 
@@ -96,7 +96,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName()
     {
         return $this->firstName;
     }
@@ -105,7 +105,7 @@ class Contact extends Entity
      * @param string $firstName first name
      * @return Contact
      */
-    public function setFirstName($firstName): Contact
+    public function setFirstName(string $firstName = null)
     {
         $this->firstName = $firstName;
 
@@ -115,7 +115,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName()
     {
         return $this->lastName;
     }
@@ -124,7 +124,7 @@ class Contact extends Entity
      * @param string $lastName last name
      * @return Contact
      */
-    public function setLastName($lastName): Contact
+    public function setLastName(string $lastName = null)
     {
         $this->lastName = $lastName;
 
@@ -134,7 +134,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -143,7 +143,7 @@ class Contact extends Entity
      * @param string $email email
      * @return Contact
      */
-    public function setEmail($email): Contact
+    public function setEmail(string $email = null)
     {
         $this->email = $email;
 
@@ -153,7 +153,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getPhone(): string
+    public function getPhone()
     {
         return $this->phone;
     }
@@ -162,7 +162,7 @@ class Contact extends Entity
      * @param string $phone phone
      * @return Contact
      */
-    public function setPhone($phone): Contact
+    public function setPhone(string $phone = null)
     {
         $this->phone = $phone;
 
@@ -172,7 +172,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getMailingCity(): string
+    public function getMailingCity()
     {
         return $this->mailingCity;
     }
@@ -181,7 +181,7 @@ class Contact extends Entity
      * @param string $mailingCity city
      * @return Contact
      */
-    public function setMailingCity($mailingCity): Contact
+    public function setMailingCity(string $mailingCity = null)
     {
         $this->mailingCity = $mailingCity;
 
@@ -191,7 +191,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getMailingCountry(): string
+    public function getMailingCountry()
     {
         return $this->mailingCountry;
     }
@@ -200,7 +200,7 @@ class Contact extends Entity
      * @param string $mailingCountry country
      * @return Contact
      */
-    public function setMailingCountry($mailingCountry): Contact
+    public function setMailingCountry(string $mailingCountry = null)
     {
         $this->mailingCountry = $mailingCountry;
 
@@ -210,7 +210,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getMailingStreet(): string
+    public function getMailingStreet()
     {
         return $this->mailingStreet;
     }
@@ -219,7 +219,7 @@ class Contact extends Entity
      * @param string $mailingStreet street
      * @return Contact
      */
-    public function setMailingStreet($mailingStreet): Contact
+    public function setMailingStreet(string $mailingStreet = null)
     {
         $this->mailingStreet = $mailingStreet;
 
@@ -229,7 +229,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getMailingState(): string
+    public function getMailingState()
     {
         return $this->mailingState;
     }
@@ -238,7 +238,7 @@ class Contact extends Entity
      * @param string $mailingState state
      * @return Contact
      */
-    public function setMailingState($mailingState): Contact
+    public function setMailingState(string $mailingState = null)
     {
         $this->mailingState = $mailingState;
 
@@ -248,7 +248,7 @@ class Contact extends Entity
     /**
      * @return string
      */
-    public function getMailingPostcode(): string
+    public function getMailingPostcode()
     {
         return $this->mailingPostcode;
     }
@@ -257,7 +257,7 @@ class Contact extends Entity
      * @param string $mailingPostcode post code
      * @return Contact
      */
-    public function setMailingPostcode($mailingPostcode): Contact
+    public function setMailingPostcode(string $mailingPostcode = null)
     {
         $this->mailingPostcode = $mailingPostcode;
 

@@ -66,7 +66,7 @@ class Result
     /**
      * @return ResponseInterface|null
      */
-    public function getResponse(): ResponseInterface
+    public function getResponse()
     {
         return $this->response;
     }
@@ -75,7 +75,7 @@ class Result
      * @param ResponseInterface|null $response response
      * @return \Salesforce\Client\Result
      */
-    public function setResponse(ResponseInterface $response): Result
+    public function setResponse(ResponseInterface $response = null)
     {
         $this->response = $response;
 

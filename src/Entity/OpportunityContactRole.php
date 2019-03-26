@@ -42,7 +42,7 @@ class OpportunityContactRole extends Entity
     /**
      * @return string
      */
-    public function getContactId(): string
+    public function getContactId()
     {
         return $this->contactId;
     }
@@ -51,7 +51,7 @@ class OpportunityContactRole extends Entity
      * @param string $contactId contact id
      * @return OpportunityContactRole
      */
-    public function setContactId($contactId): OpportunityContactRole
+    public function setContactId(string $contactId = null)
     {
         $this->contactId = $contactId;
 
@@ -61,7 +61,7 @@ class OpportunityContactRole extends Entity
     /**
      * @return string
      */
-    public function getOpportunityId(): string
+    public function getOpportunityId()
     {
         return $this->opportunityId;
     }
@@ -70,7 +70,7 @@ class OpportunityContactRole extends Entity
      * @param string $opportunityId opportunity id
      * @return OpportunityContactRole
      */
-    public function setOpportunityId($opportunityId): OpportunityContactRole
+    public function setOpportunityId(string $opportunityId = null)
     {
         $this->opportunityId = $opportunityId;
 
@@ -80,7 +80,7 @@ class OpportunityContactRole extends Entity
     /**
      * @return bool
      */
-    public function isPrimary(): bool
+    public function isPrimary()
     {
         return $this->isPrimary;
     }
@@ -89,7 +89,7 @@ class OpportunityContactRole extends Entity
      * @param bool $isPrimary primary
      * @return OpportunityContactRole
      */
-    public function setIsPrimary($isPrimary): OpportunityContactRole
+    public function setIsPrimary(bool $isPrimary = null)
     {
         $this->isPrimary = $isPrimary;
 
@@ -99,7 +99,7 @@ class OpportunityContactRole extends Entity
     /**
      * @return string
      */
-    public function getRole(): string
+    public function getRole()
     {
         return $this->role;
     }
@@ -108,7 +108,7 @@ class OpportunityContactRole extends Entity
      * @param string $role role
      * @return OpportunityContactRole
      */
-    public function setRole($role): OpportunityContactRole
+    public function setRole(string $role = null)
     {
         $this->role = $role;
 

@@ -57,7 +57,7 @@ class Opportunity extends Entity
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -66,7 +66,7 @@ class Opportunity extends Entity
      * @param string $name name
      * @return Opportunity
      */
-    public function setName($name): Opportunity
+    public function setName(string $name = null)
     {
         $this->name = $name;
 
@@ -76,7 +76,7 @@ class Opportunity extends Entity
     /**
      * @return string
      */
-    public function getAccountId(): string
+    public function getAccountId()
     {
         return $this->accountId;
     }
@@ -85,7 +85,7 @@ class Opportunity extends Entity
      * @param string $accountId account id
      * @return Opportunity
      */
-    public function setAccountId($accountId): Opportunity
+    public function setAccountId(string $accountId = null)
     {
         $this->accountId = $accountId;
 
@@ -95,7 +95,7 @@ class Opportunity extends Entity
     /**
      * @return string
      */
-    public function getCloseDate(): string
+    public function getCloseDate()
     {
         return $this->closeDate;
     }
@@ -104,7 +104,7 @@ class Opportunity extends Entity
      * @param string $closeDate close date
      * @return Opportunity
      */
-    public function setCloseDate($closeDate): Opportunity
+    public function setCloseDate(string $closeDate = null)
     {
         $this->closeDate = $closeDate;
 
@@ -114,7 +114,7 @@ class Opportunity extends Entity
     /**
      * @return string
      */
-    public function getRecordTypeId(): string
+    public function getRecordTypeId()
     {
         return $this->recordTypeId;
     }
@@ -123,7 +123,7 @@ class Opportunity extends Entity
      * @param string $recordTypeId record type
      * @return Opportunity
      */
-    public function setRecordTypeId($recordTypeId): Opportunity
+    public function setRecordTypeId(string $recordTypeId = null)
     {
         $this->recordTypeId = $recordTypeId;
 
@@ -133,7 +133,7 @@ class Opportunity extends Entity
     /**
      * @return string
      */
-    public function getStage(): string
+    public function getStage()
     {
         return $this->stage;
     }
@@ -142,7 +142,7 @@ class Opportunity extends Entity
      * @param string $stage stage
      * @return Opportunity
      */
-    public function setStage($stage): Opportunity
+    public function setStage(string $stage = null)
     {
         $this->stage = $stage;
 
@@ -152,7 +152,7 @@ class Opportunity extends Entity
     /**
      * @return string
      */
-    public function getOwnerId(): string
+    public function getOwnerId()
     {
         return $this->ownerId;
     }
@@ -161,7 +161,7 @@ class Opportunity extends Entity
      * @param string $ownerId owner
      * @return Opportunity
      */
-    public function setOwnerId($ownerId): Opportunity
+    public function setOwnerId(string $ownerId = null)
     {
         $this->ownerId = $ownerId;
 

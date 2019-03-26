@@ -30,7 +30,7 @@ class Client
      * @param \Salesforce\Cache\CacheEngineInterface|null $cache
      * @throws \EventFarm\Restforce\RestforceException
      */
-    public function __construct(Config $config, CacheEngineInterface $cache = null)
+    public function __construct(Config $config = null, CacheEngineInterface $cache = null)
     {
         $this->config = $config;
         $this->cache = $cache;
@@ -52,8 +52,12 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function createObject(string $sObject, array $data)
+    public function createObject(string $sObject = null, array $data = null)
     {
+        if (empty($sObjectId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
+        }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->create($sObject, $data);
@@ -74,8 +78,12 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function updateObject(string $sObject, string $sObjectId, array $data)
+    public function updateObject(string $sObject = null, string $sObjectId = null, array $data = null)
     {
+        if (empty($sObjectId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
+        }
+
         if (empty($sObjectId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
@@ -99,8 +107,12 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findObject($sObject, $sObjectId)
+    public function findObject(string $sObject = null, string $sObjectId = null)
     {
+        if (empty($sObjectId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
+        }
+
         if (empty($sObjectId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
@@ -134,8 +146,12 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function query($query)
+    public function query(string $query = null)
     {
+        if (empty($query)) {
+            throw new ClientException(ClientException::MSG_QUERY_MISSING);
+        }
+
         if ($this->cache) {
             $cache = $this->cache->getCache($this->cache->createKey($query));
             if ($cache !== null) {
@@ -162,7 +178,7 @@ class Client
     /**
      * @return Restforce
      */
-    public function getRestforce(): Restforce
+    public function getRestforce()
     {
         return $this->restforce;
     }
@@ -171,7 +187,7 @@ class Client
      * @param Restforce $restforce
      * @return \Salesforce\Client\Client
      */
-    public function setRestforce(Restforce $restforce): Client
+    public function setRestforce(Restforce $restforce = null)
     {
         $this->restforce = $restforce;
 
@@ -181,7 +197,7 @@ class Client
     /**
      * @return \Salesforce\Client\Config
      */
-    public function getConfig(): Config
+    public function getConfig()
     {
         return $this->config;
     }
@@ -190,7 +206,7 @@ class Client
      * @param \Salesforce\Client\Config $config
      * @return \Salesforce\Client\Client
      */
-    public function setConfig(Config $config): Client
+    public function setConfig(Config $config = null)
     {
         $this->config = $config;
 
@@ -200,7 +216,7 @@ class Client
     /**
      * @return CacheEngineInterface
      */
-    public function getCache(): CacheEngineInterface
+    public function getCache()
     {
         return $this->cache;
     }

@@ -64,7 +64,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }
@@ -73,7 +73,7 @@ class Account extends Entity
      * @param string $name name
      * @return Account
      */
-    public function setName($name): Account
+    public function setName(string $name = null)
     {
         $this->name = $name;
 
@@ -83,7 +83,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getWebsite(): string
+    public function getWebsite()
     {
         return $this->website;
     }
@@ -92,7 +92,7 @@ class Account extends Entity
      * @param string $website website
      * @return Account
      */
-    public function setWebsite($website): Account
+    public function setWebsite(string $website = null)
     {
         $this->website = $website;
 
@@ -102,7 +102,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getBillingCity(): string
+    public function getBillingCity()
     {
         return $this->billingCity;
     }
@@ -111,7 +111,7 @@ class Account extends Entity
      * @param string $billingCity city
      * @return Account
      */
-    public function setBillingCity($billingCity): Account
+    public function setBillingCity(string $billingCity = null)
     {
         $this->billingCity = $billingCity;
 
@@ -121,7 +121,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getBillingCountry(): string
+    public function getBillingCountry()
     {
         return $this->billingCountry;
     }
@@ -130,7 +130,7 @@ class Account extends Entity
      * @param string $billingCountry country
      * @return Account
      */
-    public function setBillingCountry($billingCountry): Account
+    public function setBillingCountry(string $billingCountry = null)
     {
         $this->billingCountry = $billingCountry;
 
@@ -140,7 +140,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getBillingPostcode(): string
+    public function getBillingPostcode()
     {
         return $this->billingPostcode;
     }
@@ -149,7 +149,7 @@ class Account extends Entity
      * @param string $billingPostcode post code
      * @return Account
      */
-    public function setBillingPostcode($billingPostcode): Account
+    public function setBillingPostcode(string $billingPostcode = null)
     {
         $this->billingPostcode = $billingPostcode;
 
@@ -159,7 +159,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getBillingState(): string
+    public function getBillingState()
     {
         return $this->billingState;
     }
@@ -168,7 +168,7 @@ class Account extends Entity
      * @param string $billingState state
      * @return Account
      */
-    public function setBillingState($billingState): Account
+    public function setBillingState(string $billingState = null)
     {
         $this->billingState = $billingState;
 
@@ -178,7 +178,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getBillingStreet(): string
+    public function getBillingStreet()
     {
         return $this->billingStreet;
     }
@@ -187,7 +187,7 @@ class Account extends Entity
      * @param string $billingStreet street
      * @return Account
      */
-    public function setBillingStreet($billingStreet): Account
+    public function setBillingStreet(string $billingStreet = null)
     {
         $this->billingStreet = $billingStreet;
 
@@ -197,7 +197,7 @@ class Account extends Entity
     /**
      * @return string
      */
-    public function getOwnerId(): string
+    public function getOwnerId()
     {
         return $this->ownerId;
     }
@@ -206,7 +206,7 @@ class Account extends Entity
      * @param string $ownerId owner
      * @return Account
      */
-    public function setOwnerId($ownerId): Account
+    public function setOwnerId(string $ownerId = null)
     {
         $this->ownerId = $ownerId;
 

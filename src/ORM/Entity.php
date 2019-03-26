@@ -54,7 +54,7 @@ class Entity
      * @param string $id id
      * @return Entity
      */
-    public function setId(string $id)
+    public function setId(string $id = null)
     {
         $this->id = $id;
 

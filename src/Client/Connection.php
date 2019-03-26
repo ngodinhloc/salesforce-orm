@@ -46,7 +46,7 @@ class Connection
      * @param \Salesforce\Client\Config $config
      * @return \Salesforce\Client\Connection
      */
-    public function setConfig(Config $config)
+    public function setConfig(Config $config = null)
     {
         $this->config = $config;
 
@@ -65,7 +65,7 @@ class Connection
      * @param \Salesforce\Client\Client $client
      * @return \Salesforce\Client\Connection
      */
-    public function setClient(Client $client)
+    public function setClient(Client $client = null)
     {
         $this->client = $client;
 

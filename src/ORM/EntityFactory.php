@@ -27,7 +27,7 @@ class EntityFactory
      * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    public function new($class, $data)
+    public function new(string $class = null, array $data = null)
     {
         if (!$class) {
             throw new MapperException(MapperException::MSG_NO_CLASS_NAME_PROVIDED);
@@ -47,7 +47,7 @@ class EntityFactory
      * @return \Salesforce\ORM\Entity
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    public function patch(Entity $entity, $array = [])
+    public function patch(Entity $entity = null, array $array = [])
     {
         return $this->mapper->patch($entity, $array);
     }

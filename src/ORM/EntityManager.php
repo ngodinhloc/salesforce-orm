@@ -46,7 +46,7 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function find($className, $id, $lazy = false)
+    public function find(string $className = null, string $id = null, bool $lazy = false)
     {
         $object = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($object);
@@ -82,7 +82,7 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findBy($className, $conditions = [], $limit = null, $lazy = false)
+    public function findBy(string $className = null, array $conditions = [], $limit = null, $lazy = false)
     {
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
@@ -105,7 +105,7 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function findAll($className, $lazy = true)
+    public function findAll(string $className = null, bool $lazy = true)
     {
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
@@ -127,7 +127,7 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function count($className)
+    public function count(string $className = null)
     {
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
@@ -204,7 +204,7 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function update(Entity &$entity, $data = [])
+    public function update(Entity &$entity, array $data = [])
     {
         if (!$entity->getId()) {
             throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
@@ -264,10 +264,10 @@ class EntityManager
      * @return array
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    public function resultToCollection($result, $className, $lazy = true)
+    public function resultToCollection(array $result = [], string $className = null, bool $lazy = true)
     {
         $collections = [];
-        if(!empty($result)) {
+        if (!empty($result)) {
             foreach ($result as $item) {
                 $object = $this->mapper->object($className);
                 $relationEntity = $this->mapper->patch($object, $item);
@@ -291,7 +291,7 @@ class EntityManager
      * @return \Salesforce\ORM\Repository
      * @throws \Exception
      */
-    public function getRepository($class)
+    public function getRepository(string $class = null)
     {
         $repository = new Repository($this);
         $repository->setClassName($class);
@@ -311,7 +311,7 @@ class EntityManager
      * @param \Salesforce\Client\Connection $connection
      * @return \Salesforce\ORM\EntityManager
      */
-    public function setConnection(Connection $connection)
+    public function setConnection(Connection $connection = null)
     {
         $this->connection = $connection;
 
@@ -330,7 +330,7 @@ class EntityManager
      * @param \Salesforce\ORM\Mapper $mapper mapper
      * @return void
      */
-    public function setMapper(Mapper $mapper)
+    public function setMapper(Mapper $mapper = null)
     {
         $this->mapper = $mapper;
     }
@@ -338,7 +338,7 @@ class EntityManager
     /**
      * @return EventDispatcherInterface
      */
-    public function getEventDispatcher(): EventDispatcherInterface
+    public function getEventDispatcher()
     {
         return $this->eventDispatcher;
     }
@@ -347,7 +347,7 @@ class EntityManager
      * @param EventDispatcherInterface $eventDispatcher
      * @return EntityManager
      */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): EntityManager
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher = null)
     {
         $this->eventDispatcher = $eventDispatcher;
 

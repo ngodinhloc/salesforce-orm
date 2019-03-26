@@ -20,7 +20,7 @@ abstract class CacheEngine
      * @param int $cacheTime
      * @throws \Salesforce\Cache\Exception\CacheException
      */
-    public function __construct(string $cacheDir = null, $cacheTime = 36000)
+    public function __construct(string $cacheDir = null, int $cacheTime = 36000)
     {
         if (!is_dir($cacheDir)) {
             throw new CacheException(CacheException::MSG_INVALID_CACHE_DIR . $cacheDir);

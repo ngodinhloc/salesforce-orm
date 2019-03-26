@@ -12,5 +12,5 @@ interface EventDispatcherInterface
      * @param object|null $subject The object that this event applies to ($this by default).
      * @return mixed Event
      */
-    public function dispatchEvent($name, $data = null, $subject = null);
+    public function dispatchEvent(string $name = null, array $data = null, $subject = null);
 }

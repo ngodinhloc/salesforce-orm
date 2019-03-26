@@ -28,7 +28,7 @@ class Config
      * ]
      * @throws \Salesforce\Client\Exception\ConfigException
      */
-    public function __construct(array $config)
+    public function __construct(array $config = null)
     {
         if (!isset($config['clientId']) || !isset($config['clientSecret']) || !isset($config['path']) || !isset($config['username']) || !isset($config['password']) || !isset($config['apiVersion'])) {
             throw new ConfigException(ConfigException::MSG_MISSING_SALESFORCE_CONFIG . implode(",", self::REQUIRED_CONFIGURATION_DATA));
@@ -50,10 +50,10 @@ class Config
     }
 
     /**
-     * @param array|false|string $clientId client id
+     * @param string $clientId client id
      * @return \Salesforce\Client\Config
      */
-    public function setClientId($clientId)
+    public function setClientId(string $clientId = null)
     {
         $this->clientId = $clientId;
 
@@ -61,7 +61,7 @@ class Config
     }
 
     /**
-     * @return array|false|string
+     * @return string
      */
     public function getClientSecret()
     {
@@ -69,10 +69,10 @@ class Config
     }
 
     /**
-     * @param array|false|string $clientSecret secret
+     * @param string $clientSecret secret
      * @return \Salesforce\Client\Config
      */
-    public function setClientSecret($clientSecret)
+    public function setClientSecret(string $clientSecret = null)
     {
         $this->clientSecret = $clientSecret;
 
@@ -80,7 +80,7 @@ class Config
     }
 
     /**
-     * @return array|false|string
+     * @return string
      */
     public function getPath()
     {
@@ -88,10 +88,10 @@ class Config
     }
 
     /**
-     * @param array|false|string $path path
+     * @param string $path path
      * @return \Salesforce\Client\Config
      */
-    public function setPath($path)
+    public function setPath(string $path = null)
     {
         $this->path = $path;
 
@@ -99,7 +99,7 @@ class Config
     }
 
     /**
-     * @return array|false|string
+     * @return string
      */
     public function getUsername()
     {
@@ -107,10 +107,10 @@ class Config
     }
 
     /**
-     * @param array|false|string $username username
+     * @param string $username username
      * @return \Salesforce\Client\Config
      */
-    public function setUsername($username)
+    public function setUsername(string $username = null)
     {
         $this->username = $username;
 
@@ -118,7 +118,7 @@ class Config
     }
 
     /**
-     * @return array|false|string
+     * @return string
      */
     public function getPassword()
     {
@@ -126,10 +126,10 @@ class Config
     }
 
     /**
-     * @param array|false|string $password password
+     * @param string $password password
      * @return \Salesforce\Client\Config
      */
-    public function setPassword($password)
+    public function setPassword(string $password = null)
     {
         $this->password = $password;
 
@@ -137,7 +137,7 @@ class Config
     }
 
     /**
-     * @return array|false|string
+     * @return string
      */
     public function getApiVersion()
     {
@@ -145,10 +145,10 @@ class Config
     }
 
     /**
-     * @param array|false|string $apiVersion api version
+     * @param string $apiVersion api version
      * @return \Salesforce\Client\Config
      */
-    public function setApiVersion($apiVersion)
+    public function setApiVersion(string $apiVersion = null)
     {
         $this->apiVersion = $apiVersion;
 
