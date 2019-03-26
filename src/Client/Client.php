@@ -54,7 +54,7 @@ class Client
      */
     public function createObject(string $sObject = null, array $data = null)
     {
-        if (empty($sObjectId)) {
+        if (empty($sObject)) {
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
         }
 
@@ -80,7 +80,7 @@ class Client
      */
     public function updateObject(string $sObject = null, string $sObjectId = null, array $data = null)
     {
-        if (empty($sObjectId)) {
+        if (empty($sObject)) {
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
         }
 
@@ -109,7 +109,7 @@ class Client
      */
     public function findObject(string $sObject = null, string $sObjectId = null)
     {
-        if (empty($sObjectId)) {
+        if (empty($sObject)) {
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
         }
 
