@@ -32,6 +32,7 @@ class Repository
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function find(string $id, $lazy = false)
     {
@@ -53,6 +54,7 @@ class Repository
      * @throws \Salesforce\ORM\Exception\RepositoryException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function findBy($conditions = [], $limit = null, $lazy = false)
     {
@@ -72,6 +74,7 @@ class Repository
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function findAll($lazy = true)
     {
@@ -86,6 +89,7 @@ class Repository
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function count()
     {

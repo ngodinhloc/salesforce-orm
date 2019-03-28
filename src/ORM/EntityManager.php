@@ -42,12 +42,21 @@ class EntityManager
      * @param string $id id
      * @param bool $lazy
      * @return \Salesforce\ORM\Entity|false patched entity
-     * @throws Exception\MapperException
+     * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function find(string $className = null, string $id = null, bool $lazy = false)
     {
+        if (empty($className)) {
+            throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
+        }
+
+        if (empty($id)) {
+            throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
+        }
+
         $object = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($object);
         $find = $this->connection->getClient()->findObject($objectType, $id);
@@ -81,9 +90,14 @@ class EntityManager
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function findBy(string $className = null, array $conditions = [], $limit = null, $lazy = false)
     {
+        if (empty($className)) {
+            throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
+        }
+
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
@@ -101,12 +115,17 @@ class EntityManager
      * @param string $className class
      * @param bool $lazy lazy loading
      * @return array|bool
-     * @throws Exception\MapperException
+     * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function findAll(string $className = null, bool $lazy = true)
     {
+        if (empty($className)) {
+            throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
+        }
+
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
@@ -126,9 +145,14 @@ class EntityManager
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\ORM\Exception\EntityException
      */
     public function count(string $className = null)
     {
+        if (empty($className)) {
+            throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
+        }
+
         $entity = $this->mapper->object($className);
         $objectType = $this->mapper->getObjectType($entity);
         $query = "SELECT COUNT(Id) FROM {$objectType}";
@@ -150,8 +174,12 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function save(Entity &$entity)
+    public function save(Entity &$entity = null)
     {
+        if (empty($entity)) {
+            throw new EntityException(EntityException::MGS_EMPTY_ENTITY);
+        }
+
         $checkRequiredProperties = $this->mapper->checkRequiredProperties($entity);
         if ($checkRequiredProperties !== true) {
             throw new EntityException(EntityException::MGS_REQUIRED_PROPERTIES . implode(", ", $checkRequiredProperties));
@@ -204,8 +232,11 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function update(Entity &$entity, array $data = [])
+    public function update(Entity &$entity = null, array $data = [])
     {
+        if (empty($entity)) {
+            throw new EntityException(EntityException::MGS_EMPTY_ENTITY);
+        }
         if (!$entity->getId()) {
             throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
         }
@@ -240,9 +271,9 @@ class EntityManager
      * @param \Salesforce\ORM\Entity $entity entity
      * @return \Salesforce\ORM\Entity
      */
-    public function eagerLoad(Entity $entity)
+    public function eagerLoad(Entity $entity = null)
     {
-        if (empty($entity->getEagerLoad())) {
+        if (empty($entity) || empty($entity->getEagerLoad())) {
             return $entity;
         }
         foreach ($entity->getEagerLoad() as $load) {
@@ -309,7 +340,7 @@ class EntityManager
 
     /**
      * @param \Salesforce\Client\Connection $connection
-     * @return \Salesforce\ORM\EntityManager
+     * @return $this
      */
     public function setConnection(Connection $connection = null)
     {
@@ -328,15 +359,17 @@ class EntityManager
 
     /**
      * @param \Salesforce\ORM\Mapper $mapper mapper
-     * @return void
+     * @return $this
      */
     public function setMapper(Mapper $mapper = null)
     {
         $this->mapper = $mapper;
+
+        return $this;
     }
 
     /**
-     * @return EventDispatcherInterface
+     * @return \Salesforce\Event\EventDispatcherInterface
      */
     public function getEventDispatcher()
     {
@@ -345,7 +378,7 @@ class EntityManager
 
     /**
      * @param EventDispatcherInterface $eventDispatcher
-     * @return EntityManager
+     * @return $this
      */
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher = null)
     {
