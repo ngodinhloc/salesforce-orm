@@ -278,4 +278,24 @@ class Client
 
         return $this;
     }
+
+    /**
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     * @return \Salesforce\Client\Client
+     */
+    public function setLogger(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
 }

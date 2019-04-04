@@ -1,6 +1,7 @@
 <?php
 namespace Salesforce\Client;
 
+use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineFactory;
 
 class Connection
@@ -23,15 +24,16 @@ class Connection
      *  'apiVersion' =>
      * ]
      * @param array $cacheConfig
-     * @throws \Salesforce\Client\Exception\ConfigException
+     * @param \Psr\Log\LoggerInterface|null $logger
+     * @throws Exception\ConfigException
      * @throws \EventFarm\Restforce\RestforceException
      * @throws \Salesforce\Cache\Exception\CacheException
      */
-    public function __construct($clientConfig = [], $cacheConfig = [])
+    public function __construct($clientConfig = [], $cacheConfig = [], LoggerInterface $logger = null)
     {
         $cache = empty($cacheConfig) ? null : CacheEngineFactory::createCacheEngine($cacheConfig);
         $this->config = new Config($clientConfig);
-        $this->client = new Client($this->config, $cache);
+        $this->client = new Client($this->config, $cache, $logger);
     }
 
     /**
