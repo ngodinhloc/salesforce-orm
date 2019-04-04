@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d952d3f7bba0cfd4321bd1508bc0d77",
+    "content-hash": "f1d4434058a90ec81ab6e934ea49963b",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -410,16 +410,16 @@
         },
         {
             "name": "psr/log",
-            "version": "dev-master",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "c4421fcac1edd5a324fda73e589a5cf96e52ffd0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/c4421fcac1edd5a324fda73e589a5cf96e52ffd0",
-                "reference": "c4421fcac1edd5a324fda73e589a5cf96e52ffd0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -428,7 +428,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -453,7 +453,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2018-11-21T13:42:00+00:00"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -2018,8 +2018,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "eventfarm/restforcephp": 20,
-        "psr/log": 20
+        "eventfarm/restforcephp": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
