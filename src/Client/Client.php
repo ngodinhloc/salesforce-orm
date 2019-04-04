@@ -4,6 +4,7 @@ namespace Salesforce\Client;
 use EventFarm\Restforce\Restforce;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
 
@@ -23,17 +24,31 @@ class Client
     /** @var CacheEngineInterface */
     protected $cache;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
+    const MSG_DEBUG_CREATE_START = 'Start creating object in Salesforce. Type: %s. Data: %s';
+    const MSG_DEBUG_CREATE_FINISH = 'Finish creating object in Salesforce.';
+    const MSG_DEBUG_UPDATE_START = 'Start updating object in Salesforce. Type: %s. Id: %s .Data: %s';
+    const MSG_DEBUG_UPDATE_FINISH = 'Finish updating object in Salesforce.';
+    const MSG_DEBUG_FIND_START = 'Start finding object in Salesforce. Type: %s. Id: %s';
+    const MSG_DEBUG_FIND_FINISH = 'Finish finding object in Salesforce.';
+    const MSG_DEBUG_QUERY_START = 'Start querying object in Salesforce. Query: %s';
+    const MSG_DEBUG_QUERY_FINISH = 'Finish querying object in Salesforce.';
+
     /**
      * Client constructor.
      *
      * @param \Salesforce\Client\Config|null $config config
      * @param \Salesforce\Cache\CacheEngineInterface|null $cache
+     * @param \Psr\Log\LoggerInterface|null $logger
      * @throws \EventFarm\Restforce\RestforceException
      */
-    public function __construct(Config $config = null, CacheEngineInterface $cache = null)
+    public function __construct(Config $config = null, CacheEngineInterface $cache = null, LoggerInterface $logger = null)
     {
         $this->config = $config;
         $this->cache = $cache;
+        $this->logger = $logger;
         $this->restforce = new Restforce(
             $this->config->getClientId(),
             $this->config->getClientSecret(),
@@ -58,11 +73,19 @@ class Client
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
         }
 
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CREATE_START, $sObject, json_encode($data)));
+        }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->create($sObject, $data);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_CREATE_OBJECT . $e->getMessage());
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(self::MSG_DEBUG_CREATE_FINISH);
         }
 
         $result = new Result($response);
@@ -88,11 +111,19 @@ class Client
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_UPDATE_START, $sObject, $sObjectId, json_encode($data)));
+        }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->update($sObject, $sObjectId, $data);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_UPDATE_OBJECT . $e->getMessage());
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(self::MSG_DEBUG_UPDATE_FINISH);
         }
 
         $result = new Result($response);
@@ -124,11 +155,19 @@ class Client
             }
         }
 
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_FIND_START, $sObject, $sObjectId));
+        }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->find($sObject, $sObjectId);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(self::MSG_DEBUG_FIND_FINISH);
         }
 
         $result = (new Result($response))->get();
@@ -159,11 +198,19 @@ class Client
             }
         }
 
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_QUERY_START, $query));
+        }
+
         try {
             /* @var ResponseInterface $response */
             $response = $this->restforce->query($query);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_FAILED_TO_FIND_OBJECT . $e->getMessage());
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(self::MSG_DEBUG_QUERY_FINISH);
         }
 
         $result = (new Result($response))->get();
