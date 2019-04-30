@@ -113,7 +113,10 @@ class Builder
         foreach ($this->where as $where) {
             preg_match('/(AND |OR )?(\w+) *([!=><]+|LIKE) *[\'"]?(.*)[\'"]?/i', $where, $matches);
             list($all, $connector, $field, $operator, $value) = $matches;
-            $whereString .= $connector . $field . $operator . $this->quote($value) . ' ';
+            if ($operator === 'IN') {
+                $whereString .= $connector . ' ' . $field . ' ' . $operator . ' ' . $value . ' ';
+            }
+            $whereString .= $connector . ' ' . $field . ' ' . $operator . ' ' . $this->quote($value) . ' ';
         }
 
         return rtrim($whereString);
