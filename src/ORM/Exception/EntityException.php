@@ -1,7 +1,9 @@
 <?php
 namespace Salesforce\ORM\Exception;
 
-class EntityException extends \Exception
+use Salesforce\Exception\SalesforceException;
+
+class EntityException extends SalesforceException
 {
     const MGS_EMPTY_CLASS_NAME = 'Empty class name provided: ';
     const MGS_REQUIRED_PROPERTIES = 'These properties are required: ';

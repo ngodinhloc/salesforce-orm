@@ -1,7 +1,9 @@
 <?php
 namespace Salesforce\Client\Exception;
 
-class ClientException extends \Exception
+use Salesforce\Exception\SalesforceException;
+
+class ClientException extends SalesforceException
 {
     const MSG_QUERY_MISSING = 'Query string empty.';
     const MSG_OBJECT_TYPE_MISSING = 'Object Type is missing.';

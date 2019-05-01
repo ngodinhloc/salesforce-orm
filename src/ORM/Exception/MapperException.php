@@ -1,7 +1,9 @@
 <?php
 namespace Salesforce\ORM\Exception;
 
-class MapperException extends \Exception
+use Salesforce\Exception\SalesforceException;
+
+class MapperException extends SalesforceException
 {
     const MGS_FAILED_TO_CREATE_REFLECT_CLASS = 'Failed to create reflect class: ';
     const MSG_OBJECT_TYPE_NOT_FOUND = 'Object type not found. Check class annotation: ';
