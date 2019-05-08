@@ -10,4 +10,5 @@ class EntityException extends SalesforceException
     const MGS_REQUIRED_VALIDATIONS = 'Required validation rules: ';
     const MGS_ID_IS_NOT_PROVIDED = 'Id of the entity is not provided: ';
     const MGS_EMPTY_ENTITY = 'Empy entity provided: ';
+    const MGS_EMPTY_DATA = 'Empty data provided.';
 }

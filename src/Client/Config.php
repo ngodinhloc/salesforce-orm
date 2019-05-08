@@ -11,8 +11,9 @@ class Config
     protected $username;
     protected $password;
     protected $apiVersion;
+    protected $apexEndPoint;
 
-    const REQUIRED_CONFIGURATION_DATA = ['clientId', 'clientSecret', 'path', 'username', 'password', 'apiVersion'];
+    const REQUIRED_CONFIGURATION_DATA = ['clientId', 'clientSecret', 'path', 'username', 'password', 'apiVersion', 'apexEndPoint'];
 
     /**
      * Config constructor.
@@ -25,6 +26,7 @@ class Config
      *  'username' =>
      *  'password' =>
      *  'apiVersion' =>
+     *  'apexEndPoint' =>
      * ]
      * @throws \Salesforce\Client\Exception\ConfigException
      */
@@ -39,6 +41,7 @@ class Config
         $this->username = $config['username'];
         $this->password = $config['password'];
         $this->apiVersion = $config['apiVersion'];
+        $this->apexEndPoint = $config['apexEndPoint'];
     }
 
     /**
@@ -151,6 +154,25 @@ class Config
     public function setApiVersion(string $apiVersion = null)
     {
         $this->apiVersion = $apiVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApexEndPoint()
+    {
+        return $this->apexEndPoint;
+    }
+
+    /**
+     * @param mixed $apexEndPoint
+     * @return \Salesforce\Client\Config
+     */
+    public function setApexEndPoint(string $apexEndPoint = null)
+    {
+        $this->apexEndPoint = $apexEndPoint;
 
         return $this;
     }

@@ -1,12 +1,12 @@
 <?php
 namespace Salesforce\Client;
 
-use EventFarm\Restforce\Restforce;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
+use Salesforce\Restforce\ExtendedRestforce;
 
 /**
  * Class Client
@@ -15,7 +15,7 @@ use Salesforce\Client\Exception\ClientException;
  */
 class Client
 {
-    /** @var Restforce */
+    /** @var ExtendedRestforce */
     protected $restforce;
 
     /** @var Config */
@@ -35,6 +35,8 @@ class Client
     const MSG_DEBUG_FIND_FINISH = 'Finish finding object in Salesforce.';
     const MSG_DEBUG_QUERY_START = 'Start querying object in Salesforce. Query: %s';
     const MSG_DEBUG_QUERY_FINISH = 'Finish querying object in Salesforce.';
+    const MSG_DEBUG_APEX_API_START = 'Star Apex api request. Uri: %s';
+    const MSG_DEBUG_APEX_API_FINISH = 'Finish Apex api request.';
 
     /**
      * Client constructor.
@@ -49,14 +51,15 @@ class Client
         $this->config = $config;
         $this->cache = $cache;
         $this->logger = $logger;
-        $this->restforce = new Restforce(
+        $this->restforce = new ExtendedRestforce(
             $this->config->getClientId(),
             $this->config->getClientSecret(),
             $this->config->getPath(),
             null,
             $this->config->getUsername(),
             $this->config->getPassword(),
-            $this->config->getApiVersion()
+            $this->config->getApiVersion(),
+            $this->config->getApexEndPoint()
         );
     }
 
@@ -223,7 +226,40 @@ class Client
     }
 
     /**
-     * @return Restforce
+     * @param string $uri
+     * @param array $data
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     */
+    public function apexApi(string $uri = null, array $data = null)
+    {
+        if (empty($uri)) {
+            throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_APEX_API_START, $uri));
+        }
+
+        try {
+            /* @var ResponseInterface $response */
+            $response = $this->restforce->apexApi($uri, $data);
+        } catch (Exception $e) {
+            throw new ClientException(ClientException::MSG_APEX_API_FAILED . $e->getMessage());
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(self::MSG_DEBUG_APEX_API_FINISH);
+        }
+
+        $result = (new Result($response))->get();
+
+        return $result;
+    }
+
+    /**
+     * @return \Salesforce\Restforce\ExtendedRestforce
      */
     public function getRestforce()
     {
@@ -231,10 +267,10 @@ class Client
     }
 
     /**
-     * @param Restforce $restforce
+     * @param \Salesforce\Restforce\ExtendedRestforce $restforce
      * @return \Salesforce\Client\Client
      */
-    public function setRestforce(Restforce $restforce = null)
+    public function setRestforce(ExtendedRestforce $restforce = null)
     {
         $this->restforce = $restforce;
 
@@ -297,5 +333,4 @@ class Client
 
         return $this;
     }
-
 }

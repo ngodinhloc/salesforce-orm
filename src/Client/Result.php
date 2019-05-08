@@ -34,6 +34,9 @@ class Result
             case ResponseCodes::HTTP_OK:
                 if ($content = $this->response->getBody()->getContents()) {
                     $array = json_decode($content, true);
+                    if (isset($array['error']) && isset($array['message'])) {
+                        throw new ResultException($array['message']);
+                    }
                     $result = isset($array['records']) ? $array['records'] : $array;
                 }
                 break;
