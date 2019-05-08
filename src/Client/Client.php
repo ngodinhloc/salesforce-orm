@@ -232,7 +232,7 @@ class Client
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function apexApi(string $uri = null, array $data = null)
+    public function apexPost(string $uri = null, array $data = null)
     {
         if (empty($uri)) {
             throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
@@ -244,7 +244,39 @@ class Client
 
         try {
             /* @var ResponseInterface $response */
-            $response = $this->restforce->apexApi($uri, $data);
+            $response = $this->restforce->apexPost($uri, $data);
+        } catch (Exception $e) {
+            throw new ClientException(ClientException::MSG_APEX_API_FAILED . $e->getMessage());
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(self::MSG_DEBUG_APEX_API_FINISH);
+        }
+
+        $result = (new Result($response))->get();
+
+        return $result;
+    }
+
+    /**
+     * @param string $uri
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     */
+    public function apexGet(string $uri = null)
+    {
+        if (empty($uri)) {
+            throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_APEX_API_START, $uri));
+        }
+
+        try {
+            /* @var ResponseInterface $response */
+            $response = $this->restforce->apexGet($uri);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_APEX_API_FAILED . $e->getMessage());
         }

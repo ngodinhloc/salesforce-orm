@@ -270,7 +270,6 @@ class EntityManager
     /**
      * Convert Lead
      *
-     * @param \Salesforce\ORM\Entity|null $entity
      * @param array|null $data
      * @return array
      * [
@@ -280,8 +279,8 @@ class EntityManager
      *   'opportunityId' =>
      * ]
      * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function convert(array $data = null)
     {
@@ -289,7 +288,7 @@ class EntityManager
             throw new EntityException(EntityException::MGS_EMPTY_DATA);
         }
 
-        return $this->connection->getClient()->apexApi(self::CONVERT_LEAD_URI, $data);
+        return $this->connection->getClient()->apexPost(self::CONVERT_LEAD_URI, $data);
     }
 
     /**

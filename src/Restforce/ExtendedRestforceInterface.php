@@ -2,8 +2,11 @@
 namespace Salesforce\Restforce;
 
 use EventFarm\Restforce\RestforceInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface ExtendedRestforceInterface extends RestforceInterface
 {
-    public function apexApi(string $uri = null, array $data = null);
+    public function apexGet(string $uri = null): ResponseInterface;
+
+    public function apexPost(string $uri = null, array $data = null): ResponseInterface;
 }
