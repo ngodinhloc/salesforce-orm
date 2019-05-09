@@ -50,6 +50,7 @@ class Result
                 break;
             case ResponseCodes::HTTP_NOT_FOUND:
             case ResponseCodes::HTTP_BAD_REQUEST:
+            case ResponseCodes::HTTP_UNSUPPORTED_MEDIA_TYPE:
                 if ($content = $this->response->getBody()->getContents()) {
                     $array = json_decode($content, true);
                     if (isset($array[0]['message'])) {
