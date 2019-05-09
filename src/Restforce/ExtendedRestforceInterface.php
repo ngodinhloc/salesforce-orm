@@ -8,5 +8,5 @@ interface ExtendedRestforceInterface extends RestforceInterface
 {
     public function apexGet(string $uri = null): ResponseInterface;
 
-    public function apexPost(string $uri = null, array $data = null): ResponseInterface;
+    public function apexPostJson(string $uri = null, array $data = null): ResponseInterface;
 }

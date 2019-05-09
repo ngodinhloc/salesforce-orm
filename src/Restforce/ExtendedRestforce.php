@@ -226,7 +226,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
 
         return $this->getOAuthRestClient()->patchJson($this->salesforceOauthUrl . $uri, $data);
     }
-    
+
     /**
      * @param string|null $uri
      * @return \Psr\Http\Message\ResponseInterface
@@ -241,8 +241,8 @@ class ExtendedRestforce implements ExtendedRestforceInterface
      * @param array $data
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function apexPost(string $uri = null, array $data = null): ResponseInterface
+    public function apexPostJson(string $uri = null, array $data = null): ResponseInterface
     {
-        return $this->getOAuthRestClient()->post($this->salesforceOauthUrl . $this->apexEndPoint . $uri, $data);
+        return $this->getOAuthRestClient()->postJson($this->salesforceOauthUrl . $this->apexEndPoint . $uri, $data);
     }
 }

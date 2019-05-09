@@ -232,7 +232,7 @@ class Client
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function apexPost(string $uri = null, array $data = null)
+    public function apexPostJson(string $uri = null, array $data = null)
     {
         if (empty($uri)) {
             throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
@@ -244,7 +244,7 @@ class Client
 
         try {
             /* @var ResponseInterface $response */
-            $response = $this->restforce->apexPost($uri, $data);
+            $response = $this->restforce->apexPostJson($uri, $data);
         } catch (Exception $e) {
             throw new ClientException(ClientException::MSG_APEX_API_FAILED . $e->getMessage());
         }

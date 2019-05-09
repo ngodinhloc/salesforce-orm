@@ -288,7 +288,7 @@ class EntityManager
             throw new EntityException(EntityException::MGS_EMPTY_DATA);
         }
 
-        return $this->connection->getClient()->apexPost(self::CONVERT_LEAD_URI, $data);
+        return $this->connection->getClient()->apexPostJson(self::CONVERT_LEAD_URI, $data);
     }
 
     /**
