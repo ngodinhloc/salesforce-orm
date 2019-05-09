@@ -22,8 +22,6 @@ class EntityManager
     /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 
-    const CONVERT_LEAD_URI = '/Lead/Convert/';
-
     /**
      * EntityManager constructor.
      *
@@ -265,30 +263,6 @@ class EntityManager
         };
 
         return false;
-    }
-
-    /**
-     * Convert Lead
-     *
-     * @param array|null $data
-     * @return array
-     * [
-     *   'email' =>
-     *   'accountId' =>
-     *   'contactId' =>
-     *   'opportunityId' =>
-     * ]
-     * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\Client\Exception\ClientException
-     */
-    public function convert(array $data = null)
-    {
-        if (empty($data)) {
-            throw new EntityException(EntityException::MGS_EMPTY_DATA);
-        }
-
-        return $this->connection->getClient()->apexPostJson(self::CONVERT_LEAD_URI, $data);
     }
 
     /**
