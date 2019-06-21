@@ -136,12 +136,13 @@ class Builder
 
         $whereString = ' WHERE ';
         foreach ($this->where as $where) {
-            preg_match('/(AND |OR )?(\w+) *([!=><]+|LIKE) *[\'"]?(.*)[\'"]?/i', $where, $matches);
+            preg_match('/(AND |OR )?(\w+) *([!=><]+|LIKE|IN) *[\'"]?(.*)[\'"]?/i', $where, $matches);
             list($all, $connector, $field, $operator, $value) = $matches;
             if ($operator === 'IN') {
                 $whereString .= $connector . ' ' . $field . ' ' . $operator . ' ' . $value . ' ';
+            }else {
+                $whereString .= $connector . ' ' . $field . ' ' . $operator . ' ' . $this->quote($value) . ' ';
             }
-            $whereString .= $connector . ' ' . $field . ' ' . $operator . ' ' . $this->quote($value) . ' ';
         }
 
         return rtrim($whereString);
