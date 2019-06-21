@@ -6,6 +6,7 @@ class Builder
     private $select = [];
     private $from;
     private $where = [];
+    private $order = [];
     private $limit;
 
     /**
@@ -40,7 +41,10 @@ class Builder
      */
     public function where($predicate)
     {
-        if (is_array($predicate) && !empty($predicate)) {
+        if (empty($predicate)) {
+            return $this;
+        }
+        if (is_array($predicate)) {
             $this->where = $predicate;
         } else {
             $this->where[] = $predicate;
@@ -75,9 +79,28 @@ class Builder
      * @param  int|null $limit limit
      * @return $this
      */
-    public function limit($limit = null)
+    public function limit(int $limit = null)
     {
         $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * @param array|null $orders array
+     * @return $this
+     */
+    public function order(array $orders = null)
+    {
+        if (empty($orders)) {
+            return $this;
+        }
+
+        foreach ($orders as $order) {
+            if (count($order) == 2 && in_array($order[1], ['ASC', 'DESC'])) {
+                $this->order[] = $order[0] . ' ' . $order[1];
+            }
+        }
 
         return $this;
     }
@@ -92,7 +115,9 @@ class Builder
         if (count($this->where) > 0) {
             $query .= $this->getWhereString();
         }
-
+        if (!empty($this->order)) {
+            $query .= ' ORDER BY ' . implode(",", $this->order);
+        }
         if (null !== $this->limit) {
             $query .= ' LIMIT ' . $this->limit;
         }

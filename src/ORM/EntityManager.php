@@ -84,15 +84,16 @@ class EntityManager
      *
      * @param string $className class name
      * @param array $conditions conditions
-     * @param int|null $limit
-     * @param bool $lazy
+     * @param array $orders order
+     * @param int|null $limit limit
+     * @param bool $lazy lazy loading
      * @return array collections of objects
      * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function findBy(string $className = null, array $conditions = [], $limit = null, $lazy = false)
+    public function findBy(string $className = null, array $conditions = null, array $orders = null, $limit = null, $lazy = false)
     {
         if (empty($className)) {
             throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
@@ -102,7 +103,7 @@ class EntityManager
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
         $builder = new Builder();
-        $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->limit($limit)->getQuery();
+        $query = $builder->from($objectType)->select(array_keys($array))->where($conditions)->order($orders)->limit($limit)->getQuery();
         $result = $this->connection->getClient()->query($query);
         $collections = $this->resultToCollection($result, $className, $lazy);
 
@@ -113,6 +114,7 @@ class EntityManager
      * Find all object of a class name
      *
      * @param string $className class
+     * @param array $orders order
      * @param bool $lazy lazy loading
      * @return array|bool
      * @throws \Salesforce\ORM\Exception\MapperException
@@ -120,7 +122,7 @@ class EntityManager
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function findAll(string $className = null, bool $lazy = true)
+    public function findAll(string $className = null, array $orders = null, bool $lazy = true)
     {
         if (empty($className)) {
             throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
@@ -130,7 +132,7 @@ class EntityManager
         $objectType = $this->mapper->getObjectType($entity);
         $array = $this->mapper->toArray($entity);
         $builder = new Builder();
-        $query = $builder->from($objectType)->select(array_keys($array))->getQuery();
+        $query = $builder->from($objectType)->select(array_keys($array))->order($orders)->getQuery();
         $result = $this->connection->getClient()->query($query);
         $collections = $this->resultToCollection($result, $className, $lazy);
 

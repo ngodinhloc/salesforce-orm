@@ -47,6 +47,7 @@ class Repository
      * Find objects on by conditions
      *
      * @param array $conditions conditions
+     * @param array $orders order
      * @param int $limit
      * @param bool $lazy lazy loading relations
      * @return array|bool
@@ -56,18 +57,19 @@ class Repository
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function findBy($conditions = [], $limit = null, $lazy = false)
+    public function findBy(array $conditions = null, array $orders = null, int $limit = null, bool $lazy = false)
     {
         if (!$this->className) {
             throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->findBy($this->className, $conditions, $limit, $lazy);
+        return $this->entityManager->findBy($this->className, $conditions, $orders, $limit, $lazy);
     }
 
     /**
      * Find all object of this class
      *
+     * @param array $orders order
      * @param bool $lazy lazy loading relations
      * @return array|bool
      * @throws \Salesforce\ORM\Exception\RepositoryException
@@ -76,13 +78,13 @@ class Repository
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\ORM\Exception\EntityException
      */
-    public function findAll($lazy = true)
+    public function findAll(array $orders = null, bool $lazy = true)
     {
         if (!$this->className) {
             throw new RepositoryException(RepositoryException::MSG_NO_CLASS_NAME_PROVIDED);
         }
 
-        return $this->entityManager->findAll($this->className, $lazy);
+        return $this->entityManager->findAll($this->className, $orders, $lazy);
     }
 
     /**
