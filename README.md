@@ -1,4 +1,4 @@
-# Salesforce ORM
+# Salesforce ORM for PHP: Doctrine style entities, entity manager and repository
 
 ## Configuration
 composer.json
