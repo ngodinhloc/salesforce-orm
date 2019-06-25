@@ -10,5 +10,5 @@ final class Field extends Annotation
 {
     public $name;
     public $required = false;
-    public $protection = true;
+    public $protection = false;
 }
