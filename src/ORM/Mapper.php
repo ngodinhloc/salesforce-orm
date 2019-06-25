@@ -97,7 +97,7 @@ class Mapper
         }
 
         if (!empty($protectionProperties)) {
-            $this->setPropertyValueByName($entity, Entity::PROPERTY_PROPTECTION_PROPERTIES, $protectionProperties);
+            $this->setPropertyValueByName($entity, Entity::PROPERTY_PROTECTION_PROPERTIES, $protectionProperties);
         }
 
         if (!empty($requiredValidations)) {
