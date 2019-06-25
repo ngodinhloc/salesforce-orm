@@ -9,6 +9,7 @@ class Entity
     const PROPERTY_IS_PATCHED = "isPatched";
     const PROPERTY_EAGER_LOAD = "eagerLoad";
     const PROPERTY_REQUIRED_PROPERTIES = "requiredProperties";
+    const PROPERTY_PROTECTION_PROPERTIES = "protectionProperties";
     const PROPERTY_REQUIRED_VALIDATIONS = "requiredValidations";
 
     /**
@@ -36,6 +37,11 @@ class Entity
      * @var array
      */
     protected $requiredProperties;
+
+    /**
+     * @var array
+     */
+    protected $protectionProperties;
 
     /**
      * @var array
@@ -99,5 +105,13 @@ class Entity
     public function getRequiredValidations()
     {
         return $this->requiredValidations;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProtectionProperties()
+    {
+        return $this->protectionProperties;
     }
 }
