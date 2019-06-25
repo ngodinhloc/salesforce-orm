@@ -14,7 +14,7 @@ class Entity
 
     /**
      * @var string
-     * @SF\Field(name="Id")
+     * @SF\Field(name="Id", protection=true)
      */
     protected $id;
 
