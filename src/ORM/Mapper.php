@@ -6,7 +6,6 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 use Salesforce\ORM\Annotation\Field;
 use Salesforce\ORM\Annotation\Object;
-use Salesforce\ORM\Annotation\Required;
 use Salesforce\ORM\Exception\MapperException;
 
 class Mapper
@@ -67,11 +66,11 @@ class Mapper
                     if (isset($array[$annotation->name])) {
                         $this->setPropertyValue($entity, $property, $array[$annotation->name]);
                     }
-                }
-
-                if ($annotation instanceof Required) {
-                    if ($annotation->value === true) {
+                    if ($annotation->required == true) {
                         $requiredProperties[$property->name] = $property;
+                    }
+                    if ($annotation->protection == true) {
+                        $protectionProperties[$annotation->name] = $property;
                     }
                 }
 
@@ -95,6 +94,10 @@ class Mapper
 
         if (!empty($requiredProperties)) {
             $this->setPropertyValueByName($entity, Entity::PROPERTY_REQUIRED_PROPERTIES, $requiredProperties);
+        }
+
+        if (!empty($protectionProperties)) {
+            $this->setPropertyValueByName($entity, Entity::PROPERTY_PROPTECTION_PROPERTIES, $protectionProperties);
         }
 
         if (!empty($requiredValidations)) {
@@ -136,6 +139,50 @@ class Mapper
         }
 
         return $missingFields;
+    }
+
+    /**
+     * Get none protection data
+     *
+     * @param \Salesforce\ORM\Entity $entity entity
+     * @param array $data
+     * @return array
+     * @throws \Salesforce\ORM\Exception\MapperException
+     */
+    public function getNoneProtectionData(Entity $entity, array $data = null)
+    {
+        if ($entity->isPatched() !== true) {
+            $entity = $this->patch($entity, []);
+        }
+
+        if (empty($data)) {
+            $data = $this->toArray($entity);
+        }
+
+        if (empty($protectionProperties = $entity->getProtectionProperties())) {
+            return $data;
+        }
+
+        return array_diff_key($data, $protectionProperties);
+    }
+
+    /**
+     * @param array|null $data
+     * @return bool
+     */
+    public function checkNoneProtectionData(array $data = null)
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        foreach ($data as $field => $value) {
+            if ($value !== null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

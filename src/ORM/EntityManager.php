@@ -168,6 +168,8 @@ class EntityManager
 
     /**
      * Save entity
+     * If id is provided: update object
+     * No id provided: create object
      *
      * @param \Salesforce\ORM\Entity $entity entity
      * @return bool
@@ -182,6 +184,10 @@ class EntityManager
             throw new EntityException(EntityException::MGS_EMPTY_ENTITY);
         }
 
+        if ($entity->isPatched() !== true) {
+            $entity = $this->mapper->patch($entity, []);
+        }
+
         $checkRequiredProperties = $this->mapper->checkRequiredProperties($entity);
         if ($checkRequiredProperties !== true) {
             throw new EntityException(EntityException::MGS_REQUIRED_PROPERTIES . implode(", ", $checkRequiredProperties));
@@ -193,32 +199,31 @@ class EntityManager
         }
 
         $objectType = $this->mapper->getObjectType($entity);
-        $data = $this->mapper->toArray($entity);
+        $data = $this->mapper->getNoneProtectionData($entity);
 
-        /** unset Id before sending to Salesforce */
-        if (isset($data[FieldNames::SF_FIELD_ID])) {
-            unset($data[FieldNames::SF_FIELD_ID]);
-        };
-
-        /** If id is set, then update object */
         if ($entity->getId()) {
+            if (!$this->mapper->checkNoneProtectionData($data)) {
+                return true;
+            }
             if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
                 $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
 
                 return true;
+            }
+        } else {
+            if (!$this->mapper->checkNoneProtectionData($data)) {
+                throw new EntityException(EntityException::MGS_EMPTY_NONE_PROTECTION_DATA);
+            }
+            if ($id = $this->connection->getClient()->createObject($objectType, $data)) {
+                $entity->setId($id);
+                $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, true);
+                if ($this->eventDispatcher) {
+                    $this->eventDispatcher->dispatchEvent(EventDispatcherInterface::ENTITY_AFTER_SAVE_EVENT, [], $entity);
+                }
+
+                return true;
             };
         }
-        /** id is not set, then create object */
-        if ($id = $this->connection->getClient()->createObject($objectType, $data)) {
-            $entity->setId($id);
-            $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, true);
-            /** dispatch event if EventDispatcher is provided */
-            if ($this->eventDispatcher) {
-                $this->eventDispatcher->dispatchEvent(EventDispatcherInterface::ENTITY_AFTER_SAVE_EVENT, [], $entity);
-            }
-
-            return true;
-        };
 
         return false;
     }
@@ -246,18 +251,21 @@ class EntityManager
             return true;
         }
 
-        $entity = $this->mapper->patch($entity, $data);
+        if ($entity->isPatched() !== true) {
+            $entity = $this->mapper->patch($entity, []);
+        }
+
         $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
         if ($checkRequiredValidations !== true) {
             throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
         }
 
-        $objectType = $this->mapper->getObjectType($entity);
-        /** unset Id before sending to Salesforce */
-        if (isset($data[FieldNames::SF_FIELD_ID])) {
-            unset($data[FieldNames::SF_FIELD_ID]);
-        };
+        $data = $this->mapper->getNoneProtectionData($entity, $data);
+        if (!$this->mapper->checkNoneProtectionData($data)) {
+            return true;
+        }
 
+        $objectType = $this->mapper->getObjectType($entity);
         if ($this->connection->getClient()->updateObject($objectType, $entity->getId(), $data)) {
             $this->mapper->setPropertyValueByName($entity, Entity::PROPERTY_IS_NEW, false);
 

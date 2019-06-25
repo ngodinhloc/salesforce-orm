@@ -11,4 +11,5 @@ class EntityException extends SalesforceException
     const MGS_ID_IS_NOT_PROVIDED = 'Id of the entity is not provided: ';
     const MGS_EMPTY_ENTITY = 'Empy entity provided: ';
     const MGS_EMPTY_DATA = 'Empty data provided.';
+    const MGS_EMPTY_NONE_PROTECTION_DATA = 'There is not any none protection data field provided.';
 }
