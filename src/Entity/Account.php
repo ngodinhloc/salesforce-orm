@@ -8,7 +8,7 @@ use Salesforce\ORM\Entity;
  * Salesforce Account
  *
  * @package Salesforce\Entity
- * @SF\Object(name="Account")
+ * @SF\sObject(name="Account")
  */
 class Account extends Entity
 {

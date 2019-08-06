@@ -8,7 +8,7 @@ use Salesforce\ORM\Entity;
  * Salesforce Contact
  *
  * @package Salesforce\Entity
- * @SF\Object(name="Contact")
+ * @SF\sObject(name="Contact")
  */
 class Contact extends Entity
 {

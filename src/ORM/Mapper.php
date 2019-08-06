@@ -5,7 +5,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 use Salesforce\ORM\Annotation\Field;
-use Salesforce\ORM\Annotation\Object;
+use Salesforce\ORM\Annotation\sObject;
 use Salesforce\ORM\Exception\MapperException;
 
 class Mapper
@@ -34,8 +34,8 @@ class Mapper
     public function getObjectType(Entity $entity)
     {
         $reflectionClass = $this->reflect($entity);
-        /* @var Object $object */
-        $object = $this->reader->getClassAnnotation($reflectionClass, Object::class);
+        /* @var sObject $object */
+        $object = $this->reader->getClassAnnotation($reflectionClass, sObject::class);
         if (!$object->name) {
             throw new MapperException(MapperException::MSG_OBJECT_TYPE_NOT_FOUND . get_class($entity));
         }

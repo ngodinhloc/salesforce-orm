@@ -9,7 +9,7 @@ use Salesforce\ORM\Entity;
  * Class OpportunityContactRole
  *
  * @package Salesforce\Entity
- * @SF\Object(name="OpportunityContactRole")
+ * @SF\sObject(name="OpportunityContactRole")
  */
 class OpportunityContactRole extends Entity
 {

@@ -8,7 +8,7 @@ use Salesforce\ORM\Entity;
  * Salesforce Opportunity
  *
  * @package Salesforce\Entity
- * @SF\Object(name="Opportunity")
+ * @SF\sObject(name="Opportunity")
  */
 class Opportunity extends Entity
 {
