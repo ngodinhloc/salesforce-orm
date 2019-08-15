@@ -14,8 +14,7 @@ class Account extends Entity
 {
     /**
      * @var string
-     * @SF\Field(name="Name")
-     * @SF\Required(value=true)
+     * @SF\Field(name="Name", required=true)
      */
     protected $name;
 

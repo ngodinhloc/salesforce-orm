@@ -15,15 +15,13 @@ class OpportunityContactRole extends Entity
 {
     /**
      * @var string
-     * @SF\Field(name="ContactId")
-     * @SF\Required(value=true)
+     * @SF\Field(name="ContactId", required=true)
      */
     protected $contactId;
 
     /**
      * @var string
-     * @SF\Field(name="OpportunityId")
-     * @SF\Required(value=true)
+     * @SF\Field(name="OpportunityId", required=true)
      */
     protected $opportunityId;
 

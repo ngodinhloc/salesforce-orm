@@ -24,7 +24,7 @@ class EntityManagerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = ["clientId" => "***", "clientSecret" => "***", "path" => "***", 'username' => '***', "password" => "***", "apiVersion" => "***"];
+        $config = ["clientId" => "***", "clientSecret" => "***", "path" => "***", 'username' => '***', "password" => "***", "apiVersion" => "***", 'apexEndPoint' => 'http://localhost/apex'];
         $this->connection = new Connection($config);
         $this->sfClient = $this->createMock(Client::class);
         $this->connection->setClient($this->sfClient);
@@ -65,7 +65,16 @@ class EntityManagerTest extends TestCase
         $account = new Account();
         $account->setName("Ken");
         $objectType = $this->mapper->getObjectType($account);
-        $data = $this->mapper->toArray($account);
+        $data = [
+            'Name' => 'Ken',
+            'Website' => null,
+            'BillingCity' => null,
+            'BillingCountry' => null,
+            'BillingPostalCode' => null,
+            'BillingState' => null,
+            'BillingStreet' => null,
+            'OwnerId' => null,
+        ];
         $this->sfClient->expects($this->once())->method("createObject")->with($objectType, $data);
         $this->entityManager->save($account);
     }

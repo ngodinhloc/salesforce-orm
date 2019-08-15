@@ -39,7 +39,7 @@ class BuilderTest extends TestCase
         $where = ["{$col}={$value}"];
         $this->builder->where($where);
         $query = $this->builder->getQuery();
-        $this->assertContains("{$col}='{$value}'", $query);
+        $this->assertContains("{$col} = '{$value}'", $query);
     }
 
     public function testLimit()

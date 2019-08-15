@@ -32,7 +32,7 @@ class Config
      */
     public function __construct(array $config = null)
     {
-        if (!isset($config['clientId']) || !isset($config['clientSecret']) || !isset($config['path']) || !isset($config['username']) || !isset($config['password']) || !isset($config['apiVersion'])) {
+        if (!isset($config['clientId']) || !isset($config['clientSecret']) || !isset($config['path']) || !isset($config['username']) || !isset($config['password']) || !isset($config['apiVersion']) || !isset($config['apexEndPoint'])) {
             throw new ConfigException(ConfigException::MSG_MISSING_SALESFORCE_CONFIG . implode(",", self::REQUIRED_CONFIGURATION_DATA));
         }
         $this->clientId = $config['clientId'];

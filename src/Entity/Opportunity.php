@@ -14,43 +14,37 @@ class Opportunity extends Entity
 {
     /**
      * @var string
-     * @SF\Field(name="name")
-     * @SF\Required(value=true)
+     * @SF\Field(name="Name", required=true)
      */
     protected $name;
 
     /**
      * @var string
-     * @SF\Field(name="AccountId")
-     * @SF\Required(value=true)
+     * @SF\Field(name="AccountId", required=true)
      */
     protected $accountId;
 
     /**
      * @var string
-     * @SF\Field(name="closeDate")
-     * @SF\Required(value=true)
+     * @SF\Field(name="closeDate", required=true)
      */
     protected $closeDate;
 
     /**
      * @var string
-     * @SF\Field(name="RecordTypeId")
-     * @SF\Required(value=true)
+     * @SF\Field(name="RecordTypeId", required=true)
      */
     protected $recordTypeId;
 
     /**
      * @var string
-     * @SF\Field(name="StageName")
-     * @SF\Required(value=true)
+     * @SF\Field(name="StageName", required=true)
      */
     protected $stage;
 
     /**
      * @var string
-     * @SF\Field(name="OwnerId")
-     * @SF\Required(value=true)
+     * @SF\Field(name="OwnerId", required=true)
      */
     protected $ownerId;
 
