@@ -14,8 +14,7 @@ class Contact extends Entity
 {
     /**
      * @var string
-     * @SF\Field(name="AccountId")
-     * @SF\Required(value=true)
+     * @SF\Field(name="AccountId", required=true)
      */
     protected $accountId;
 
@@ -27,8 +26,7 @@ class Contact extends Entity
 
     /**
      * @var string
-     * @SF\Field(name="LastName")
-     * @SF\Required(value=true)
+     * @SF\Field(name="LastName", required=true)
      */
     protected $lastName;
 

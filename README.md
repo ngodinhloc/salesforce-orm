@@ -1,4 +1,6 @@
 # Salesforce ORM for PHP: Doctrine style entities, entity manager and repository
+[![Build Status](https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master)](https://travis-ci.com/brighte-capital/salesforce-orm)
+[![codecov](https://codecov.io/gh/brighte-capital/salesforce-orm/branch/master/graph/badge.svg)](https://codecov.io/gh/brighte-capital/salesforce-orm)
 
 ## Configuration
 composer.json
@@ -75,8 +77,7 @@ class Account extends Entity
 {
     /**
      * @var string
-     * @SF\Field(name="Name")
-     * @SF\Required(value=true)
+     * @SF\Field(name="Name", required=true)
      */
     protected $name;
 
@@ -101,8 +102,7 @@ class Account extends Entity
 {
     /**
      * @var string
-     * @SF\Field(name="Name")
-     * @SF\Required(value=true)
+     * @SF\Field(name="Name", required=true)
      */
     protected $name;
 

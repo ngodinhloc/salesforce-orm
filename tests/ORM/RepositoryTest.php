@@ -28,13 +28,6 @@ class RepositoryTest extends TestCase
         $this->repository->setClassName($class)->find($id);
     }
 
-    public function testSave()
-    {
-        $account = new Account();
-        $this->entityManager->expects($this->once())->method('save')->with($account);
-        $this->repository->save($account);
-    }
-
     public function testFindBy()
     {
         $class = "Account";
