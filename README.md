@@ -1,7 +1,9 @@
 # Salesforce ORM for PHP: Doctrine style entities, entity manager and repository
-[![Build Status](https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master)](https://travis-ci.com/brighte-capital/salesforce-orm)
-[![codecov](https://codecov.io/gh/brighte-capital/salesforce-orm/branch/master/graph/badge.svg)](https://codecov.io/gh/brighte-capital/salesforce-orm)
-[![Download]](https://packagist.org/packages/brightecapital/salesforce-orm/stats)
+[![Software license][ico-license]](LICENSE)
+[![Version][ico-version-stable]][link-packagist]
+[![Download][ico-downloads-monthly]][link-downloads]
+[![Build status][ico-travis]][link-travis]
+
 
 ## Configuration
 composer.json
@@ -145,3 +147,13 @@ $accounts = $accountRepo->findAll();
 // Find total number of Account
 $count = $accountRepository->count();
 </pre>
+
+
+[ico-license]: https://img.shields.io/github/license/nrk/predis.svg?style=flat-square
+[ico-version-stable]: https://img.shields.io/packagist/v/predis/predis.svg?style=flat-square
+[ico-downloads-monthly]: https://img.shields.io/packagist/dm/predis/predis.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/nrk/predis.svg?style=flat-square
+
+[link-packagist]: https://codecov.io/gh/brighte-capital/salesforce-orm
+[link-travis]: https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master
+[link-downloads]: https://packagist.org/packages/brightecapital/salesforce-orm/stats
