@@ -21,7 +21,7 @@ class FileCache extends CacheEngine implements CacheEngineInterface
      * @return bool
      * @throws \Salesforce\Cache\Exception\FileCacheException
      */
-    public function writeCache(string $key = null, array $data = null)
+    public function writeCache(string $key = null, $data = null)
     {
         $file = $this->cacheDir . $this->createKey($key);
         $array = ['time' => time(), 'data' => $data];
