@@ -151,8 +151,8 @@ $count = $accountRepository->count();
 
 
 [ico-license]: https://img.shields.io/github/license/nrk/predis.svg?style=flat-square
-[ico-version-stable]: https://img.shields.io/packagist/v/brighte-capital/salesforce-orm.svg?style=flat-square
-[ico-downloads-monthly]: https://img.shields.io/packagist/dm/brighte-capital/salesforce-orms.svg?style=flat-square
+[ico-version-stable]: https://img.shields.io/packagist/v/brightecapital/salesforce-orm.svg?style=flat-square
+[ico-downloads-monthly]: https://img.shields.io/packagist/dm/brightecapital/salesforce-orms.svg?style=flat-square
 [ico-travis]: https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master
 [ico-codecov]: https://codecov.io/gh/brighte-capital/salesforce-orm/branch/master/graph/badge.svg
 
