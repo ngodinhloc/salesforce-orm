@@ -3,6 +3,7 @@
 [![Version][ico-version-stable]][link-packagist]
 [![Download][ico-downloads-monthly]][link-downloads]
 [![Build status][ico-travis]][link-travis]
+[![Coverage][ico-travis]][link-codecov]
 
 
 ## Configuration
@@ -154,6 +155,7 @@ $count = $accountRepository->count();
 [ico-downloads-monthly]: https://img.shields.io/packagist/dm/predis/predis.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/nrk/predis.svg?style=flat-square
 
-[link-packagist]: https://codecov.io/gh/brighte-capital/salesforce-orm
+[link-packagist]: https://packagist.org/packages/brightecapital/salesforce-orm
+[link-codecov]: https://codecov.io/gh/brighte-capital/salesforce-orm
 [link-travis]: https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master
 [link-downloads]: https://packagist.org/packages/brightecapital/salesforce-orm/stats
