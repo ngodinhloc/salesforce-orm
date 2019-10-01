@@ -2,7 +2,7 @@
 
 namespace Salesforce\Restforce;
 
-use EventFarm\Restforce\Rest\GuzzleRestClient;
+use Salesforce\Restforce\ExtendedGuzzleRestClient;
 use EventFarm\Restforce\Rest\OAuthAccessToken;
 use EventFarm\Restforce\Rest\OAuthRestClient;
 use EventFarm\Restforce\Rest\RestClientInterface;
@@ -14,6 +14,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
 {
     const USER_INFO_ENDPOINT = 'RESOURCE_OWNER';
     const DEFAULT_API_VERSION = 'v38.0';
+    const DEFAULT_BULK_JOB_BASE_URI = 'jobs/';
 
     /** @var string */
     protected $clientId;
@@ -174,12 +175,12 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     private function getOAuthRestClient(): RestClientInterface
     {
         if ($this->oAuthRestClient === null) {
-            $this->oAuthRestClient = new OAuthRestClient(
-                new SalesforceRestClient(
-                    new GuzzleRestClient('https://na1.salesforce.com'),
+            $this->oAuthRestClient = new ExtendedOAuthRestClient(
+                new ExtendedSalesforceRestClient(
+                    new ExtendedGuzzleRestClient('https://na1.salesforce.com'),
                     $this->apiVersion
                 ),
-                new GuzzleRestClient($this->salesforceOauthUrl),
+                new ExtendedGuzzleRestClient($this->salesforceOauthUrl),
                 $this->clientId,
                 $this->clientSecret,
                 $this->username,
@@ -245,4 +246,44 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     {
         return $this->getOAuthRestClient()->postJson($this->salesforceOauthUrl . $this->apexEndPoint . $uri, $data);
     }
+
+    /**
+     * @param string|null $uri
+     * @param array|null $data
+     * @return ResponseInterface
+     */
+    public function createBulkJob(string $uri = null, array $data = null): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->postJson(self::DEFAULT_BULK_JOB_BASE_URI . $uri, $data);
+    }
+
+    /**
+     * @param string|null $uri
+     * @param string|null $csvdata
+     * @return ResponseInterface
+     */
+    public function addToBulkJobBatches(string $uri = null, string $csvdata = null): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->putCsv(self::DEFAULT_BULK_JOB_BASE_URI . $uri, $csvdata);
+    }
+
+    /**
+     * @param string|null $uri
+     * @param array|null $data
+     * @return ResponseInterface
+     */
+    public function closeBulkJob(string $uri = null, array $data = null): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->patchJson(self::DEFAULT_BULK_JOB_BASE_URI . $uri, $data);
+    }
+
+    /**
+     * @param $uri
+     * @return ResponseInterface
+     */
+    public function bulkJobGet($uri): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->get(self::DEFAULT_BULK_JOB_BASE_URI . $uri);
+    }
+
 }

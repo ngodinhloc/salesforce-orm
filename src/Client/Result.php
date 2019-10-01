@@ -33,9 +33,15 @@ class Result
         switch ($this->response->getStatusCode()) {
             case ResponseCodes::HTTP_OK:
                 if ($content = $this->response->getBody()->getContents()) {
+                    if (current($this->response->getHeader('Content-Type')) == 'text/csv') {
+                        return $content;
+                    }
                     $array = json_decode($content, true);
                     if (isset($array['error']) && isset($array['message'])) {
                         throw new ResultException($array['message']);
+                    }
+                    if (isset($array['state']) && in_array($array['state'], ['Failed', ''])) {
+                        throw new ResultException($array['errorMessage']);
                     }
                     $result = isset($array['records']) ? $array['records'] : $array;
                 }
@@ -47,6 +53,7 @@ class Result
                         $result = $array['id'];
                     }
                 }
+                $result = true;
                 break;
             case ResponseCodes::HTTP_NOT_FOUND:
             case ResponseCodes::HTTP_BAD_REQUEST:

@@ -11,6 +11,7 @@ class Entity
     const PROPERTY_REQUIRED_PROPERTIES = "requiredProperties";
     const PROPERTY_PROTECTION_PROPERTIES = "protectionProperties";
     const PROPERTY_REQUIRED_VALIDATIONS = "requiredValidations";
+    const PROPERTY_EXTERNAL_IDS = "externalIds";
 
     /**
      * @var string
@@ -47,6 +48,11 @@ class Entity
      * @var array
      */
     protected $requiredValidations;
+
+    /**
+     * @var array
+     */
+    protected $externalIds;
 
     /**
      * @return string
@@ -113,5 +119,13 @@ class Entity
     public function getProtectionProperties()
     {
         return $this->protectionProperties;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExternalIds()
+    {
+        return $this->externalIds;
     }
 }

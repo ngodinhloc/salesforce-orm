@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
+use Salesforce\ORM\Constants\BulkApiConstants;
 use Salesforce\Restforce\ExtendedRestforce;
 
 /**
@@ -28,6 +29,9 @@ class Client
     protected $logger;
 
     const MSG_DEBUG_CREATE_START = 'Start creating object in Salesforce. Type: %s. Data: %s';
+    const MSG_DEBUG_CREATE_BULK_START = 'Start creating object in Salesforce. Type: %s. Action: %s';
+    const MSG_DEBUG_ADD_BATCHES_TO_BULK_START = 'Start adding batches to bulk in Salesforce. JobId: %s. Data: %s';
+    const MSG_DEBUG_CLOSE_BULK_START = 'Start closing bulk Job in Salesforce. JobId: %s.';
     const MSG_DEBUG_CREATE_FINISH = 'Finish creating object in Salesforce.';
     const MSG_DEBUG_UPDATE_START = 'Start updating object in Salesforce. Type: %s. Id: %s .Data: %s';
     const MSG_DEBUG_UPDATE_FINISH = 'Finish updating object in Salesforce.';
@@ -90,6 +94,103 @@ class Client
         if ($this->logger) {
             $this->logger->debug(self::MSG_DEBUG_CREATE_FINISH);
         }
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $object
+     * @param string|null $action
+     * @return mixed
+     * @throws Exception\ResultException
+     */
+    public function createBulkJob(string $object = null, string $action = null)
+    {
+        if (empty($object)) {
+            throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
+        }
+
+        if (empty($action)) {
+            throw new ClientException(ClientException::MSG_ACTION_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CREATE_BULK_START, $object, $action));
+        }
+
+        $response = $this->restforce->createBulkJob(BulkApiConstants::JOB_INGEST_ENDPOINT, [
+            'operation' => $action,
+            'object' => $object,
+            'externalIdFieldName' => 'Brighte_Id__c',
+            'contentType' => 'CSV',
+        ]);
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $jobId
+     * @param string $csvData
+     * @return mixed
+     * @throws Exception\ResultException
+     */
+    public function addToBulkJobBatches(string $jobId = null, string $csvData = null)
+    {
+        if (empty($jobId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_BULK_START, $jobId, $csvData));
+        }
+
+        $response = $this->restforce->addToBulkJobBatches(BulkApiConstants::JOB_INGEST_ENDPOINT . $jobId . '/' . BulkApiConstants::JOB_ADD_BATCHES_ENDPOINT, $csvData);
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $jobId
+     * @return mixed
+     * @throws Exception\ResultException
+     */
+    public function closeBulkJob(string $jobId = null)
+    {
+        if (empty($jobId)) {
+            throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_BULK_START, $jobId));
+        }
+
+        $response = $this->restforce->closeBulkJob(BulkApiConstants::JOB_INGEST_ENDPOINT . $jobId, [
+            'state' => BulkApiConstants::JOB_FIELD_VALUE_JOB_UPLOAD_COMPLETE
+        ]);
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $uri
+     * @return mixed
+     * @throws Exception\ResultException
+     */
+    public function bulkJobGet(string $uri = null)
+    {
+        if (empty($uri)) {
+            throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        $response = $this->restforce->bulkJobGet($uri);
 
         $result = new Result($response);
 
@@ -256,6 +357,11 @@ class Client
         $result = (new Result($response))->get();
 
         return $result;
+    }
+
+    public function bulkPost($uri, $data)
+    {
+
     }
 
     /**

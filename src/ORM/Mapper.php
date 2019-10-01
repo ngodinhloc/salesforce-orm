@@ -59,6 +59,7 @@ class Mapper
         $eagerLoad = [];
         $requiredProperties = [];
         $requiredValidations = [];
+        $externalIds = [];
         foreach ($properties as $property) {
             $annotations = $this->reader->getPropertyAnnotations($property);
             foreach ($annotations as $annotation) {
@@ -71,6 +72,9 @@ class Mapper
                     }
                     if ($annotation->protection == true) {
                         $protectionProperties[$annotation->name] = $property;
+                    }
+                    if ($annotation->externalId == true) {
+                        $externalIds[$annotation->name] = $property;
                     }
                 }
 
@@ -102,6 +106,10 @@ class Mapper
 
         if (!empty($requiredValidations)) {
             $this->setPropertyValueByName($entity, Entity::PROPERTY_REQUIRED_VALIDATIONS, $requiredValidations);
+        }
+
+        if (!empty($externalIds)) {
+            $this->setPropertyValueByName($entity, Entity::PROPERTY_EXTERNAL_IDS, $externalIds);
         }
 
         $this->setPropertyValueByName($entity, Entity::PROPERTY_IS_PATCHED, true);
