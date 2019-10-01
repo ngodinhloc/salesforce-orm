@@ -42,6 +42,39 @@ class BuilderTest extends TestCase
         $this->assertContains("{$col} = '{$value}'", $query);
     }
 
+    public function testAndWhere()
+    {
+        $col = "Id";
+        $value = "12345";
+        $where = ["{$col}={$value}"];
+        $this->builder->where($where);
+        $this->builder->AndWhere("Id = 12345");
+        $query = $this->builder->getQuery();
+        $this->assertContains("{$col} = '{$value}'", $query);
+    }
+
+    public function testOrWhere()
+    {
+        $col = "Id";
+        $value = "12345";
+        $where = ["{$col}={$value}"];
+        $this->builder->where($where);
+        $this->builder->OrWhere("Id = 12345");
+        $query = $this->builder->getQuery();
+        $this->assertContains("{$col} = '{$value}'", $query);
+    }
+
+    public function testOrder()
+    {
+        $col = "Id";
+        $value = "12345";
+        $where = ["{$col}={$value}"];
+        $this->builder->where($where);
+        $this->builder->order(["ASC"]);
+        $query = $this->builder->getQuery();
+        $this->assertContains("{$col} = '{$value}'", $query);
+    }
+
     public function testLimit()
     {
         $limit = 10;

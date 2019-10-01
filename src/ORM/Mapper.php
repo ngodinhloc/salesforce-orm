@@ -194,10 +194,6 @@ class Mapper
      */
     public function checkRequiredValidations(Entity $entity)
     {
-        if ($entity->isPatched() !== true) {
-            $entity = $this->patch($entity, []);
-        }
-
         if (empty($entity->getRequiredValidations())) {
             return true;
         }
@@ -207,6 +203,7 @@ class Mapper
         foreach ($entity->getRequiredValidations() as $rule) {
             $property = $rule['property'];
             $annotation = $rule['annotation'];
+
             if ($annotation instanceof ValidationInterface) {
                 $validator = $annotation->getValidator($this);
                 $check = $validator->validate($entity, $property, $annotation);
@@ -374,7 +371,7 @@ class Mapper
      * @return \ReflectionClass
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    protected function reflect(Entity $entity)
+    public function reflect(Entity $entity)
     {
         try {
             $reflectionClass = new ReflectionClass(get_class($entity));
