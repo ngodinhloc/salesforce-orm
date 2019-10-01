@@ -197,7 +197,7 @@ class Mapper
         if ($entity->isPatched() !== true) {
             $entity = $this->patch($entity, []);
         }
-        
+
         if (empty($entity->getRequiredValidations())) {
             return true;
         }
@@ -207,7 +207,6 @@ class Mapper
         foreach ($entity->getRequiredValidations() as $rule) {
             $property = $rule['property'];
             $annotation = $rule['annotation'];
-
             if ($annotation instanceof ValidationInterface) {
                 $validator = $annotation->getValidator($this);
                 $check = $validator->validate($entity, $property, $annotation);

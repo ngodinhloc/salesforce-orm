@@ -201,7 +201,6 @@ class EntityManager
         $objectType = $this->mapper->getObjectType($entity);
         $data = $this->mapper->getNoneProtectionData($entity);
 
-
         if ($entity->getId()) {
             if (!$this->mapper->checkNoneProtectionData($data)) {
                 return true;
