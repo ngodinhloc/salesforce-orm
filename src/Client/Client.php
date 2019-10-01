@@ -104,7 +104,8 @@ class Client
      * @param string|null $object
      * @param string|null $action
      * @return mixed
-     * @throws Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function createBulkJob(string $object = null, string $action = null)
     {
@@ -136,7 +137,8 @@ class Client
      * @param string|null $jobId
      * @param string $csvData
      * @return mixed
-     * @throws Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function addToBulkJobBatches(string $jobId = null, string $csvData = null)
     {
@@ -158,7 +160,8 @@ class Client
     /**
      * @param string|null $jobId
      * @return mixed
-     * @throws Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws ClientException
      */
     public function closeBulkJob(string $jobId = null)
     {
@@ -182,7 +185,8 @@ class Client
     /**
      * @param string|null $uri
      * @return mixed
-     * @throws Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function bulkJobGet(string $uri = null)
     {
@@ -357,11 +361,6 @@ class Client
         $result = (new Result($response))->get();
 
         return $result;
-    }
-
-    public function bulkPost($uri, $data)
-    {
-
     }
 
     /**

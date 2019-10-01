@@ -54,6 +54,10 @@ class EntityBulkManager
      * @throws BulkException
      * @throws EntityException
      * @throws Exception\MapperException
+     * @throws \League\Csv\CannotInsertRecord
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \TypeError
      */
     public function bulkCreate(string $className, array $header, array $data)
     {
@@ -73,6 +77,10 @@ class EntityBulkManager
      * @throws BulkException
      * @throws EntityException
      * @throws Exception\MapperException
+     * @throws \League\Csv\CannotInsertRecord
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \TypeError
      */
     public function bulkUpdate(string $className, array $header, array $data)
     {
@@ -89,9 +97,13 @@ class EntityBulkManager
      * @param array $header
      * @param array $data
      * @return array
+     * @throws \TypeError
      * @throws BulkException
      * @throws EntityException
      * @throws Exception\MapperException
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \League\Csv\CannotInsertRecord
      */
     public function bulkUpsert(string $className, array $header, array $data, string $externalIdField = null)
     {
@@ -114,6 +126,8 @@ class EntityBulkManager
      * @return array
      * @throws BulkException
      * @throws \League\Csv\CannotInsertRecord
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      * @throws \TypeError
      */
     protected function processBulkData(string $jobId, array $header, array $data)
@@ -204,6 +218,8 @@ class EntityBulkManager
      * @param string $jobId
      * @param int $retry
      * @return array
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      * @throws BulkException
      */
     public function getJobResult(string $jobId, $retry = 0)
