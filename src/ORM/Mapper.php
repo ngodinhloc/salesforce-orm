@@ -194,6 +194,10 @@ class Mapper
      */
     public function checkRequiredValidations(Entity $entity)
     {
+        if ($entity->isPatched() !== true) {
+            $entity = $this->patch($entity, []);
+        }
+        
         if (empty($entity->getRequiredValidations())) {
             return true;
         }
