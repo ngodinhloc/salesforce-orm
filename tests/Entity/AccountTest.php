@@ -7,7 +7,7 @@ use Salesforce\Entity\Account;
 
 class AccountTest extends TestCase
 {
-    /** @var $contact Account */
+    /** @var $account Account */
     protected $account;
 
     public function setUp()
@@ -15,7 +15,6 @@ class AccountTest extends TestCase
         parent::setUp();
         $this->account = new Account();
     }
-
 
     public function testProperties()
     {
