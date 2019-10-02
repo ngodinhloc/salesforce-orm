@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
-use Salesforce\ORM\Constants\BulkApiConstants;
+use Salesforce\Job\Constants\JobConstants;
 use Salesforce\Restforce\ExtendedRestforce;
 
 /**
@@ -103,11 +103,12 @@ class Client
     /**
      * @param string|null $object
      * @param string|null $action
+     * @param array $additionalData
      * @return mixed
+     * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function createBulkJob(string $object = null, string $action = null)
+    public function createBulkJob(string $object = null, string $action = null, array $additionalData = [])
     {
         if (empty($object)) {
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
@@ -121,12 +122,17 @@ class Client
             $this->logger->debug(sprintf(self::MSG_DEBUG_CREATE_BULK_START, $object, $action));
         }
 
-        $response = $this->restforce->createBulkJob(BulkApiConstants::JOB_INGEST_ENDPOINT, [
+        $data = [
             'operation' => $action,
             'object' => $object,
-            'externalIdFieldName' => 'Brighte_Id__c',
             'contentType' => 'CSV',
-        ]);
+        ];
+
+        if (!empty($additionalData)) {
+            $data = array_merge($data, $additionalData);
+        }
+
+        $response = $this->restforce->createBulkJob(JobConstants::JOB_INGEST_ENDPOINT, $data);
 
         $result = new Result($response);
 
@@ -150,7 +156,7 @@ class Client
             $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_BULK_START, $jobId, $csvData));
         }
 
-        $response = $this->restforce->addToBulkJobBatches(BulkApiConstants::JOB_INGEST_ENDPOINT . $jobId . '/' . BulkApiConstants::JOB_ADD_BATCHES_ENDPOINT, $csvData);
+        $response = $this->restforce->addToBulkJobBatches(JobConstants::JOB_INGEST_ENDPOINT . $jobId . '/' . JobConstants::JOB_ADD_BATCHES_ENDPOINT, $csvData);
 
         $result = new Result($response);
 
@@ -173,8 +179,8 @@ class Client
             $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_BULK_START, $jobId));
         }
 
-        $response = $this->restforce->closeBulkJob(BulkApiConstants::JOB_INGEST_ENDPOINT . $jobId, [
-            'state' => BulkApiConstants::JOB_FIELD_VALUE_JOB_UPLOAD_COMPLETE
+        $response = $this->restforce->closeBulkJob(JobConstants::JOB_INGEST_ENDPOINT . $jobId, [
+            'state' => JobConstants::STATE_UPLOAD_COMPLETE
         ]);
 
         $result = new Result($response);

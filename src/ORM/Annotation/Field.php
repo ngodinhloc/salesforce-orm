@@ -11,5 +11,4 @@ final class Field extends Annotation
     public $name;
     public $required = false;
     public $protection = false;
-    public $externalId = false;
 }
