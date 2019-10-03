@@ -29,9 +29,9 @@ class Client
     protected $logger;
 
     const MSG_DEBUG_CREATE_START = 'Start creating object in Salesforce. Type: %s. Data: %s';
-    const MSG_DEBUG_CREATE_BULK_START = 'Start creating object in Salesforce. Type: %s. Action: %s';
-    const MSG_DEBUG_ADD_BATCHES_TO_BULK_START = 'Start adding batches to bulk in Salesforce. JobId: %s. Data: %s';
-    const MSG_DEBUG_CLOSE_BULK_START = 'Start closing bulk Job in Salesforce. JobId: %s.';
+    const MSG_DEBUG_CREATE_JOB_START = 'Start creating job in Salesforce. Type: %s. Action: %s';
+    const MSG_DEBUG_ADD_BATCHES_TO_JOB_START = 'Start adding batches to job in Salesforce. JobId: %s. Data: %s';
+    const MSG_DEBUG_CLOSE_JOB_START = 'Start closing Job in Salesforce. JobId: %s.';
     const MSG_DEBUG_CREATE_FINISH = 'Finish creating object in Salesforce.';
     const MSG_DEBUG_UPDATE_START = 'Start updating object in Salesforce. Type: %s. Id: %s .Data: %s';
     const MSG_DEBUG_UPDATE_FINISH = 'Finish updating object in Salesforce.';
@@ -105,10 +105,10 @@ class Client
      * @param string|null $action
      * @param array $additionalData
      * @return mixed
-     * @throws ClientException
+     * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function createBulkJob(string $object = null, string $action = null, array $additionalData = [])
+    public function createJob(string $object = null, string $action = null, array $additionalData = [])
     {
         if (empty($object)) {
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
@@ -119,7 +119,7 @@ class Client
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf(self::MSG_DEBUG_CREATE_BULK_START, $object, $action));
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CREATE_JOB_START, $object, $action));
         }
 
         $data = [
@@ -132,7 +132,7 @@ class Client
             $data = array_merge($data, $additionalData);
         }
 
-        $response = $this->restforce->createBulkJob(JobConstants::JOB_INGEST_ENDPOINT, $data);
+        $response = $this->restforce->createJob(JobConstants::JOB_INGEST_ENDPOINT, $data);
 
         $result = new Result($response);
 
@@ -146,17 +146,17 @@ class Client
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function addToBulkJobBatches(string $jobId = null, string $csvData = null)
+    public function addToJobBatches(string $jobId = null, string $csvData = null)
     {
         if (empty($jobId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_BULK_START, $jobId, $csvData));
+            $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_JOB_START, $jobId, $csvData));
         }
 
-        $response = $this->restforce->addToBulkJobBatches(JobConstants::JOB_INGEST_ENDPOINT . $jobId . '/' . JobConstants::JOB_ADD_BATCHES_ENDPOINT, $csvData);
+        $response = $this->restforce->addToJobBatches(JobConstants::JOB_INGEST_ENDPOINT . $jobId . '/' . JobConstants::JOB_ADD_BATCHES_ENDPOINT, $csvData);
 
         $result = new Result($response);
 
@@ -167,19 +167,19 @@ class Client
      * @param string|null $jobId
      * @return mixed
      * @throws \Salesforce\Client\Exception\ResultException
-     * @throws ClientException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function closeBulkJob(string $jobId = null)
+    public function closeJob(string $jobId = null)
     {
         if (empty($jobId)) {
             throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_BULK_START, $jobId));
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_JOB_START, $jobId));
         }
 
-        $response = $this->restforce->closeBulkJob(JobConstants::JOB_INGEST_ENDPOINT . $jobId, [
+        $response = $this->restforce->closeJob(JobConstants::JOB_INGEST_ENDPOINT . $jobId, [
             'state' => JobConstants::STATE_UPLOAD_COMPLETE
         ]);
 
@@ -194,13 +194,13 @@ class Client
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function bulkJobGet(string $uri = null)
+    public function jobGet(string $uri = null)
     {
         if (empty($uri)) {
             throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
         }
 
-        $response = $this->restforce->bulkJobGet($uri);
+        $response = $this->restforce->jobGet($uri);
 
         $result = new Result($response);
 

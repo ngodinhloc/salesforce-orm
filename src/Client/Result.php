@@ -3,6 +3,7 @@ namespace Salesforce\Client;
 
 use Psr\Http\Message\ResponseInterface;
 use Salesforce\Client\Exception\ResultException;
+use Salesforce\Job\Constants\JobConstants;
 
 class Result
 {
@@ -40,7 +41,7 @@ class Result
                     if (isset($array['error']) && isset($array['message'])) {
                         throw new ResultException($array['message']);
                     }
-                    if (isset($array['state']) && in_array($array['state'], ['Failed', ''])) {
+                    if (isset($array['state']) && in_array($array['state'], [JobConstants::STATE_FAILED, JobConstants::STATE_ABORTED])) {
                         throw new ResultException($array['errorMessage']);
                     }
                     $result = isset($array['records']) ? $array['records'] : $array;

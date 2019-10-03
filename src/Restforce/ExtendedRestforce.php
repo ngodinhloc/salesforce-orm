@@ -2,11 +2,9 @@
 
 namespace Salesforce\Restforce;
 
-use Salesforce\Restforce\ExtendedGuzzleRestClient;
 use EventFarm\Restforce\Rest\OAuthAccessToken;
 use EventFarm\Restforce\Rest\OAuthRestClient;
 use EventFarm\Restforce\Rest\RestClientInterface;
-use EventFarm\Restforce\Rest\SalesforceRestClient;
 use EventFarm\Restforce\RestforceException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -14,7 +12,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
 {
     const USER_INFO_ENDPOINT = 'RESOURCE_OWNER';
     const DEFAULT_API_VERSION = 'v38.0';
-    const DEFAULT_BULK_JOB_BASE_URI = 'jobs/';
+    const DEFAULT_JOB_BASE_URI = 'jobs/';
 
     /** @var string */
     protected $clientId;
@@ -170,7 +168,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     }
 
     /**
-     * @return \EventFarm\Restforce\Rest\RestClientInterface
+     * @return \Salesforce\Restforce\ExtendedRestClientInterface
      */
     private function getOAuthRestClient(): RestClientInterface
     {
@@ -252,9 +250,9 @@ class ExtendedRestforce implements ExtendedRestforceInterface
      * @param array|null $data
      * @return ResponseInterface
      */
-    public function createBulkJob(string $uri = null, array $data = null): ResponseInterface
+    public function createJob(string $uri = null, array $data = null): ResponseInterface
     {
-        return $this->getOAuthRestClient()->postJson(self::DEFAULT_BULK_JOB_BASE_URI . $uri, $data);
+        return $this->getOAuthRestClient()->postJson(self::DEFAULT_JOB_BASE_URI . $uri, $data);
     }
 
     /**
@@ -262,9 +260,9 @@ class ExtendedRestforce implements ExtendedRestforceInterface
      * @param string|null $csvdata
      * @return ResponseInterface
      */
-    public function addToBulkJobBatches(string $uri = null, string $csvdata = null): ResponseInterface
+    public function addToJobBatches(string $uri = null, string $csvdata = null): ResponseInterface
     {
-        return $this->getOAuthRestClient()->putCsv(self::DEFAULT_BULK_JOB_BASE_URI . $uri, $csvdata);
+        return $this->getOAuthRestClient()->putCsv(self::DEFAULT_JOB_BASE_URI . $uri, $csvdata);
     }
 
     /**
@@ -272,18 +270,18 @@ class ExtendedRestforce implements ExtendedRestforceInterface
      * @param array|null $data
      * @return ResponseInterface
      */
-    public function closeBulkJob(string $uri = null, array $data = null): ResponseInterface
+    public function closeJob(string $uri = null, array $data = null): ResponseInterface
     {
-        return $this->getOAuthRestClient()->patchJson(self::DEFAULT_BULK_JOB_BASE_URI . $uri, $data);
+        return $this->getOAuthRestClient()->patchJson(self::DEFAULT_JOB_BASE_URI . $uri, $data);
     }
 
     /**
      * @param $uri
      * @return ResponseInterface
      */
-    public function bulkJobGet($uri): ResponseInterface
+    public function jobGet($uri): ResponseInterface
     {
-        return $this->getOAuthRestClient()->get(self::DEFAULT_BULK_JOB_BASE_URI . $uri);
+        return $this->getOAuthRestClient()->get(self::DEFAULT_JOB_BASE_URI . $uri);
     }
 
 }

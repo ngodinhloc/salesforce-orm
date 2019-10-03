@@ -1,7 +1,6 @@
 <?php
 namespace Salesforce\Job;
 
-use Salesforce\Client\Connection;
 use Salesforce\ORM\Entity;
 
 class Job
@@ -17,9 +16,6 @@ class Job
 
     /** @var Entity */
     protected $entity;
-
-    /** @var Connection */
-    protected $connection;
 
     /** @var String */
     protected $state;
@@ -79,23 +75,7 @@ class Job
     }
 
     /**
-     * @return Connection
-     */
-    public function getConnection(): Connection
-    {
-        return $this->connection;
-    }
-
-    /**
-     * @param Connection $connection
-     */
-    public function setConnection(Connection $connection)
-    {
-        $this->connection = $connection;
-    }
-
-    /**
-     * @return Entity
+     * @return \Salesforce\ORM\Entity
      */
     public function getEntity(): Entity
     {
@@ -103,7 +83,7 @@ class Job
     }
 
     /**
-     * @param Entity $entity
+     * @param \Salesforce\ORM\Entity $entity
      */
     public function setEntity(Entity $entity)
     {

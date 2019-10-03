@@ -1,72 +1,77 @@
 <?php
 namespace Salesforce\Job;
 
-use League\Csv\Reader;
-use Salesforce\Client\Connection;
 use Salesforce\Job\Constants\JobConstants;
 
 class JobResult
 {
-    /** @var Job */
-    protected $job;
+    /** @var array */
+    protected $successfulResult;
 
-    /** @var Connection */
-    protected $connection;
+    /** @var array */
+    protected $unprocessedRecords;
 
-    public function __construct(Job $job, Connection $connection)
-    {
-        $this->job = $job;
-        $this->connection = $connection;
-    }
+    /** @var array */
+    protected $failedResult;
 
     /**
      * @return array
-     * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function getSuccessFullResult()
+    public function getSuccessfulResult(): array
     {
-        $passedResult =$this->connection->getClient()->bulkJobGet(JobConstants::JOB_INGEST_ENDPOINT . $this->job->getId() . '/' . JobConstants::JOB_RESULT_PASSED_RESULT_ENDPOINT);
-
-        return Reader::createFromString($passedResult)->jsonSerialize();
+        return $this->successfulResult;
     }
 
     /**
-     * @return array
-     * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\Client\Exception\ResultException
+     * @param array $successfulResult
      */
-    public function getFailedFullResult()
+    public function setSuccessfulResult(array $successfulResult)
     {
-        $failedResult = $this->connection->getClient()->bulkJobGet(JobConstants::JOB_INGEST_ENDPOINT . $this->job->getId() . '/' . JobConstants::JOB_RESULT_FAILED_RESULT_ENDPOINT);
-
-        return Reader::createFromString($failedResult)->jsonSerialize();
+        $this->successfulResult = $successfulResult;
     }
 
     /**
      * @return array
-     * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function getUnprocessedRecord()
+    public function getUnprocessedRecords(): array
     {
-        $unprocessedRecords = $this->connection->getClient()->bulkJobGet(JobConstants::JOB_INGEST_ENDPOINT . $this->job->getId() . '/' . JobConstants::JOB_RESULT_UNPROCESSED_RESULT_ENDPOINT);
+        return $this->unprocessedRecords;
+    }
 
-        return Reader::createFromString($unprocessedRecords)->jsonSerialize();
+    /**
+     * @param array $unprocessedRecords
+     */
+    public function setUnprocessedRecords(array $unprocessedRecords)
+    {
+        $this->unprocessedRecords = $unprocessedRecords;
     }
 
     /**
      * @return array
-     * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function getFailedResult(): array
+    {
+        return $this->failedResult;
+    }
+
+    /**
+     * @param array $failedResult
+     */
+    public function setFailedResult(array $failedResult)
+    {
+        $this->failedResult = $failedResult;
+    }
+
+    /**
+     * @return array
      */
     public function getAll()
     {
         $result = [];
 
-        $result[JobConstants::JOB_RESULT_SUCCESSFUL] = $this->getSuccessFullResult();
-        $result[JobConstants::JOB_RESULT_FAILED] = $this->getFailedFullResult();
-        $result[JobConstants::JOB_RESULT_UNPROCESSED] = $this->getUnprocessedRecord();
+        $result[JobConstants::JOB_RESULT_SUCCESSFUL] = $this->getSuccessfulResult();
+        $result[JobConstants::JOB_RESULT_FAILED] = $this->getFailedResult();
+        $result[JobConstants::JOB_RESULT_UNPROCESSED] = $this->getUnprocessedRecords();
 
         return $result;
     }

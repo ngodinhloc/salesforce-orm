@@ -10,4 +10,5 @@ class JobException extends SalesforceException
     const MSG_CLOSE_FAILED = 'Job batch upload failed.';
     const MSG_GET_RESULT_FAILED = 'Job failed to get result.';
     const MSG_MISSING_EXTERNAL_ID = 'External Id field name is missing for upsert.';
+    const MSG_OPERATION_DELETE_VALIDATION_FAILED = 'Delete operation can only have ID passed for the object.';
 }
