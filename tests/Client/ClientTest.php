@@ -63,7 +63,7 @@ class ClientTest extends TestCase
         $this->logger = $this->client->getLogger();
         $this->client->setCache($this->cache);
         $this->cache = $this->client->getCache();
-        $this->config = $this->client->setConfig( $this->config);
+        $this->config = $this->client->setConfig($this->config);
         $this->config = $this->client->getConfig();
     }
 
