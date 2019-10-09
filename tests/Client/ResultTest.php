@@ -71,6 +71,5 @@ class ResultTest extends TestCase
         } catch (\ResultException $e) {
             $this->assertSame($e->getMessage(), $bodyContents['message']);
         }
-
     }
 }
