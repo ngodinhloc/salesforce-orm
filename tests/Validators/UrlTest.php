@@ -9,7 +9,6 @@ use Salesforce\ORM\Mapper;
 use Salesforce\ORM\Validators\Url;
 use Salesforce\ORM\Annotation\Url As AnnotationUrl;
 
-
 class urlTest extends TestCase
 {
     /** @var $urlClass Url */

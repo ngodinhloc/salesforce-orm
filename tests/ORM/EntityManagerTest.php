@@ -1,5 +1,4 @@
 <?php
-
 namespace SalesforceTest\ORM;
 
 use Doctrine\Common\Annotations\AnnotationReader;

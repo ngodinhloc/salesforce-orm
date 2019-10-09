@@ -9,7 +9,6 @@ use Salesforce\ORM\Mapper;
 use Salesforce\ORM\Validators\Email;
 use Salesforce\ORM\Annotation\Email As AnnotationEmail;
 
-
 class emailTest extends TestCase
 {
     /** @var $emailClass Email */

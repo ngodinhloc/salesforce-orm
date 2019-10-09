@@ -9,7 +9,6 @@ use Salesforce\ORM\Mapper;
 use Salesforce\ORM\Validators\Date;
 use Salesforce\ORM\Annotation\Date As AnnotationDate;
 
-
 class dateTest extends TestCase
 {
     /** @var $dateClass Date */
