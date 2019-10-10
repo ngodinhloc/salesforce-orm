@@ -24,7 +24,7 @@ class Job
     protected $state;
 
     /** @var String */
-    protected $type;
+    protected $type = JobConstants::TYPE_BULK;
 
     /** @var \Salesforce\ORM\EntityFactory */
     protected $entityFactory;

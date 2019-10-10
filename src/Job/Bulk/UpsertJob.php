@@ -53,6 +53,10 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
                 $entity = $this->mapper->patch($entity, []);
             }
 
+            if ($entity->getId()) {
+                throw new JobException(JobException::MSG_UPSERT_DATA_CANNOT_HAVE_ID_ASSIGNED);
+            }
+
             $checkRequiredProperties = $this->mapper->checkRequiredProperties($entity);
             if ($checkRequiredProperties !== true) {
                 throw new EntityException(EntityException::MGS_REQUIRED_PROPERTIES . implode(", ", $checkRequiredProperties));
@@ -77,7 +81,7 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
      */
     public function getOperation(): String
     {
-        return $this->operation ?: JobConstants::OPERATION_UPSERT;
+        return $this->operation;
     }
 
     /**

@@ -68,7 +68,7 @@ class UpdateJob extends Job implements JobInterface, BulkImportInterface
      */
     public function getOperation(): String
     {
-        return $this->operation ?: JobConstants::OPERATION_UPDATE;
+        return $this->operation;
     }
 
     /**
