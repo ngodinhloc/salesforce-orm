@@ -8,7 +8,6 @@ use Salesforce\Event\EventDispatcherInterface;
 use Salesforce\Job\Constants\JobConstants;
 use Salesforce\ORM\EntityFactory;
 use Salesforce\Job\Exception\JobException;
-use Salesforce\ORM\Exception\EntityException;
 use Salesforce\ORM\Mapper;
 
 /**
@@ -50,14 +49,12 @@ class JobManager
     /**
      * @param string $className
      * @param \Salesforce\Job\Job $job
-     * @throws \Salesforce\Job\Exception\JobException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function registerJob(string $className, Job &$job)
     {
-        $data = [];
         $entity = $this->mapper->object($className);
         $patchedEntity = $this->mapper->patch($entity, []);
         $object = $this->mapper->getObjectType($patchedEntity);
@@ -67,15 +64,10 @@ class JobManager
 
         $operation = $job->getOperation();
 
-        if ($operation === JobConstants::OPERATION_UPSERT) {
-            $externalId = $job->getExternalId();
-            if (empty($externalId)) {
-                throw new JobException(JobException::MSG_MISSING_EXTERNAL_ID);
-            }
-            $data[JobConstants::JOB_FIELD_EXTERNAL_ID_FIELD_NAME] = $externalId;
-        }
+        /** @var JobInterface $job */
+        $job->validate();
 
-        $jobResponse = $this->connection->getClient()->createJob($object, $operation, $data);
+        $jobResponse = $this->connection->getClient()->createJob($job->getBaseUrl(), $object, $operation, $job->getRequestBody());
 
         $job->setId($jobResponse[JobConstants::JOB_FIELD_ID]);
         $job->setState($jobResponse[JobConstants::JOB_FIELD_STATE]);
@@ -83,47 +75,28 @@ class JobManager
 
     /**
      * @param \Salesforce\Job\Job $job
-     * @param array $header
-     * @param array $data
+     * @throws JobException
      * @throws \League\Csv\CannotInsertRecord
-     * @throws \Salesforce\Job\Exception\JobException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\ORM\Exception\MapperException
      * @throws \TypeError
      */
-    public function processJob(Job &$job, array $header, array $data)
+    public function processBatchJob(Job &$job)
     {
-        switch ($job->getType()) {
-            case JobConstants::TYPE_BULK:
-                $this->batchJob($job, $header, $data);
-                break;
+        if (!$job instanceof BulkImportInterface) {
+            return;
         }
-    }
 
-    /**
-     * @param \Salesforce\Job\Job $job
-     * @param array $header
-     * @param array $data
-     * @throws \League\Csv\CannotInsertRecord
-     * @throws \Salesforce\Job\Exception\JobException
-     * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \TypeError
-     */
-    protected function batchJob(Job &$job, array $header, array $data)
-    {
-        $this->validateJobBatchData($job, $header, $data);
+        $data = $job->getCsvData();
+
+        $header = array_shift($data);
 
         //load the CSV document from a string
         $csv = Writer::createFromString('');
         $csv->insertOne($header);
         $csv->insertAll($data);
 
-        $jobAddedSuccessfully = $this->connection->getClient()->addToJobBatches($job->getId(), $csv->getContent());
+        $jobAddedSuccessfully = $this->connection->getClient()->addToJobBatches($job->getBaseUrl() . $job->getId() . '/' . JobConstants::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
 
         if ($jobAddedSuccessfully !== true) {
             throw new JobException(JobException::MSG_BATCH_UPLOAD_FAILED);
@@ -140,7 +113,11 @@ class JobManager
      */
     public function closeJob(Job &$job)
     {
-        $closedJob = $this->connection->getClient()->closeJob($job->getId());
+        if (!$job instanceof BulkImportInterface) {
+            return;
+        }
+
+        $closedJob = $this->connection->getClient()->closeJob($job->getBaseUrl() . $job->getId());
 
         if ($closedJob[JobConstants::JOB_FIELD_STATE] !== JobConstants::STATE_UPLOAD_COMPLETE) {
             throw new JobException(JobException::MSG_CLOSE_FAILED);
@@ -156,7 +133,7 @@ class JobManager
      */
     public function getJobInfo(Job &$job)
     {
-        $jobInfo = $this->connection->getClient()->jobGet(JobConstants::JOB_INGEST_ENDPOINT . $job->getId());
+        $jobInfo = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId());
         $job->setState($jobInfo[JobConstants::JOB_FIELD_STATE]);
     }
 
@@ -170,102 +147,23 @@ class JobManager
     {
         $jobResult = new JobResult();
 
-        $passedResult =$this->connection->getClient()->jobGet(JobConstants::JOB_INGEST_ENDPOINT . $job->getId() . '/' . JobConstants::JOB_RESULT_PASSED_RESULT_ENDPOINT);
+        $successfulResult =$this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getSuccessResultUrl());
 
-        $jobResult->setSuccessfulResult(Reader::createFromString($passedResult)->jsonSerialize());
+        $jobResult->setSuccessfulResult(Reader::createFromString($successfulResult)->jsonSerialize());
 
-        $failedResult = $this->connection->getClient()->jobGet(JobConstants::JOB_INGEST_ENDPOINT . $job->getId() . '/' . JobConstants::JOB_RESULT_FAILED_RESULT_ENDPOINT);
+        if (!$job instanceof BulkImportInterface) {
+            return $jobResult;
+        }
+
+        $failedResult = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getFailedResultUrl());
 
         $jobResult->setFailedResult(Reader::createFromString($failedResult)->jsonSerialize());
 
-        $unprocessedRecords = $this->connection->getClient()->jobGet(JobConstants::JOB_INGEST_ENDPOINT . $job->getId() . '/' . JobConstants::JOB_RESULT_UNPROCESSED_RESULT_ENDPOINT);
+        $unprocessedRecords = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getUnprocessedResultUrl());
 
         $jobResult->setUnprocessedRecords(Reader::createFromString($unprocessedRecords)->jsonSerialize());
 
         return $jobResult;
-    }
-
-    /**
-     * @param \Salesforce\Job\Job $job
-     * @param array $header
-     * @param array $data
-     * @return bool
-     * @throws \Salesforce\ORM\Exception\EntityException
-     * @throws \Salesforce\ORM\Exception\MapperException
-     * @throws \Salesforce\Job\Exception\JobException
-     */
-    protected function validateJobBatchData(Job $job, array $header = [], array $data = [])
-    {
-        if (empty(get_class($job->getEntity()))) {
-            throw new EntityException(EntityException::MGS_EMPTY_CLASS_NAME);
-        }
-        if (empty($header)) {
-            throw new EntityException(EntityException::MGS_EMPTY_HEADER);
-        }
-        if (empty($data)) {
-            throw new EntityException(EntityException::MGS_EMPTY_DATA);
-        }
-
-        $rowSize = count($header);
-
-        foreach($data as $row) {
-            if (count($row) !== $rowSize) {
-                throw new EntityException(EntityException::MGS_CSV_ROW_COUNT_MISMATCH);
-            }
-            $row = array_combine($header, $row);
-
-            $entity = $this->entityFactory->new(get_class($job->getEntity()), $row);
-
-            if ($entity->isPatched() !== true) {
-                $entity = $this->mapper->patch($entity, []);
-            }
-
-            switch ($job->getOperation()) {
-                case JobConstants::OPERATION_INSERT:
-                case JobConstants::OPERATION_UPSERT:
-                    $checkRequiredProperties = $this->mapper->checkRequiredProperties($entity);
-                    if ($checkRequiredProperties !== true) {
-                        throw new EntityException(EntityException::MGS_REQUIRED_PROPERTIES . implode(", ", $checkRequiredProperties));
-                    }
-
-                    $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
-                    if ($checkRequiredValidations !== true) {
-                        throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
-                    }
-
-                    $data = $this->mapper->getNoneProtectionData($entity);
-                    if (!$this->mapper->checkNoneProtectionData($data)) {
-                        throw new EntityException(EntityException::MGS_EMPTY_NONE_PROTECTION_DATA);
-                    }
-                    break;
-                case JobConstants::OPERATION_UPDATE:
-                    if (!$entity->getId()) {
-                        throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
-                    }
-
-                    $checkRequiredValidations = $this->mapper->checkRequiredValidations($entity);
-                    if ($checkRequiredValidations !== true) {
-                        throw new EntityException(EntityException::MGS_REQUIRED_VALIDATIONS . implode(", ", $checkRequiredValidations));
-                    }
-
-                    $data = $this->mapper->getNoneProtectionData($entity);
-                    if (!$this->mapper->checkNoneProtectionData($data)) {
-                        throw new EntityException(EntityException::MGS_EMPTY_NONE_PROTECTION_DATA);
-                    }
-                    break;
-                case JobConstants::OPERATION_DELETE:
-                    if (!$entity->getId()) {
-                        throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
-                    }
-
-                    if (count($row) > 1) {
-                        throw new JobException(JobException::MSG_OPERATION_DELETE_VALIDATION_FAILED);
-                    }
-                    break;
-            }
-        }
-
-        return true;
     }
 
     /**

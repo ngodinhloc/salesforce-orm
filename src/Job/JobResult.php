@@ -6,10 +6,10 @@ use Salesforce\Job\Constants\JobConstants;
 class JobResult
 {
     /** @var array */
-    protected $successfulResult;
+    protected $successfulResult = [];
 
     /** @var array */
-    protected $unprocessedRecords;
+    protected $unprocessedRecords = [];
 
     /** @var array */
     protected $failedResult;

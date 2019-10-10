@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
 use Salesforce\Job\Constants\JobConstants;
+use Salesforce\Job\Exception\JobException;
 use Salesforce\Restforce\ExtendedRestforce;
 
 /**
@@ -101,6 +102,7 @@ class Client
     }
 
     /**
+     * @param string|null $uri
      * @param string|null $object
      * @param string|null $action
      * @param array $additionalData
@@ -108,8 +110,12 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function createJob(string $object = null, string $action = null, array $additionalData = [])
+    public function createJob(string $uri = null, string $object = null, string $action = null, array $additionalData = [])
     {
+        if (empty($uri)) {
+            throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
         if (empty($object)) {
             throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
         }
@@ -131,7 +137,6 @@ class Client
         if (!empty($additionalData)) {
             $data = array_merge($data, $additionalData);
         }
-
         $response = $this->restforce->createJob(JobConstants::JOB_INGEST_ENDPOINT, $data);
 
         $result = new Result($response);
@@ -140,23 +145,24 @@ class Client
     }
 
     /**
+     * @param string|null $uri
      * @param string|null $jobId
      * @param string $csvData
      * @return mixed
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function addToJobBatches(string $jobId = null, string $csvData = null)
+    public function addToJobBatches(string $uri = null, string $csvData = null)
     {
-        if (empty($jobId)) {
-            throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
+        if (empty($uri)) {
+            throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_JOB_START, $jobId, $csvData));
+            $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_JOB_START, $uri, $csvData));
         }
 
-        $response = $this->restforce->addToJobBatches(JobConstants::JOB_INGEST_ENDPOINT . $jobId . '/' . JobConstants::JOB_ADD_BATCHES_ENDPOINT, $csvData);
+        $response = $this->restforce->addToJobBatches($uri, $csvData);
 
         $result = new Result($response);
 
@@ -164,22 +170,22 @@ class Client
     }
 
     /**
-     * @param string|null $jobId
+     * @param string|null $uri
      * @return mixed
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function closeJob(string $jobId = null)
+    public function closeJob(string $uri = null)
     {
-        if (empty($jobId)) {
-            throw new ClientException(ClientException::MSG_OBJECT_ID_MISSING);
+        if (empty($uri)) {
+            throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
         }
 
         if ($this->logger) {
             $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_JOB_START, $jobId));
         }
 
-        $response = $this->restforce->closeJob(JobConstants::JOB_INGEST_ENDPOINT . $jobId, [
+        $response = $this->restforce->closeJob($uri, [
             'state' => JobConstants::STATE_UPLOAD_COMPLETE
         ]);
 
