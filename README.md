@@ -5,6 +5,16 @@
 [![Build status][ico-travis]][link-travis]
 [![Coverage][ico-codecov]][link-codecov]
 
+[ico-license]: https://img.shields.io/github/license/nrk/predis.svg?style=flat-square
+[ico-version-stable]: https://img.shields.io/packagist/v/brightecapital/salesforce-orm.svg
+[ico-downloads-monthly]: https://img.shields.io/packagist/dm/brightecapital/salesforce-orm.svg
+[ico-travis]: https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master
+[ico-codecov]: https://codecov.io/gh/brighte-capital/salesforce-orm/branch/master/graph/badge.svg
+
+[link-packagist]: https://packagist.org/packages/brightecapital/salesforce-orm
+[link-codecov]: https://codecov.io/gh/brighte-capital/salesforce-orm
+[link-travis]: https://travis-ci.com/brighte-capital/salesforce-orm
+[link-downloads]: https://packagist.org/packages/brightecapital/salesforce-orm/stats
 
 ## Configuration
 composer.json
@@ -148,15 +158,3 @@ $accounts = $accountRepo->findAll();
 // Find total number of Account
 $count = $accountRepository->count();
 </pre>
-
-
-[ico-license]: https://img.shields.io/github/license/nrk/predis.svg?style=flat-square
-[ico-version-stable]: https://img.shields.io/packagist/v/brightecapital/salesforce-orm.svg
-[ico-downloads-monthly]: https://img.shields.io/packagist/dm/brightecapital/salesforce-orm.svg
-[ico-travis]: https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master
-[ico-codecov]: https://codecov.io/gh/brighte-capital/salesforce-orm/branch/master/graph/badge.svg
-
-[link-packagist]: https://packagist.org/packages/brightecapital/salesforce-orm
-[link-codecov]: https://codecov.io/gh/brighte-capital/salesforce-orm
-[link-travis]: https://travis-ci.com/brighte-capital/salesforce-orm.svg?branch=master
-[link-downloads]: https://packagist.org/packages/brightecapital/salesforce-orm/stats

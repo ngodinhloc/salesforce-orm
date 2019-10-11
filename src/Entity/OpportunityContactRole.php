@@ -78,7 +78,7 @@ class OpportunityContactRole extends Entity
     /**
      * @return bool
      */
-    public function isPrimary()
+    public function getIsPrimary()
     {
         return $this->isPrimary;
     }
