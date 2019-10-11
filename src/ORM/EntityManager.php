@@ -241,9 +241,6 @@ class EntityManager
      */
     public function update(Entity &$entity = null, array $data = [])
     {
-        if (empty($entity)) {
-            throw new EntityException(EntityException::MGS_EMPTY_ENTITY);
-        }
         if (!$entity->getId()) {
             throw new EntityException(EntityException::MGS_ID_IS_NOT_PROVIDED);
         }
