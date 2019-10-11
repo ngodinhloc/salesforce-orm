@@ -70,7 +70,7 @@ class BuilderTest extends TestCase
         $value = "12345";
         $where = ["{$col}={$value}"];
         $this->builder->where($where);
-        $this->builder->order([0 => "ASC", 1 =>     "DESC"]);
+        $this->builder->order([[0 => "ASC"], [1 => "DESC"]]);
         $query = $this->builder->getQuery();
         $this->assertContains("{$col} = '{$value}'", $query);
     }
