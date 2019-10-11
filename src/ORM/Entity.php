@@ -114,4 +114,28 @@ class Entity
     {
         return $this->protectionProperties;
     }
+
+    /**
+     * @param bool $isPatched
+     */
+    public function setIsPatched(bool $isPatched)
+    {
+        $this->isPatched = $isPatched;
+    }
+
+    /**
+     * @param array $eagerLoad
+     */
+    public function setEagerLoad(array $eagerLoad)
+    {
+        $this->eagerLoad = $eagerLoad;
+    }
+
+    /**
+     * @param array $requiredValidations
+     */
+    public function setRequiredValidations(array $requiredValidations)
+    {
+        $this->requiredValidations = $requiredValidations;
+    }
 }
