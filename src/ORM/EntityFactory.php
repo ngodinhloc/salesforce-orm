@@ -51,4 +51,20 @@ class EntityFactory
     {
         return $this->mapper->patch($entity, $array);
     }
+
+    /**
+     * @return Mapper
+     */
+    public function getMapper(): Mapper
+    {
+        return $this->mapper;
+    }
+
+    /**
+     * @param Mapper $mapper
+     */
+    public function setMapper(Mapper $mapper)
+    {
+        $this->mapper = $mapper;
+    }
 }

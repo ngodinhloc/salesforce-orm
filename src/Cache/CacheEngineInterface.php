@@ -4,11 +4,11 @@ namespace Salesforce\Cache;
 interface CacheEngineInterface
 {
     /**
-     * @param $key
-     * @param $data
+     * @param string $key
+     * @param mixed $data
      * @return bool
      */
-    public function writeCache(string $key = null, array $data = null);
+    public function writeCache(string $key = null, $data = null);
 
     /**
      * @param string|null $key
