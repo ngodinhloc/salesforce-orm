@@ -18,8 +18,8 @@ class DeleteJob extends Job implements JobInterface, BulkImportInterface
 
     /**
      * @return bool
-     * @throws EntityException
-     * @throws JobException
+     * @throws \Salesforce\ORM\Exception\EntityException
+     * @throws \Salesforce\Job\Exception\JobException
      */
     public function validate(): bool
     {

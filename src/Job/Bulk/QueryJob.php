@@ -32,7 +32,7 @@ class QueryJob extends Job implements QueryInterface
 
     /**
      * @return array
-     * @throws JobException
+     * @throws \Salesforce\Job\Exception\JobException
      */
     public function getRequestBody(): array
     {

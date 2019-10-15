@@ -17,7 +17,7 @@ class Job
     /** @var String */
     protected $object;
 
-    /** @var Entity */
+    /** @var \Salesforce\ORM\Entity */
     protected $entity;
 
     /** @var String */
@@ -46,7 +46,7 @@ class Job
 
     /**
      * Job constructor.
-     * @param EntityFactory|null $entityFactory
+     * @param \Salesforce\ORM\EntityFactory|null $entityFactory
      * @param \Salesforce\ORM\Mapper|null $mapper
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
@@ -153,7 +153,7 @@ class Job
     }
 
     /**
-     * @return EntityFactory
+     * @return \Salesforce\ORM\EntityFactory
      */
     public function getEntityFactory(): EntityFactory
     {
@@ -161,7 +161,7 @@ class Job
     }
 
     /**
-     * @param EntityFactory $entityFactory
+     * @param \Salesforce\ORM\EntityFactory $entityFactory
      */
     public function setEntityFactory(EntityFactory $entityFactory)
     {

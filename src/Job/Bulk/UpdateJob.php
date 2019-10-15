@@ -17,8 +17,8 @@ class UpdateJob extends Job implements JobInterface, BulkImportInterface
     protected $operation = JobConstants::OPERATION_UPDATE;
     /**
      * @return bool
-     * @throws EntityException
-     * @throws JobException
+     * @throws \Salesforce\ORM\Exception\EntityException
+     * @throws \Salesforce\Job\Exception\JobException
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function validate(): bool

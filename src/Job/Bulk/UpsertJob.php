@@ -21,8 +21,8 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
 
     /**
      * @return bool
-     * @throws EntityException
-     * @throws JobException
+     * @throws \Salesforce\ORM\Exception\EntityException
+     * @throws \Salesforce\Job\Exception\JobException
      * @throws \Salesforce\ORM\Exception\MapperException
      */
     public function validate(): bool
@@ -116,3 +116,4 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
         return array_merge($this->requestBody, [JobConstants::JOB_FIELD_EXTERNAL_ID_FIELD_NAME => $this->getExternalId()]);
     }
 }
+

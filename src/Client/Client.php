@@ -148,7 +148,7 @@ class Client
      * @param string|null $uri
      * @param string $csvData
      * @return mixed
-     * @throws ClientException
+     * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
     public function addToJobBatches(string $uri = null, string $csvData = null)

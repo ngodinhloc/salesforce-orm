@@ -109,7 +109,7 @@ class JobManager
 
     /**
      * @param \Salesforce\Job\Job $job
-     * @throws JobException
+     * @throws \Salesforce\Job\Exception\JobException
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
