@@ -147,6 +147,8 @@ class JobManager
      */
     public function getJobResult(Job $job)
     {
+        $this->getJobInfo($job);
+
         $jobResult = new JobResult();
 
         $successfulResult =$this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getSuccessResultUrl());
