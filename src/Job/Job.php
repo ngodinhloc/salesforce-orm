@@ -23,9 +23,6 @@ class Job
     /** @var String */
     protected $state;
 
-    /** @var String */
-    protected $type = JobConstants::TYPE_BULK;
-
     /** @var \Salesforce\ORM\EntityFactory */
     protected $entityFactory;
 
@@ -137,22 +134,6 @@ class Job
     public function setState(String $state)
     {
         $this->state = $state;
-    }
-
-    /**
-     * @return String
-     */
-    public function getType(): String
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param String $type
-     */
-    public function setType(String $type)
-    {
-        $this->type = $type;
     }
 
     /**

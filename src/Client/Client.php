@@ -137,7 +137,7 @@ class Client
         if (!empty($additionalData)) {
             $data = array_merge($data, $additionalData);
         }
-        $response = $this->restforce->createJob(JobConstants::JOB_INGEST_ENDPOINT, $data);
+        $response = $this->restforce->createJob($uri, $data);
 
         $result = new Result($response);
 
@@ -146,11 +146,10 @@ class Client
 
     /**
      * @param string|null $uri
-     * @param string|null $jobId
      * @param string $csvData
      * @return mixed
+     * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @throws \Salesforce\Client\Exception\ClientException
      */
     public function addToJobBatches(string $uri = null, string $csvData = null)
     {

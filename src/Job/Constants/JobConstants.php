@@ -12,10 +12,13 @@ class JobConstants extends Constants
     const OPERATION_UPDATE = 'update';
     const OPERATION_UPSERT = 'upsert';
     const OPERATION_DELETE = 'delete';
+    const OPERATION_QUERY = 'query';
+    const OPERATION_QUERY_ALL = 'queryAll';
 
     const JOB_FIELD_ID = 'id';
     const JOB_FIELD_STATE = 'state';
     const JOB_FIELD_EXTERNAL_ID_FIELD_NAME = 'externalIdFieldName';
+    const JOB_FIELD_QUERY = 'query';
 
     const STATE_OPEN = 'Open';
     const STATE_UPLOAD_COMPLETE = 'UploadComplete';
@@ -26,13 +29,14 @@ class JobConstants extends Constants
     const JOB_RESULT_SUCCESSFUL = 'successfulResults';
     const JOB_RESULT_FAILED = 'failedResults';
     const JOB_RESULT_UNPROCESSED = 'unprocessedRecords';
+    const JOB_QUERY_RESULT_SUCCESSFUL = 'results';
 
     const JOB_INGEST_ENDPOINT = 'ingest/';
+    const JOB_QUERY_ENDPOINT = 'query/';
     const JOB_ADD_BATCHES_ENDPOINT = 'batches/';
 
     const JOB_RESULT_PASSED_RESULT_ENDPOINT = self::JOB_RESULT_SUCCESSFUL . '/';
     const JOB_RESULT_FAILED_RESULT_ENDPOINT = self::JOB_RESULT_FAILED . '/';
     const JOB_RESULT_UNPROCESSED_RESULT_ENDPOINT = self::JOB_RESULT_UNPROCESSED . '/';
-
-    const GET_RESULT_RETRY = 10;
+    const JOB_QUERY_RESULT_SUCCESSFUL_RESULT_ENDPOINT = self::JOB_QUERY_RESULT_SUCCESSFUL . '/';
 }

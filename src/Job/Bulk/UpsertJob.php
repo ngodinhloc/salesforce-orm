@@ -79,14 +79,6 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
     /**
      * @return String
      */
-    public function getOperation(): String
-    {
-        return $this->operation;
-    }
-
-    /**
-     * @return String
-     */
     public function getExternalId(): String
     {
         return $this->externalId;
@@ -121,7 +113,6 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
      */
     public function getRequestBody(): array
     {
-        return $this->requestBody ?: [JobConstants::JOB_FIELD_EXTERNAL_ID_FIELD_NAME => $this->getExternalId()];
+        return array_merge($this->requestBody, [JobConstants::JOB_FIELD_EXTERNAL_ID_FIELD_NAME => $this->getExternalId()]);
     }
-
 }

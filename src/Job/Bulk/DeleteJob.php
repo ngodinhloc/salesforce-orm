@@ -47,14 +47,6 @@ class DeleteJob extends Job implements JobInterface, BulkImportInterface
     }
 
     /**
-     * @return String
-     */
-    public function getOperation(): String
-    {
-        return $this->operation;
-    }
-
-    /**
      * @return array
      */
     public function getCsvData(): array

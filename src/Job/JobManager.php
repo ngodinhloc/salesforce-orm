@@ -64,8 +64,10 @@ class JobManager
 
         $operation = $job->getOperation();
 
-        /** @var JobInterface $job */
-        $job->validate();
+        if ($job instanceof BulkImportInterface) {
+            /** @var JobInterface $job */
+            $job->validate();
+        }
 
         $jobResponse = $this->connection->getClient()->createJob($job->getBaseUrl(), $object, $operation, $job->getRequestBody());
 

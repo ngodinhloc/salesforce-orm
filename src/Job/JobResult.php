@@ -12,7 +12,10 @@ class JobResult
     protected $unprocessedRecords = [];
 
     /** @var array */
-    protected $failedResult;
+    protected $failedResult = [];
+
+    /** @var string */
+    protected $successResultUrl = JobConstants::JOB_RESULT_PASSED_RESULT_ENDPOINT;
 
     /**
      * @return array
