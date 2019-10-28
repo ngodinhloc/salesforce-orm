@@ -2,7 +2,6 @@
 namespace Salesforce\Job\Bulk;
 
 use Salesforce\Job\BulkImportInterface;
-use Salesforce\Job\Constants\JobConstants;
 use Salesforce\Job\Exception\JobException;
 use Salesforce\Job\Job;
 use Salesforce\Job\JobInterface;
@@ -14,7 +13,7 @@ class InsertJob extends Job implements JobInterface, BulkImportInterface
     protected $csvData;
 
     /** @var string */
-    protected $operation = JobConstants::OPERATION_INSERT;
+    protected $operation = Job::OPERATION_INSERT;
 
     /**
      * @return bool

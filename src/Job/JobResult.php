@@ -1,8 +1,6 @@
 <?php
 namespace Salesforce\Job;
 
-use Salesforce\Job\Constants\JobConstants;
-
 class JobResult
 {
     /** @var array */
@@ -15,7 +13,7 @@ class JobResult
     protected $failedResult = [];
 
     /** @var string */
-    protected $successResultUrl = JobConstants::JOB_RESULT_PASSED_RESULT_ENDPOINT;
+    protected $successResultUrl = Job::JOB_RESULT_PASSED_RESULT_ENDPOINT;
 
     /**
      * @return array
@@ -72,9 +70,9 @@ class JobResult
     {
         $result = [];
 
-        $result[JobConstants::JOB_RESULT_SUCCESSFUL] = $this->getSuccessfulResult();
-        $result[JobConstants::JOB_RESULT_FAILED] = $this->getFailedResult();
-        $result[JobConstants::JOB_RESULT_UNPROCESSED] = $this->getUnprocessedRecords();
+        $result[Job::JOB_RESULT_SUCCESSFUL] = $this->getSuccessfulResult();
+        $result[Job::JOB_RESULT_FAILED] = $this->getFailedResult();
+        $result[Job::JOB_RESULT_UNPROCESSED] = $this->getUnprocessedRecords();
 
         return $result;
     }

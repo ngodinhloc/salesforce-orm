@@ -2,7 +2,6 @@
 namespace Salesforce\Job\Bulk;
 
 use Salesforce\Job\BulkImportInterface;
-use Salesforce\Job\Constants\JobConstants;
 use Salesforce\Job\Exception\JobException;
 use Salesforce\Job\Job;
 use Salesforce\Job\JobInterface;
@@ -14,7 +13,7 @@ class DeleteJob extends Job implements JobInterface, BulkImportInterface
     protected $csvData;
 
     /** @var string */
-    protected $operation = JobConstants::OPERATION_DELETE;
+    protected $operation = Job::OPERATION_DELETE;
 
     /**
      * @return bool

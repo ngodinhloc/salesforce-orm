@@ -5,7 +5,6 @@ use League\Csv\Reader;
 use League\Csv\Writer;
 use Salesforce\Client\Connection;
 use Salesforce\Event\EventDispatcherInterface;
-use Salesforce\Job\Constants\JobConstants;
 use Salesforce\ORM\EntityFactory;
 use Salesforce\Job\Exception\JobException;
 use Salesforce\ORM\Mapper;
@@ -71,8 +70,8 @@ class JobManager
 
         $jobResponse = $this->connection->getClient()->createJob($job->getBaseUrl(), $object, $operation, $job->getRequestBody());
 
-        $job->setId($jobResponse[JobConstants::JOB_FIELD_ID]);
-        $job->setState($jobResponse[JobConstants::JOB_FIELD_STATE]);
+        $job->setId($jobResponse[Job::JOB_FIELD_ID]);
+        $job->setState($jobResponse[Job::JOB_FIELD_STATE]);
     }
 
     /**
@@ -98,13 +97,13 @@ class JobManager
         $csv->insertOne($header);
         $csv->insertAll($data);
 
-        $jobAddedSuccessfully = $this->connection->getClient()->addToJobBatches($job->getBaseUrl() . $job->getId() . '/' . JobConstants::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
+        $jobAddedSuccessfully = $this->connection->getClient()->batchJob($job->getBaseUrl() . $job->getId() . '/' . Job::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
 
         if ($jobAddedSuccessfully !== true) {
             throw new JobException(JobException::MSG_BATCH_UPLOAD_FAILED);
         }
 
-        $job->setState(JobConstants::STATE_UPLOAD_COMPLETE);
+        $job->setState(Job::STATE_UPLOAD_COMPLETE);
     }
 
     /**
@@ -121,11 +120,11 @@ class JobManager
 
         $closedJob = $this->connection->getClient()->closeJob($job->getBaseUrl() . $job->getId());
 
-        if ($closedJob[JobConstants::JOB_FIELD_STATE] !== JobConstants::STATE_UPLOAD_COMPLETE) {
+        if ($closedJob[Job::JOB_FIELD_STATE] !== Job::STATE_UPLOAD_COMPLETE) {
             throw new JobException(JobException::MSG_CLOSE_FAILED);
         }
 
-        $job->setState($closedJob[JobConstants::JOB_FIELD_STATE]);
+        $job->setState($closedJob[Job::JOB_FIELD_STATE]);
     }
 
     /**
@@ -136,7 +135,7 @@ class JobManager
     public function getJobInfo(Job &$job)
     {
         $jobInfo = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId());
-        $job->setState($jobInfo[JobConstants::JOB_FIELD_STATE]);
+        $job->setState($jobInfo[Job::JOB_FIELD_STATE]);
     }
 
     /**

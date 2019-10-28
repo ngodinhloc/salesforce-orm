@@ -1,9 +1,7 @@
 <?php
 namespace Salesforce\Job\Bulk;
 
-use Salesforce\Job\BulkImportInterface;
-use Salesforce\Job\Constants\JobConstants;
-use Salesforce\Job\Exception\JobException;
+use Salesforce\Job\BulkImportInterface;use Salesforce\Job\Exception\JobException;
 use Salesforce\Job\Job;
 use Salesforce\Job\JobInterface;
 use Salesforce\ORM\Exception\EntityException;
@@ -17,7 +15,7 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
     protected $externalId;
 
     /** @var string */
-    protected $operation = JobConstants::OPERATION_UPSERT;
+    protected $operation = Job::OPERATION_UPSERT;
 
     /**
      * @return bool
@@ -113,7 +111,7 @@ class UpsertJob extends Job implements JobInterface, BulkImportInterface
      */
     public function getRequestBody(): array
     {
-        return array_merge($this->requestBody, [JobConstants::JOB_FIELD_EXTERNAL_ID_FIELD_NAME => $this->getExternalId()]);
+        return array_merge($this->requestBody, [Job::JOB_FIELD_EXTERNAL_ID_FIELD_NAME => $this->getExternalId()]);
     }
 }
 

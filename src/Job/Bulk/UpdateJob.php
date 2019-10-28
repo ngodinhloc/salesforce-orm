@@ -1,9 +1,7 @@
 <?php
 namespace Salesforce\Job\Bulk;
 
-use Salesforce\Job\BulkImportInterface;
-use Salesforce\Job\Constants\JobConstants;
-use Salesforce\Job\Exception\JobException;
+use Salesforce\Job\BulkImportInterface;use Salesforce\Job\Exception\JobException;
 use Salesforce\Job\Job;
 use Salesforce\Job\JobInterface;
 use Salesforce\ORM\Exception\EntityException;
@@ -14,7 +12,7 @@ class UpdateJob extends Job implements JobInterface, BulkImportInterface
     protected $csvData;
 
     /** @var string */
-    protected $operation = JobConstants::OPERATION_UPDATE;
+    protected $operation = Job::OPERATION_UPDATE;
     /**
      * @return bool
      * @throws \Salesforce\ORM\Exception\EntityException

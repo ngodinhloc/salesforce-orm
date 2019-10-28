@@ -6,8 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
-use Salesforce\Job\Constants\JobConstants;
-use Salesforce\Job\Exception\JobException;
+use Salesforce\Job\Job;
 use Salesforce\Restforce\ExtendedRestforce;
 
 /**
@@ -151,7 +150,7 @@ class Client
      * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
      */
-    public function addToJobBatches(string $uri = null, string $csvData = null)
+    public function batchJob(string $uri = null, string $csvData = null)
     {
         if (empty($uri)) {
             throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
@@ -161,7 +160,7 @@ class Client
             $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_JOB_START, $uri, $csvData));
         }
 
-        $response = $this->restforce->addToJobBatches($uri, $csvData);
+        $response = $this->restforce->batchJob($uri, $csvData);
 
         $result = new Result($response);
 
@@ -185,7 +184,7 @@ class Client
         }
 
         $response = $this->restforce->closeJob($uri, [
-            'state' => JobConstants::STATE_UPLOAD_COMPLETE
+            'state' => Job::STATE_UPLOAD_COMPLETE
         ]);
 
         $result = new Result($response);
