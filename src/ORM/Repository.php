@@ -1,25 +1,32 @@
 <?php
+
 namespace Salesforce\ORM;
 
 use Salesforce\ORM\Exception\RepositoryException;
 
 class Repository
 {
+
     /* @var string $className class name */
     protected $className;
 
-    /** @var EntityManager */
+    /** @var \Salesforce\ORM\EntityManager */
     protected $entityManager;
+
+    /** @var \Salesforce\ORM\EntityFactory */
+    protected $entityFactory;
 
     /**
      * Repository constructor.
      *
-     * @param \Salesforce\ORM\EntityManager|null $entityManager entity manager
-     * @throws \Exception
+     * @param \Salesforce\ORM\EntityManager|null $entityManager
+     * @param \Salesforce\ORM\EntityFactory|null $entityFactory
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager = null, EntityFactory $entityFactory = null)
     {
         $this->entityManager = $entityManager;
+        $this->entityFactory = $entityFactory ? $entityFactory : new EntityFactory();
     }
 
     /**
@@ -129,10 +136,30 @@ class Repository
      * @param \Salesforce\ORM\EntityManager $entityManager entity manager
      * @return \Salesforce\ORM\Repository
      */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setEntityManager(EntityManager $entityManager = null)
     {
         $this->entityManager = $entityManager;
 
         return $this;
     }
+
+    /**
+     * @return \Salesforce\ORM\EntityFactory
+     */
+    public function getEntityFactory()
+    {
+        return $this->entityFactory;
+    }
+
+    /**
+     * @param \Salesforce\ORM\EntityFactory $entityFactory
+     * @return Repository
+     */
+    public function setEntityFactory(EntityFactory $entityFactory = null)
+    {
+        $this->entityFactory = $entityFactory;
+
+        return $this;
+    }
+
 }
