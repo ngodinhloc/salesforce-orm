@@ -134,7 +134,7 @@ class JobManager
      */
     public function getJobInfo(Job &$job)
     {
-        $jobInfo = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId());
+        $jobInfo = $this->connection->getClient()->getJob($job->getBaseUrl() . $job->getId());
         $job->setState($jobInfo[Job::JOB_FIELD_STATE]);
     }
 
@@ -150,7 +150,7 @@ class JobManager
 
         $jobResult = new JobResult();
 
-        $successfulResult =$this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getSuccessResultUrl());
+        $successfulResult =$this->connection->getClient()->getJob($job->getBaseUrl() . $job->getId() . '/' . $job->getSuccessResultUrl());
 
         $jobResult->setSuccessfulResult(Reader::createFromString($successfulResult)->jsonSerialize());
 
@@ -158,11 +158,11 @@ class JobManager
             return $jobResult;
         }
 
-        $failedResult = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getFailedResultUrl());
+        $failedResult = $this->connection->getClient()->getJob($job->getBaseUrl() . $job->getId() . '/' . $job->getFailedResultUrl());
 
         $jobResult->setFailedResult(Reader::createFromString($failedResult)->jsonSerialize());
 
-        $unprocessedRecords = $this->connection->getClient()->jobGet($job->getBaseUrl() . $job->getId() . '/' . $job->getUnprocessedResultUrl());
+        $unprocessedRecords = $this->connection->getClient()->getJob($job->getBaseUrl() . $job->getId() . '/' . $job->getUnprocessedResultUrl());
 
         $jobResult->setUnprocessedRecords(Reader::createFromString($unprocessedRecords)->jsonSerialize());
 

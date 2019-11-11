@@ -198,13 +198,13 @@ class Client
      * @throws \Salesforce\Client\Exception\ResultException
      * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function jobGet(string $uri = null)
+    public function getJob(string $uri = null)
     {
         if (empty($uri)) {
             throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
         }
 
-        $response = $this->restforce->jobGet($uri);
+        $response = $this->restforce->getJob($uri);
 
         $result = new Result($response);
 

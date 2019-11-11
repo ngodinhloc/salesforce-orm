@@ -279,7 +279,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
      * @param $uri
      * @return ResponseInterface
      */
-    public function jobGet($uri): ResponseInterface
+    public function getJob($uri): ResponseInterface
     {
         return $this->getOAuthRestClient()->get(self::DEFAULT_JOB_BASE_URI . $uri);
     }
