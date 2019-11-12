@@ -96,7 +96,7 @@ class JobManager
         $csv->insertOne($header);
         $csv->insertAll($data);
 
-        $jobAddedSuccessfully = $this->connection->getClient()->addToJobBatches($job->getBaseUrl() . $job->getId() . '/' . Job::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
+        $jobAddedSuccessfully = $this->connection->getClient()->batchJob($job->getBaseUrl() . $job->getId() . '/' . Job::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
 
         if ($jobAddedSuccessfully !== true) {
             throw new JobException(JobException::MSG_BATCH_UPLOAD_FAILED);
