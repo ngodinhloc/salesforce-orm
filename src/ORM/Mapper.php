@@ -374,7 +374,7 @@ class Mapper
      * @return \ReflectionClass
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    protected function reflect(Entity $entity)
+    public function reflect(Entity $entity)
     {
         try {
             $reflectionClass = new ReflectionClass(get_class($entity));

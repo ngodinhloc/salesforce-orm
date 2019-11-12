@@ -13,7 +13,7 @@
   "require": {
     "php": "^7.0",
     "eventfarm/restforcephp": "dev-master",
-    "doctrine/annotations": "^1.4",
+    "doctrine/annotations": "^1.6",
     "psr/log": "1.0.2",
     "league/csv": "9.3"
   },

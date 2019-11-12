@@ -18,6 +18,9 @@ class EntityFactoryTest extends TestCase
         parent::setUp();
         $this->mapper = $this->createMock(Mapper::class);
         $this->entityFactory = new EntityFactory($this->mapper);
+        $this->entityFactory->setMapper($this->mapper);
+        $mapper = $this->entityFactory->getMapper();
+        $this->assertEquals($mapper, $this->mapper);
     }
 
     public function testNew()
