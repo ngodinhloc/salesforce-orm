@@ -260,7 +260,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
      * @param string|null $csvdata
      * @return ResponseInterface
      */
-    public function batchJob(string $uri = null, string $csvdata = null): ResponseInterface
+    public function addToJobBatches(string $uri = null, string $csvdata = null): ResponseInterface
     {
         return $this->getOAuthRestClient()->putCsv(self::DEFAULT_JOB_BASE_URI . $uri, $csvdata);
     }

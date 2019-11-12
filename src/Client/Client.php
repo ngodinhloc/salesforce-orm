@@ -145,12 +145,13 @@ class Client
 
     /**
      * @param string|null $uri
+     * @param string|null $jobId
      * @param string $csvData
      * @return mixed
-     * @throws \Salesforce\Client\Exception\ClientException
      * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
      */
-    public function batchJob(string $uri = null, string $csvData = null)
+    public function addToJobBatches(string $uri = null, string $csvData = null)
     {
         if (empty($uri)) {
             throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
@@ -160,7 +161,7 @@ class Client
             $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_JOB_START, $uri, $csvData));
         }
 
-        $response = $this->restforce->batchJob($uri, $csvData);
+        $response = $this->restforce->addToJobBatches($uri, $csvData);
 
         $result = new Result($response);
 

@@ -3,6 +3,8 @@ namespace Salesforce\Client;
 
 use Psr\Http\Message\ResponseInterface;
 use Salesforce\Client\Exception\ResultException;
+use Salesforce\Job\Job;
+
 class Result
 {
     /* @var ResponseInterface|null */

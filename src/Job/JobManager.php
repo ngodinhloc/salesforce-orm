@@ -67,7 +67,6 @@ class JobManager
             /** @var JobInterface $job */
             $job->validate();
         }
-
         $jobResponse = $this->connection->getClient()->createJob($job->getBaseUrl(), $object, $operation, $job->getRequestBody());
 
         $job->setId($jobResponse[Job::JOB_FIELD_ID]);
@@ -97,7 +96,7 @@ class JobManager
         $csv->insertOne($header);
         $csv->insertAll($data);
 
-        $jobAddedSuccessfully = $this->connection->getClient()->batchJob($job->getBaseUrl() . $job->getId() . '/' . Job::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
+        $jobAddedSuccessfully = $this->connection->getClient()->addToJobBatches($job->getBaseUrl() . $job->getId() . '/' . Job::JOB_ADD_BATCHES_ENDPOINT, $csv->getContent());
 
         if ($jobAddedSuccessfully !== true) {
             throw new JobException(JobException::MSG_BATCH_UPLOAD_FAILED);
@@ -129,8 +128,6 @@ class JobManager
 
     /**
      * @param \Salesforce\Job\Job $job
-     * @throws \Salesforce\Client\Exception\ClientException
-     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function getJobInfo(Job &$job)
     {
