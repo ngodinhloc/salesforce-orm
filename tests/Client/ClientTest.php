@@ -146,6 +146,25 @@ class ClientTest extends TestCase
 
     /**
      * @throws \Salesforce\Client\Exception\ResultException
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::setBaseUriForRestClient()
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::get()
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::post()
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::postJson()
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::patchJson()
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::putCsv()
+     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::containsTrailingSlash()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::get()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::post()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::postJson()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::putCsv()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::setParamsFromAccessToken()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getOAuthAccessToken()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getAuthorizationHeader()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getClientCredentialsAccessToken()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getPasswordAccessToken()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getRefreshToken()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getOAuthAccessTokenFromResponse()
+     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getNewToken()
      */
     public function testQuery()
     {
