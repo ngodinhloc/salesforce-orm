@@ -9,7 +9,7 @@ use Salesforce\ORM\Exception\EntityException;
 class UpsertJob extends Job implements JobInterface, BulkImportInterface
 {
     /** @var array */
-    protected $csvData;
+    protected $csvData = [];
 
     /** @var String */
     protected $externalId;

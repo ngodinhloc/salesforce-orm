@@ -5,7 +5,6 @@ use League\Csv\Reader;
 use League\Csv\Writer;
 use Salesforce\Client\Connection;
 use Salesforce\Event\EventDispatcherInterface;
-use Salesforce\ORM\EntityFactory;
 use Salesforce\Job\Exception\JobException;
 use Salesforce\ORM\Mapper;
 
@@ -32,15 +31,13 @@ class JobManager
      * JobManager constructor.
      *
      * @param \Salesforce\Client\Connection|null $conn
-     * @param \Salesforce\ORM\EntityFactory|null $entityFactory
      * @param \Salesforce\ORM\Mapper|null $mapper mapper
      * @param \Salesforce\Event\EventDispatcherInterface|null $eventDispatcher
      * @throws \Doctrine\Common\Annotations\AnnotationException
      */
-    public function __construct(Connection $conn = null, EntityFactory $entityFactory = null, Mapper $mapper = null, EventDispatcherInterface $eventDispatcher = null)
+    public function __construct(Connection $conn = null, Mapper $mapper = null, EventDispatcherInterface $eventDispatcher = null)
     {
         $this->connection = $conn;
-        $this->entityFactory = $entityFactory ?: new EntityFactory();
         $this->mapper = $mapper ?: new Mapper();
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -68,7 +65,6 @@ class JobManager
             $job->validate();
         }
         $jobResponse = $this->connection->getClient()->createJob($job->getBaseUrl(), $object, $operation, $job->getRequestBody());
-
         $job->setId($jobResponse[Job::JOB_FIELD_ID]);
         $job->setState($jobResponse[Job::JOB_FIELD_STATE]);
     }
@@ -128,6 +124,8 @@ class JobManager
 
     /**
      * @param \Salesforce\Job\Job $job
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
      */
     public function getJobInfo(Job &$job)
     {
@@ -143,10 +141,7 @@ class JobManager
      */
     public function getJobResult(Job $job)
     {
-        $this->getJobInfo($job);
-
         $jobResult = new JobResult();
-
         $successfulResult =$this->connection->getClient()->getJob($job->getBaseUrl() . $job->getId() . '/' . $job->getSuccessResultUrl());
 
         $jobResult->setSuccessfulResult(Reader::createFromString($successfulResult)->jsonSerialize());

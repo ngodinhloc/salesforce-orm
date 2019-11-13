@@ -9,7 +9,7 @@ use Salesforce\ORM\Exception\EntityException;
 class UpdateJob extends Job implements JobInterface, BulkImportInterface
 {
     /** @var array */
-    protected $csvData;
+    protected $csvData = [];
 
     /** @var string */
     protected $operation = Job::OPERATION_UPDATE;
@@ -57,7 +57,6 @@ class UpdateJob extends Job implements JobInterface, BulkImportInterface
                 throw new EntityException(EntityException::MGS_EMPTY_NONE_PROTECTION_DATA);
             }
         }
-
         return true;
     }
 

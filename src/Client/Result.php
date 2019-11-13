@@ -52,6 +52,7 @@ class Result
                     $array = json_decode($content, true);
                     if ($array['success'] && isset($array['id'])) {
                         $result = $array['id'];
+                        break;
                     }
                 }
                 $result = true;

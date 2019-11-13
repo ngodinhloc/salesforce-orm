@@ -10,7 +10,7 @@ use Salesforce\ORM\Exception\EntityException;
 class InsertJob extends Job implements JobInterface, BulkImportInterface
 {
     /** @var array */
-    protected $csvData;
+    protected $csvData = [];
 
     /** @var string */
     protected $operation = Job::OPERATION_INSERT;
@@ -26,7 +26,7 @@ class InsertJob extends Job implements JobInterface, BulkImportInterface
         $data = $this->getCsvData();
 
         if (empty($data) || count($data) < 2) {
-            throw new  JobException(JobException::MSG_JOB_DATA_MISSING);
+            throw new JobException(JobException::MSG_JOB_DATA_MISSING);
         }
 
         $header = array_shift($data);

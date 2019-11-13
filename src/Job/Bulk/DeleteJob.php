@@ -10,7 +10,7 @@ use Salesforce\ORM\Exception\EntityException;
 class DeleteJob extends Job implements JobInterface, BulkImportInterface
 {
     /** @var array */
-    protected $csvData;
+    protected $csvData = [];
 
     /** @var string */
     protected $operation = Job::OPERATION_DELETE;
