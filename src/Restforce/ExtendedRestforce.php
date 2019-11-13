@@ -283,5 +283,4 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     {
         return $this->getOAuthRestClient()->get(self::DEFAULT_JOB_BASE_URI . $uri);
     }
-
 }

@@ -145,7 +145,6 @@ class Client
 
     /**
      * @param string|null $uri
-     * @param string|null $jobId
      * @param string $csvData
      * @return mixed
      * @throws \Salesforce\Client\Exception\ResultException
@@ -181,7 +180,7 @@ class Client
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_JOB_START, $jobId));
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_JOB_START, $uri));
         }
 
         $response = $this->restforce->closeJob($uri, [
