@@ -44,14 +44,6 @@ class ClientTest extends TestCase
      * @throws \EventFarm\Restforce\RestforceException
      * @throws \Salesforce\Cache\Exception\CacheException
      * @throws \Salesforce\Client\Exception\ConfigException
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::setParamsFromAccessToken()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getOAuthAccessToken()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getAuthorizationHeader()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getClientCredentialsAccessToken()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getPasswordAccessToken()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getRefreshToken()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getOAuthAccessTokenFromResponse()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::getNewToken()
      */
     public function setUp(LoggerInterface $logger = null)
     {
@@ -79,9 +71,6 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::setBaseUriForRestClient()
-     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::post()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::post()
      */
     public function testCreateObject()
     {
@@ -112,10 +101,6 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @covers \Salesforce\Restforce\ExtendedRestforce::createJob()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::postJson()
-     * @covers \Salesforce\Restforce\ExtendedSalesforceRestClient::postJson()
-     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::postJson()
      */
     public function testCreateJob()
     {
@@ -151,10 +136,6 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @covers \Salesforce\Restforce\ExtendedRestforce::batchJob()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::putCsv()
-     * @covers \Salesforce\Restforce\ExtendedSalesforceRestClient::putCsv()
-     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::putCsv()
      */
     public function testBatchJob()
     {
@@ -176,10 +157,6 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @covers \Salesforce\Restforce\ExtendedRestforce::closeJob()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::patchJson()
-     * @covers \Salesforce\Restforce\ExtendedSalesforceRestClient::patchJson()
-     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::patchJson()
      */
     public function testCloseJob()
     {
@@ -200,10 +177,6 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws \Salesforce\Client\Exception\ResultException
-     * @covers \Salesforce\Restforce\ExtendedRestforce::getJob()
-     * @covers \Salesforce\Restforce\ExtendedOAuthRestClient::get()
-     * @covers \Salesforce\Restforce\ExtendedSalesforceRestClient::get()
-     * @covers \Salesforce\Restforce\ExtendedGuzzleRestClient::get()
      */
     public function testGetJob()
     {
