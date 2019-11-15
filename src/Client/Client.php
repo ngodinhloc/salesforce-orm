@@ -129,9 +129,12 @@ class Client
 
         $data = [
             'operation' => $action,
-            'object' => $object,
             'contentType' => 'CSV',
         ];
+
+        if ($action !== Job::OPERATION_QUERY) {
+            $data['object'] = $object;
+        }
 
         if (!empty($additionalData)) {
             $data = array_merge($data, $additionalData);
