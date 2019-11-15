@@ -8,7 +8,7 @@ use EventFarm\Restforce\Rest\OAuthAccessToken;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-final class ExtendedOAuthRestClient implements ExtendedRestClientInterface
+class ExtendedOAuthRestClient implements ExtendedRestClientInterface
 {
     const TOKEN_TYPE = 'Bearer';
     /** @var SalesforceRestClientInterface */

@@ -170,7 +170,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     /**
      * @return \Salesforce\Restforce\ExtendedRestClientInterface
      */
-    private function getOAuthRestClient(): RestClientInterface
+    protected function getOAuthRestClient(): RestClientInterface
     {
         if ($this->oAuthRestClient === null) {
             $this->oAuthRestClient = new ExtendedOAuthRestClient(
@@ -188,6 +188,13 @@ class ExtendedRestforce implements ExtendedRestforceInterface
         }
 
         return $this->oAuthRestClient;
+    }
+
+    /**
+     * @param RestClientInterface $oAuthRestClient
+     */
+    public function setOAuthRestClient(RestClientInterface $oAuthRestClient) {
+        $this->oAuthRestClient = $oAuthRestClient;
     }
 
     /**

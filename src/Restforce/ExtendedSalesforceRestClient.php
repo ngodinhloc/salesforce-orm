@@ -1,6 +1,7 @@
 <?php
 namespace Salesforce\Restforce;
 
+use EventFarm\Restforce\Rest\GuzzleRestClient;
 use Psr\Http\Message\ResponseInterface;
 
 class ExtendedSalesforceRestClient implements ExtendedSalesforceRestClientInterface
