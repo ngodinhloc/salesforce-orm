@@ -1,4 +1,5 @@
 <?php
+
 namespace Salesforce\ORM;
 
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -10,8 +11,12 @@ use Salesforce\ORM\Exception\MapperException;
 
 class Mapper
 {
+
     /** @var AnnotationReader */
     protected $reader;
+
+    const KEY_FIELD_NAME = 1;
+    const KEY_PROPERTY_NAME = 2;
 
     /**
      * Mapper constructor.
@@ -227,18 +232,18 @@ class Mapper
      * Get array of entity
      *
      * @param \Salesforce\ORM\Entity $entity entity
-     * @param string $display 'field'|property' return array with field name|property name as index
+     * @param int $key 1|2 return array with field name|property name as keys
      * @return array
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    public function toArray(Entity $entity, string $display = 'field')
+    public function toArray(Entity $entity, int $key = self::KEY_FIELD_NAME)
     {
         $reflectionClass = $this->reflect($entity);
         $properties = $reflectionClass->getProperties();
 
         $array = [];
-        switch ($display) {
-            case 'property':
+        switch ($key) {
+            case self::KEY_PROPERTY_NAME:
                 /** @var \ReflectionProperty $property */
                 foreach ($properties as $property) {
                     $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
@@ -247,7 +252,7 @@ class Mapper
                     }
                 }
                 break;
-            case 'field':
+            case self::KEY_FIELD_NAME:
             default:
                 /** @var \ReflectionProperty $property */
                 foreach ($properties as $property) {
