@@ -227,20 +227,36 @@ class Mapper
      * Get array of entity
      *
      * @param \Salesforce\ORM\Entity $entity entity
+     * @param string $display 'field'|property' return array with field name|property name as index
      * @return array
      * @throws \Salesforce\ORM\Exception\MapperException
      */
-    public function toArray(Entity $entity)
+    public function toArray(Entity $entity, string $display = 'field')
     {
         $reflectionClass = $this->reflect($entity);
         $properties = $reflectionClass->getProperties();
 
         $array = [];
-        foreach ($properties as $property) {
-            $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
-            if ($annotation instanceof Field) {
-                $array[$annotation->name] = $this->getPropertyValue($entity, $property);
-            }
+        switch ($display) {
+            case 'property':
+                /** @var \ReflectionProperty $property */
+                foreach ($properties as $property) {
+                    $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
+                    if ($annotation instanceof Field) {
+                        $array[$property->getName()] = $this->getPropertyValue($entity, $property);
+                    }
+                }
+                break;
+            case 'field':
+            default:
+                /** @var \ReflectionProperty $property */
+                foreach ($properties as $property) {
+                    $annotation = $this->reader->getPropertyAnnotation($property, Field::class);
+                    if ($annotation instanceof Field) {
+                        $array[$annotation->name] = $this->getPropertyValue($entity, $property);
+                    }
+                }
+                break;
         }
 
         return $array;
