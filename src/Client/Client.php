@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Salesforce\Cache\CacheEngineInterface;
 use Salesforce\Client\Exception\ClientException;
+use Salesforce\Job\Job;
 use Salesforce\Restforce\ExtendedRestforce;
 
 /**
@@ -28,6 +29,9 @@ class Client
     protected $logger;
 
     const MSG_DEBUG_CREATE_START = 'Start creating object in Salesforce. Type: %s. Data: %s';
+    const MSG_DEBUG_CREATE_JOB_START = 'Start creating job in Salesforce. Type: %s. Action: %s';
+    const MSG_DEBUG_ADD_BATCHES_TO_JOB_START = 'Start adding batches to job in Salesforce. JobId: %s. Data: %s';
+    const MSG_DEBUG_CLOSE_JOB_START = 'Start closing Job in Salesforce. JobId: %s.';
     const MSG_DEBUG_CREATE_FINISH = 'Finish creating object in Salesforce.';
     const MSG_DEBUG_UPDATE_START = 'Start updating object in Salesforce. Type: %s. Id: %s .Data: %s';
     const MSG_DEBUG_UPDATE_FINISH = 'Finish updating object in Salesforce.';
@@ -90,6 +94,120 @@ class Client
         if ($this->logger) {
             $this->logger->debug(self::MSG_DEBUG_CREATE_FINISH);
         }
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $uri
+     * @param string|null $object
+     * @param string|null $action
+     * @param array $additionalData
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ClientException
+     * @throws \Salesforce\Client\Exception\ResultException
+     */
+    public function createJob(string $uri = null, string $object = null, string $action = null, array $additionalData = [])
+    {
+        if (empty($uri)) {
+            throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        if (empty($object)) {
+            throw new ClientException(ClientException::MSG_OBJECT_TYPE_MISSING);
+        }
+
+        if (empty($action)) {
+            throw new ClientException(ClientException::MSG_ACTION_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CREATE_JOB_START, $object, $action));
+        }
+
+        $data = [
+            'operation' => $action,
+            'contentType' => 'CSV',
+        ];
+
+        if ($action !== Job::OPERATION_QUERY) {
+            $data['object'] = $object;
+        }
+
+        if (!empty($additionalData)) {
+            $data = array_merge($data, $additionalData);
+        }
+        $response = $this->restforce->createJob($uri, $data);
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $uri
+     * @param string $csvData
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     */
+    public function batchJob(string $uri = null, string $csvData = null)
+    {
+        if (empty($uri)) {
+            throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_ADD_BATCHES_TO_JOB_START, $uri, $csvData));
+        }
+
+        $response = $this->restforce->batchJob($uri, $csvData);
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $uri
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     */
+    public function closeJob(string $uri = null)
+    {
+        if (empty($uri)) {
+            throw new  ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf(self::MSG_DEBUG_CLOSE_JOB_START, $uri));
+        }
+
+        $response = $this->restforce->closeJob($uri, [
+            'state' => Job::STATE_UPLOAD_COMPLETE
+        ]);
+
+        $result = new Result($response);
+
+        return $result->get();
+    }
+
+    /**
+     * @param string|null $uri
+     * @return mixed
+     * @throws \Salesforce\Client\Exception\ResultException
+     * @throws \Salesforce\Client\Exception\ClientException
+     */
+    public function getJob(string $uri = null)
+    {
+        if (empty($uri)) {
+            throw new ClientException(ClientException::MSG_APEX_API_URI_MISSING);
+        }
+
+        $response = $this->restforce->getJob($uri);
 
         $result = new Result($response);
 
