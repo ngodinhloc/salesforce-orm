@@ -159,4 +159,4 @@ $accounts = $accountRepo->findAll();
 $count = $accountRepository->count();
 </pre>
 
-#### Job (Bulb upload)
+#### Job (Bulk upload)
