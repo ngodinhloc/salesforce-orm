@@ -19,12 +19,12 @@ class ExtendedSalesforceRestClient implements ExtendedSalesforceRestClientInterf
         $this->apiVersion = $apiVersion;
     }
 
-    public function setResourceOwnerUrl(string $resourceOwnerUrl)
+    public function setResourceOwnerUrl(string $resourceOwnerUrl): void
     {
         $this->resourceOwnerUrl = $resourceOwnerUrl;
     }
 
-    public function setBaseUriForRestClient(string $baseUri)
+    public function setBaseUriForRestClient(string $baseUri): void
     {
         $this->restClient->setBaseUriForRestClient($baseUri);
     }
