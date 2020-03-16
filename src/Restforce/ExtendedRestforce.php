@@ -2,11 +2,9 @@
 
 namespace Salesforce\Restforce;
 
-use EventFarm\Restforce\Rest\GuzzleRestClient;
 use EventFarm\Restforce\Rest\OAuthAccessToken;
 use EventFarm\Restforce\Rest\OAuthRestClient;
 use EventFarm\Restforce\Rest\RestClientInterface;
-use EventFarm\Restforce\Rest\SalesforceRestClient;
 use EventFarm\Restforce\RestforceException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -14,6 +12,7 @@ class ExtendedRestforce implements ExtendedRestforceInterface
 {
     const USER_INFO_ENDPOINT = 'RESOURCE_OWNER';
     const DEFAULT_API_VERSION = 'v38.0';
+    const DEFAULT_JOB_BASE_URI = 'jobs/';
 
     /** @var string */
     protected $clientId;
@@ -169,17 +168,17 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     }
 
     /**
-     * @return \EventFarm\Restforce\Rest\RestClientInterface
+     * @return \Salesforce\Restforce\ExtendedRestClientInterface
      */
-    private function getOAuthRestClient(): RestClientInterface
+    protected function getOAuthRestClient(): RestClientInterface
     {
         if ($this->oAuthRestClient === null) {
-            $this->oAuthRestClient = new OAuthRestClient(
-                new SalesforceRestClient(
-                    new GuzzleRestClient('https://na1.salesforce.com'),
+            $this->oAuthRestClient = new ExtendedOAuthRestClient(
+                new ExtendedSalesforceRestClient(
+                    new ExtendedGuzzleRestClient('https://na1.salesforce.com'),
                     $this->apiVersion
                 ),
-                new GuzzleRestClient($this->salesforceOauthUrl),
+                new ExtendedGuzzleRestClient($this->salesforceOauthUrl),
                 $this->clientId,
                 $this->clientSecret,
                 $this->username,
@@ -189,6 +188,13 @@ class ExtendedRestforce implements ExtendedRestforceInterface
         }
 
         return $this->oAuthRestClient;
+    }
+
+    /**
+     * @param RestClientInterface $oAuthRestClient
+     */
+    public function setOAuthRestClient(RestClientInterface $oAuthRestClient) {
+        $this->oAuthRestClient = $oAuthRestClient;
     }
 
     /**
@@ -244,5 +250,44 @@ class ExtendedRestforce implements ExtendedRestforceInterface
     public function apexPostJson(string $uri = null, array $data = null): ResponseInterface
     {
         return $this->getOAuthRestClient()->postJson($this->salesforceOauthUrl . $this->apexEndPoint . $uri, $data);
+    }
+
+    /**
+     * @param string|null $uri
+     * @param array|null $data
+     * @return ResponseInterface
+     */
+    public function createJob(string $uri = null, array $data = null): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->postJson(self::DEFAULT_JOB_BASE_URI . $uri, $data);
+    }
+
+    /**
+     * @param string|null $uri
+     * @param string|null $csvdata
+     * @return ResponseInterface
+     */
+    public function batchJob(string $uri = null, string $csvdata = null): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->putCsv(self::DEFAULT_JOB_BASE_URI . $uri, $csvdata);
+    }
+
+    /**
+     * @param string|null $uri
+     * @param array|null $data
+     * @return ResponseInterface
+     */
+    public function closeJob(string $uri = null, array $data = null): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->patchJson(self::DEFAULT_JOB_BASE_URI . $uri, $data);
+    }
+
+    /**
+     * @param $uri
+     * @return ResponseInterface
+     */
+    public function getJob($uri): ResponseInterface
+    {
+        return $this->getOAuthRestClient()->get(self::DEFAULT_JOB_BASE_URI . $uri);
     }
 }

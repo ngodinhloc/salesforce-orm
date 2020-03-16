@@ -3,6 +3,7 @@ namespace Salesforce\Client;
 
 use Psr\Http\Message\ResponseInterface;
 use Salesforce\Client\Exception\ResultException;
+use Salesforce\Job\Job;
 
 class Result
 {
@@ -33,9 +34,15 @@ class Result
         switch ($this->response->getStatusCode()) {
             case ResponseCodes::HTTP_OK:
                 if ($content = $this->response->getBody()->getContents()) {
+                    if (current($this->response->getHeader('Content-Type')) == 'text/csv') {
+                        return $content;
+                    }
                     $array = json_decode($content, true);
                     if (isset($array['error']) && isset($array['message'])) {
                         throw new ResultException($array['message']);
+                    }
+                    if (isset($array['state']) && in_array($array['state'], [Job::STATE_FAILED, Job::STATE_ABORTED])) {
+                        throw new ResultException($array['errorMessage']);
                     }
                     $result = isset($array['records']) ? $array['records'] : $array;
                 }
@@ -45,8 +52,10 @@ class Result
                     $array = json_decode($content, true);
                     if ($array['success'] && isset($array['id'])) {
                         $result = $array['id'];
+                        break;
                     }
                 }
+                $result = true;
                 break;
             case ResponseCodes::HTTP_NOT_FOUND:
             case ResponseCodes::HTTP_BAD_REQUEST:
